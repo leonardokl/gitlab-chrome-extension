@@ -1,0 +1,17 @@
+.flex {
+  display: flex;
+}
+
+.main {
+  width: 330px;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px;
+}
+
+input {
+  width: 295px;
+  height: 34px;
+  padding-left: 10px;
+  padding-right: 10px;
+}

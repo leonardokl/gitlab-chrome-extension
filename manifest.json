@@ -1,0 +1,13 @@
+{
+  "manifest_version": 2,
+  "name": "Gitlab Chrome Extension",
+  "description": "Copy Gitlab new branch name to clipboard",
+  "version": "0.0.1",
+
+  "browser_action": {
+   "default_icon": "src/images/logo.png",
+   "default_popup": "public/index.html"
+  },
+
+  "permissions": [ "activeTab", "tabs" ]
+}

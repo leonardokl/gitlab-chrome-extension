@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Spotify Web Player Control</title>
+    <link rel="stylesheet" type="text/css" href="/vendor/bootstrap-3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/src/css/main.css">
+  </head>
+  <body>
+  	<div class="main flex">
+      <div class="input-group">
+        <input id="branch-name" type="text" value="Branch name not found">
+        <span class="input-group-btn">
+          <button title="Copy to clipboard" class="btn btn-default" data-clipboard-target="#branch-name" type="button">
+            <span class="glyphicon glyphicon glyphicon-copy" aria-hidden="true"></span>
+          </button>
+        </span>
+      </div>
+  	</div>
+    <script src="/vendor/clipboard.js-1.5.12/clipboard.min.js"></script>
+    <script src="/src/js/index.js"></script>
+  </body>
+</html>
