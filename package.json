@@ -4,9 +4,22 @@
   "description": "Copy Gitlab new branch name to clipboard",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npm run watch",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:js": "uglifyjs src/js/index.js -o public/js/bundler.min.js -m -c",
+    "build:css": "cleancss -o public/css/main.min.css src/css/main.css",
+    "watch:js": "watch 'npm run build:js' src/js/",
+    "watch:css": "watch 'npm run build:css' src/css/",
+    "watch": "parallelshell 'npm run watch:js' 'npm run watch:css'",
+    "build": "npm run build:js && npm run build:css"
   },
   "keywords": [],
   "author": "Leonardo Luiz <leonardokl@hotmail.com>",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "clean-css": "^3.4.19",
+    "parallelshell": "^2.0.0",
+    "uglify-js": "^2.7.3",
+    "watch": "^0.19.2"
+  }
 }
