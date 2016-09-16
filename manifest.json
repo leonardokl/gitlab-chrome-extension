@@ -9,5 +9,5 @@
    "default_popup": "public/index.html"
   },
 
-  "permissions": [ "activeTab", "tabs" ]
+  "permissions": [ "activeTab", "tabs", "https://gitlab.com/*" ]
 }

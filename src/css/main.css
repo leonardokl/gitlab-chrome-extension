@@ -14,4 +14,10 @@ input {
   height: 34px;
   padding-left: 10px;
   padding-right: 10px;
+  border: 1px solid #CCCCCC;
+  color: #636363;
+}
+
+.copy-clipboard {
+  color: #797979;
 }
