@@ -1,10 +1,12 @@
-const webpack = require('webpack');
+/* global __dirname */
+
+const webpack = require('webpack')
 
 module.exports = {
-  entry: "./src/index.js",
+  entry: './src/index.js',
   output: {
     path: __dirname,
-    filename: "public/js/bundle.js"
+    filename: 'public/js/bundle.js'
   },
   module: {
     loaders: [
@@ -13,7 +15,7 @@ module.exports = {
         exclude: /node_modules/,
         loader: 'babel-loader'
       },
-      { test: /\.css$/, loader: "style!css" }
+      { test: /\.css$/, loader: 'style!css' }
     ]
   },
   plugins: [
@@ -26,4 +28,4 @@ module.exports = {
       },
     }),
   ]
-};
+}

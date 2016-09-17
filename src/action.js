@@ -1,14 +1,14 @@
-import Clipboard from 'clipboard';
-import API from './api';
-import View from './view';
+import Clipboard from 'clipboard'
+import API from './api'
+import View from './view'
 
 const addClipboardListener = () => {
-		new Clipboard('.btn');
-};
+	new Clipboard('.btn')
+}
 
 const setBrancheNameAndAddClipboardListener = (name) => {
-	View.setBranchName(`git checkout -b ${name}`);
-	addClipboardListener();
+	View.setBranchName(`git checkout -b ${name}`)
+	addClipboardListener()
 }
 
 const fetchBranchNameAttribute = (tabId) => {
@@ -18,8 +18,8 @@ const fetchBranchNameAttribute = (tabId) => {
 			.catch(() => {
 				API.getNewBranchButtonAttribute(tabId, 'data-original-title')
 					.then(resolve)
-					.catch(reject);
-			});
+					.catch(reject)
+			})
 	})
 }
 
@@ -27,13 +27,11 @@ class Action {
 	static fetchBranchName() {
 		API.getCurrentTab()
 			.then((tab) => {
-				fetchBranchNameAttribute()
+				fetchBranchNameAttribute(tab.id)
 					.then(setBrancheNameAndAddClipboardListener)
-					.catch((error) => {
-						View.setBranchName('Branch name not found');
-					});
-		});
+					.catch(() => View.setBranchName('Branch name not found'))
+		})
 	}
-};
+}
 
-export default Action;
+export default Action

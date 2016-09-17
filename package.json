@@ -2,7 +2,7 @@
   "name": "gitlab-chrome-extension",
   "version": "0.0.1",
   "description": "Copy Gitlab new branch name to clipboard",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "start": "webpack --progress --colors --watch",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -19,7 +19,10 @@
     "clipboard": "^1.5.12",
     "conventional-changelog-cli": "^1.2.0",
     "css-loader": "^0.25.0",
+    "eslint": "^3.5.0",
     "style-loader": "^0.13.1",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^2.3.1",
     "webpack": "^1.13.2"
   }
 }
