@@ -1,7 +1,11 @@
-import Action from './controllers/action'
-import './styles/main.styl'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {Provider} from 'react-redux'
+import store from 'config/store'
+import App from 'ui/app'
 
-const initApp = () =>	Action.fetchBranchName()
-
-// EVENT LISTENERS
-document.addEventListener('DOMContentLoaded', initApp)
+ReactDOM.render((
+  <Provider store={store}>
+    <App />
+  </Provider>
+), document.getElementById('app'))

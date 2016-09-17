@@ -1,6 +1,6 @@
 import Chrome from 'utils/chrome'
 
-class API {
+class ChromeAPI {
 	static getCurrentTab() {
 		return Chrome.query({active: true})
 	}
@@ -14,4 +14,4 @@ class API {
 	}
 }
 
-export default API
+export default ChromeAPI
