@@ -1,6 +1,7 @@
 /* global __dirname */
 
 const webpack = require('webpack')
+const path = require('path')
 
 module.exports = {
   entry: './src/index.js',
@@ -15,7 +16,8 @@ module.exports = {
         exclude: /node_modules/,
         loader: 'babel-loader'
       },
-      { test: /\.css$/, loader: 'style!css' }
+      { test: /\.css$/, loader: 'style!css' },
+      { test: /\.styl$/, loader: 'style-loader!css-loader!stylus-loader' }
     ]
   },
   plugins: [
@@ -27,5 +29,9 @@ module.exports = {
         comments: false,
       },
     }),
-  ]
+  ],
+  resolve: {
+    root: path.resolve('./src'),
+    extensions: ['', '.js'],
+  },
 }

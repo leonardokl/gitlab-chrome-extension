@@ -5,7 +5,7 @@
   "version": "0.0.1",
 
   "browser_action": {
-   "default_icon": "src/images/logo.png",
+   "default_icon": "public/images/logo.png",
    "default_popup": "public/index.html"
   },
 

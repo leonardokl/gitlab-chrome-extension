@@ -7,7 +7,9 @@
     "start": "webpack --progress --colors --watch",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --progress --colors --config webpack.production.config.js",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "version": "npm run build && npm run changelog && git add -A",
+    "postversion": "git push && git push --tags"
   },
   "keywords": [],
   "author": "Leonardo Luiz <leonardokl@hotmail.com>",

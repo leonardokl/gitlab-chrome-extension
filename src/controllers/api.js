@@ -1,4 +1,4 @@
-import Chrome from './chrome'
+import Chrome from 'utils/chrome'
 
 class API {
 	static getCurrentTab() {
@@ -7,7 +7,9 @@ class API {
 
 	static getNewBranchButtonAttribute(tabId, attribute) {
 		return Chrome.executeScript(tabId, {
-			code: `document.getElementById("new-branch").getElementsByTagName("a")[1].getAttribute("${attribute}")`
+			code: `document.getElementById("new-branch")
+						.getElementsByTagName("a")[1]
+						.getAttribute("${attribute}")`
 		})
 	}
 }
