@@ -1,19 +1,24 @@
-.flex
-  display flex
+// nav #FAFAFA
 
-.main
-  width 330px
-  flex-direction column
-  align-items center
+body, html
+  height initial
+
+.max-width
+  width 100%
+
+.container
   margin 10px
 
-input
-  width 295px
-  height 34px
-  padding-left 10px
-  padding-right 10px
-  border 1px solid #CCCCCC
-  color #636363
+.projects__item__action
+  visibility hidden
 
-.copy-clipboard
-  color #797979
+.item
+  &:hover
+    .projects__item__action
+      visibility visible
+
+.clipboard-input
+  width 100%
+
+.ui.dropdown.menu
+  left -75px

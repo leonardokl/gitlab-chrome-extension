@@ -1,6 +1,7 @@
 import chrome from './chrome'
-// import gitlab from './gitlab'
+import gitlab from './gitlab'
 
 export default {
-  chrome
+  chrome,
+  gitlab
 }

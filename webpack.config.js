@@ -1,5 +1,6 @@
 /* global __dirname */
 
+const webpack = require('webpack')
 const path = require('path')
 
 module.exports = {
@@ -20,6 +21,11 @@ module.exports = {
       { test: /\.styl$/, loader: 'style-loader!css-loader!stylus-loader' }
     ]
   },
+  plugins: [
+    new webpack.ProvidePlugin({
+      'fetch': 'imports?this=>global!exports?global.fetch!whatwg-fetch'
+    })
+  ],
   resolve: {
     root: path.resolve('./src'),
     extensions: ['', '.js'],

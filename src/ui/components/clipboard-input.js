@@ -3,26 +3,33 @@ import Clipboard from 'clipboard'
 
 class ClipboardInput extends React.Component {
   componentDidMount() {
-    new Clipboard('.btn')
+    this.addClipboardListener()
+  }
+
+  addClipboardListener = () => {
+    new Clipboard(this.button)
   }
 
   render() {
-      return (
-        <div className='input-group'>
-          <input id='branch-name' type='text' value={this.props.value} readOnly />
-          <span className='input-group-btn'>
-            <button
-              title='Copy to clipboard'
-              className='btn btn-default copy-clipboard'
-              data-clipboard-target='#branch-name'
-              type='button'
-              >
-              <span className='glyphicon glyphicon glyphicon-copy' aria-hidden='true'/>
-            </button>
-          </span>
-        </div>
-      )
-    }
+    return (
+      <div className='clipboard-input ui action input'>
+        <input
+          id='branch-name'
+          type='text'
+          readOnly
+          value={this.props.value}
+        />
+        <button
+          ref={(el) => (this.button = el)}
+          className='ui icon button'
+          data-clipboard-target='#branch-name'
+          title='Copy to clipboard'
+        >
+          <i className='copy icon'></i>
+        </button>
+      </div>
+    )
+  }
 }
 
 export default ClipboardInput

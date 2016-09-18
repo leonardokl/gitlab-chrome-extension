@@ -1,3 +1,5 @@
+/* global chrome */
+
 import Chrome from 'utils/chrome'
 
 class ChromeAPI {
@@ -12,6 +14,17 @@ class ChromeAPI {
 						.getAttribute("${attribute}")`
 		})
 	}
+
+	static getStorage(item) {
+    return new Promise((resolve, reject) => {
+      chrome.storage.sync.get(item, (response) => {
+        if (Object.keys(response).length === 0 && response.constructor === Object)
+          return reject(response)
+
+        return resolve({data: response[item]})
+      })
+    })
+  }
 }
 
 export default ChromeAPI
