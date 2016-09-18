@@ -4,6 +4,7 @@ import * as actions from 'actions'
 
 import AccessToken from 'ui/containers/access-token'
 import Main from 'ui/containers/main'
+import ClipboardInput from 'ui/components/clipboard-input'
 import './styles/main.styl'
 
 class App extends React.Component {
@@ -11,25 +12,26 @@ class App extends React.Component {
     this.props.onDidMount()
   }
 
-  get issueBranchName() {
-    if (this.props.app.issueBranchName)
-      return `git checkout -b ${this.props.app.issueBranchName}`
-
-    return 'Branch name not found'
-  }
-
   renderContent() {
-    const {user} = this.props
+    const {app, user, projects} = this.props
 
-    if (!user.accessToken) {
+    if (app.issueBranchName)
+      return (
+        <ClipboardInput
+          value={`git checkout -b ${this.props.app.issueBranchName}`}
+        />
+      )
+
+    if (!user.accessToken)
       return (
         <AccessToken onSave={this.props.onSaveAccessToken}/>
       )
-    }
 
     return (
       <Main
         user={user}
+        projects={projects}
+        onDidMount={this.props.onMainDidMount}
         onRemoveAccessToken={this.props.onRemoveAccessToken}
       />
     )
@@ -46,18 +48,22 @@ class App extends React.Component {
 
 const mapStateToProps = (state) => ({
   app: state.app,
-  user: state.user
+  user: state.user,
+  projects: state.projects
 })
 
 const mapDispatchToProps = (dispatch) => ({
   onDidMount: () => {
-    //dispatch(actions.fetchIssueBranchName())
+    dispatch(actions.fetchIssueBranchName())
     dispatch(actions.fetchUserAccessToken())
+  },
+  onMainDidMount: () => {
+    dispatch(actions.fetchProjects())
   },
   onSaveAccessToken: (accessToken) => {
     dispatch(actions.saveUserAccessToken(accessToken))
   },
-  onRemoveAccessToken: () => {console.log("app.onRemoveAccessToken")
+  onRemoveAccessToken: () => {
     dispatch(actions.removeUserAccessToken())
   }
 })

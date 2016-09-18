@@ -7,6 +7,7 @@ const ProjectItem = (props) => (
       <div
         className="ui button positive"
         style={{fontSize: '0.8rem'}}
+        title={`${props.url}/issues/new?issue`}
         onClick={props.onClickIssue}
       >
         <i className="icon plus"></i>Issue

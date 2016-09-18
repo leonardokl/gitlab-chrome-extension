@@ -26,6 +26,12 @@ class ChromeAPI {
     })
   }
 
+	static setStorage(item) {
+		return new Promise((resolve) =>
+			chrome.storage.sync.set(item, resolve)
+		)
+	}
+
 	static clearStorage() {
     return new Promise((resolve) => {
       chrome.storage.sync.clear(resolve)

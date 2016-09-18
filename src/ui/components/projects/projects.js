@@ -4,11 +4,12 @@ import ProjectItem from './project-item'
 
 const Projects = (props) => (
   <List>
-    {[1,2,3,4,5,6].map((item, index) =>
+    {props.list.map((project, index) =>
       <ProjectItem
         key={index}
-        name='html-scraper-planet-node-js'
-        nameSpace='Leonardo Luiz'
+        name={project.name}
+        nameSpace={project.nameSpace}
+        url={project.webUrl}
       />
     )}
   </List>

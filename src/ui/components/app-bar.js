@@ -8,7 +8,7 @@ const styles = {
   input: {flexGrow: 1},
   dropdown: {marginLeft: 10},
   dropdownIcon: {margin: 0},
-  dropdownMenu: {left: -75}
+  dropdownMenu: {top: 35, left: -75}
 }
 
 class AppBar extends React.Component {

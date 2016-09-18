@@ -56,6 +56,41 @@ export const removeUserAccessToken = () => (dispatch) => {
 		}))
 }
 
+const fetchStorageProjects = () => (dispatch) => {
+	API.chrome.getStorage('projects')
+		.then(response => {
+			dispatch({
+				type: actionTypes.FETCH_GITLAB_PROJECTS,
+				data: response.data
+			})
+		})
+}
+
+const saveProjectsToStorage = (projects) => {
+	API.chrome.setStorage({projects})
+}
+
+export const fetchProjects = () => (dispatch, getState) => {
+	const state = getState()
+
+	dispatch(fetchStorageProjects())
+	API.gitlab.fetchProjects({accessToken: state.user.accessToken})
+		.then((response) => {
+			const projects = response.map(project => ({
+				name: project.name,
+				nameSpace: project.namespace.name,
+				webUrl: project.web_url,
+				sshUrl: project.ssh_url_to_repo
+			}))
+
+			dispatch({
+				type: actionTypes.FETCH_GITLAB_PROJECTS,
+				data: projects
+			})
+			saveProjectsToStorage(projects)
+		})
+}
+
 export const fetchIssueBranchName = () => (dispatch) => {
   API.chrome.getCurrentTab()
     .then((tab) => {
