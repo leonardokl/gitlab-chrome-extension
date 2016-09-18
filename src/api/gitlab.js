@@ -36,6 +36,20 @@ class GitlabAPI {
 				return response.json()
 			})
 	}
+
+	static searchProjects({accessToken, value}) {console.log('api.searchProjects');
+		return fetch(createRequestUrl({
+			accessToken,
+			pathname: `projects/search/${value}`,
+			params: {per_page: 6}
+		}))
+      .then(response => {
+				if (!response.ok)
+					throw ({status: response.status, statusText: response.statusText})
+
+				return response.json()
+			})
+	}
 }
 
 export default GitlabAPI

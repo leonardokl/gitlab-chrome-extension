@@ -33,6 +33,7 @@ class App extends React.Component {
         projects={projects}
         onDidMount={this.props.onMainDidMount}
         onRemoveAccessToken={this.props.onRemoveAccessToken}
+        onChangeFilter={this.props.onSearchProjects}
       />
     )
   }
@@ -59,6 +60,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   onMainDidMount: () => {
     dispatch(actions.fetchProjects())
+  },
+  onSearchProjects: (value) => {
+    dispatch(actions.searchProjects(value))
   },
   onSaveAccessToken: (accessToken) => {
     dispatch(actions.saveUserAccessToken(accessToken))

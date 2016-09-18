@@ -9,14 +9,18 @@ class Main extends React.Component {
 
   render() {
     const {projects} = this.props
-    console.log(projects.list);
+
     return (
       <div>
         <AppBar
           avatarUrl={this.props.user.avatarUrl}
+          onChangeFilter={this.props.onChangeFilter}
           onClickRemoveToken={this.props.onRemoveAccessToken}
+          searching={projects.searching}
         />
-        <Projects list={projects.list}/>
+        <Projects
+          list={projects.list}    
+        />
       </div>
     )
   }

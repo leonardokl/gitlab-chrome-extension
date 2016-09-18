@@ -89,11 +89,49 @@ export const fetchProjects = () => (dispatch, getState) => {
 			})
 			saveProjectsToStorage(projects)
 		})
+		.catch(() => dispatch({
+			type: actionTypes.FETCH_GITLAB_PROJECTS,
+			data: []
+		}))
+}
+
+const searchProjectsRequest = () => (dispatch) => {
+	dispatch({
+		type: actionTypes.SEARCH_GITLAB_PROJECTS_REQUEST
+	})
+}
+
+export const searchProjects = (value) => (dispatch, getState) => {
+	const state = getState()
+	const {accessToken} = state.user
+
+	if (!value)
+		return dispatch(fetchProjects())
+
+	dispatch(searchProjectsRequest())
+	API.gitlab.searchProjects({accessToken, value})
+		.then(response => {
+			const projects = response.map(project => ({
+				name: project.name,
+				nameSpace: project.namespace.name,
+				webUrl: project.web_url,
+				sshUrl: project.ssh_url_to_repo
+			}))
+
+			dispatch({
+				type: actionTypes.SEARCH_GITLAB_PROJECTS,
+				data: projects
+			})
+		})
+		.catch(() => dispatch({
+			type: actionTypes.SEARCH_GITLAB_PROJECTS,
+			data: []
+		}))
 }
 
 export const fetchIssueBranchName = () => (dispatch) => {
   API.chrome.getCurrentTab()
-    .then((tab) => {
+    .then(tab => {
       fetchBranchNameAttribute(tab.id)
         .then((response) => dispatch({
           type: actionTypes.FETCH_ISSUE_BRANCH_NAME,

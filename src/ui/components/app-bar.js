@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Avatar from 'ui/components/avatar'
+import SearchInput from 'ui/components/search-input'
 
 const styles = {
   container: {display: 'flex', 'alignItems': 'center'},
@@ -20,22 +21,27 @@ class AppBar extends React.Component {
     })
   }
 
+  handleOnSubmitSearchInput = (value) => {
+    this.props.onChangeFilter(value)
+  }
+
   render() {
     return (
       <div style={styles.container}>
-        <div style={styles.input} className="ui icon input">
-          <i className="search icon"></i>
-          <input type="text" placeholder="Filter by name..." />
-        </div>
+        <SearchInput
+          placeholder='Filter by name...'
+          loading={this.props.searching}
+          onSubmit={this.handleOnSubmitSearchInput}
+        />
         <div
           style={styles.dropdown}
           ref={(el) => (this.dropdown = el)}
-          className="ui dropdown"
+          className='ui dropdown'
         >
-          <Avatar url={this.props.avatarUrl} /> <i style={styles.dropdownIcon} className="dropdown icon"></i>
-          <div style={styles.dropdownMenu} className="menu" >
+          <Avatar url={this.props.avatarUrl} /> <i style={styles.dropdownIcon} className='dropdown icon'></i>
+          <div style={styles.dropdownMenu} className='menu' >
             <div
-              className="item"
+              className='item'
             >
               Remove Token
             </div>
