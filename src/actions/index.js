@@ -1,3 +1,5 @@
+/* global chrome */
+
 import API from 'api'
 import * as actionTypes from 'constants/action-types'
 
@@ -14,36 +16,44 @@ const fetchBranchNameAttribute = (tabId) => {
 }
 
 export const fetchUserAccessToken = () => (dispatch) => {
-	API.chrome.getStorage('accessToken')
+	API.chrome.getStorage('user')
 		.then(response => {
-			const accessToken = response.data
+			const user = response.data
 
-			API.gitlab.getUser({accessToken})
-				.then(response => {
-					let user = {
-						accessToken,
-						avatarUrl: response.avatar_url,
-						name: response.name,
-						username: response.username,
-						email: response.email
-					}
-
-					dispatch({
-						type: actionTypes.FETCH_ACCESS_TOKEN,
-						data: user
-					})
-				})
+			dispatch({
+				type: actionTypes.FETCH_ACCESS_TOKEN,
+				data: user
+			})
 		})
 		.catch(error => console.warn('error', error))
 }
 
 export const saveUserAccessToken = (accessToken) => (dispatch) => {
-	chrome.storage.sync.set({accessToken}, () =>
-		dispatch({
-			type: actionTypes.SAVE_ACCESS_TOKEN,
-			data: accessToken
+	API.gitlab.getUser({accessToken})
+		.then(response => {
+			const user = {
+				accessToken,
+				avatarUrl: response.avatar_url,
+				name: response.name,
+				username: response.username,
+				email: response.email
+			}
+
+			chrome.storage.sync.set({user}, () =>
+				dispatch({
+					type: actionTypes.SAVE_ACCESS_TOKEN,
+					data: user
+				})
+			)
 		})
-  )
+		.catch(error => console.warn('saveUserAccessToken', error))
+}
+
+export const removeUserAccessToken = () => (dispatch) => {
+	API.chrome.clearStorage()
+		.then(() => dispatch({
+			type: actionTypes.REMOVE_ACCESS_TOKEN,
+		}))
 }
 
 export const fetchIssueBranchName = () => (dispatch) => {

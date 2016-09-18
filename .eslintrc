@@ -11,6 +11,7 @@ parserOptions:
 plugins:
   - react
 rules:
+  no-console: 1
   linebreak-style:
     - error
     - unix

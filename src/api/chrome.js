@@ -25,6 +25,12 @@ class ChromeAPI {
       })
     })
   }
+
+	static clearStorage() {
+    return new Promise((resolve) => {
+      chrome.storage.sync.clear(resolve)
+    })
+  }
 }
 
 export default ChromeAPI

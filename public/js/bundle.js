@@ -23171,6 +23171,7 @@
 	var FETCH_ISSUE_BRANCH_NAME = exports.FETCH_ISSUE_BRANCH_NAME = 'FETCH_ISSUE_BRANCH_NAME';
 	var SAVE_ACCESS_TOKEN = exports.SAVE_ACCESS_TOKEN = 'SAVE_ACCESS_TOKEN';
 	var FETCH_ACCESS_TOKEN = exports.FETCH_ACCESS_TOKEN = 'FETCH_ACCESS_TOKEN';
+	var REMOVE_ACCESS_TOKEN = exports.REMOVE_ACCESS_TOKEN = 'REMOVE_ACCESS_TOKEN';
 
 /***/ },
 /* 201 */
@@ -23181,8 +23182,6 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	var _actionTypes = __webpack_require__(200);
 
@@ -23200,9 +23199,10 @@
 
 	  switch (action.type) {
 	    case _actionTypes.FETCH_ACCESS_TOKEN:
-	      return action.data;
 	    case _actionTypes.SAVE_ACCESS_TOKEN:
-	      return _extends({}, state, { accessToken: action.data });
+	      return action.data;
+	    case _actionTypes.REMOVE_ACCESS_TOKEN:
+	      return initialState;
 	  }
 
 	  return state;
@@ -23240,11 +23240,7 @@
 
 	var _main2 = _interopRequireDefault(_main);
 
-	var _clipboardInput = __webpack_require__(213);
-
-	var _clipboardInput2 = _interopRequireDefault(_clipboardInput);
-
-	__webpack_require__(223);
+	__webpack_require__(219);
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -23280,7 +23276,10 @@
 	        return _react2.default.createElement(_accessToken2.default, { onSave: this.props.onSaveAccessToken });
 	      }
 
-	      return _react2.default.createElement(_main2.default, { user: user });
+	      return _react2.default.createElement(_main2.default, {
+	        user: user,
+	        onRemoveAccessToken: this.props.onRemoveAccessToken
+	      });
 	    }
 	  }, {
 	    key: 'render',
@@ -23318,6 +23317,10 @@
 	    },
 	    onSaveAccessToken: function onSaveAccessToken(accessToken) {
 	      dispatch(actions.saveUserAccessToken(accessToken));
+	    },
+	    onRemoveAccessToken: function onRemoveAccessToken() {
+	      console.log("app.onRemoveAccessToken");
+	      dispatch(actions.removeUserAccessToken());
 	    }
 	  };
 	};
@@ -23333,7 +23336,7 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.fetchIssueBranchName = exports.saveUserAccessToken = exports.fetchUserAccessToken = undefined;
+	exports.fetchIssueBranchName = exports.removeUserAccessToken = exports.saveUserAccessToken = exports.fetchUserAccessToken = undefined;
 
 	var _api = __webpack_require__(204);
 
@@ -23347,6 +23350,8 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	/* global chrome */
+
 	var fetchBranchNameAttribute = function fetchBranchNameAttribute(tabId) {
 		return new Promise(function (resolve, reject) {
 			_api2.default.chrome.getNewBranchButtonAttribute(tabId, 'title').then(resolve).catch(function () {
@@ -23357,22 +23362,12 @@
 
 	var fetchUserAccessToken = exports.fetchUserAccessToken = function fetchUserAccessToken() {
 		return function (dispatch) {
-			_api2.default.chrome.getStorage('accessToken').then(function (response) {
-				var accessToken = response.data;
+			_api2.default.chrome.getStorage('user').then(function (response) {
+				var user = response.data;
 
-				_api2.default.gitlab.getUser({ accessToken: accessToken }).then(function (response) {
-					var user = {
-						accessToken: accessToken,
-						avatarUrl: response.avatar_url,
-						name: response.name,
-						username: response.username,
-						email: response.email
-					};
-
-					dispatch({
-						type: actionTypes.FETCH_ACCESS_TOKEN,
-						data: user
-					});
+				dispatch({
+					type: actionTypes.FETCH_ACCESS_TOKEN,
+					data: user
 				});
 			}).catch(function (error) {
 				return console.warn('error', error);
@@ -23382,10 +23377,32 @@
 
 	var saveUserAccessToken = exports.saveUserAccessToken = function saveUserAccessToken(accessToken) {
 		return function (dispatch) {
-			chrome.storage.sync.set({ accessToken: accessToken }, function () {
+			_api2.default.gitlab.getUser({ accessToken: accessToken }).then(function (response) {
+				var user = {
+					accessToken: accessToken,
+					avatarUrl: response.avatar_url,
+					name: response.name,
+					username: response.username,
+					email: response.email
+				};
+
+				chrome.storage.sync.set({ user: user }, function () {
+					return dispatch({
+						type: actionTypes.SAVE_ACCESS_TOKEN,
+						data: user
+					});
+				});
+			}).catch(function (error) {
+				return console.warn('saveUserAccessToken', error);
+			});
+		};
+	};
+
+	var removeUserAccessToken = exports.removeUserAccessToken = function removeUserAccessToken() {
+		return function (dispatch) {
+			_api2.default.chrome.clearStorage().then(function () {
 				return dispatch({
-					type: actionTypes.SAVE_ACCESS_TOKEN,
-					data: accessToken
+					type: actionTypes.REMOVE_ACCESS_TOKEN
 				});
 			});
 		};
@@ -23436,7 +23453,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-			value: true
+	  value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /* global chrome */
@@ -23450,36 +23467,43 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var ChromeAPI = function () {
-			function ChromeAPI() {
-					_classCallCheck(this, ChromeAPI);
-			}
+	  function ChromeAPI() {
+	    _classCallCheck(this, ChromeAPI);
+	  }
 
-			_createClass(ChromeAPI, null, [{
-					key: 'getCurrentTab',
-					value: function getCurrentTab() {
-							return _chrome2.default.query({ active: true });
-					}
-			}, {
-					key: 'getNewBranchButtonAttribute',
-					value: function getNewBranchButtonAttribute(tabId, attribute) {
-							return _chrome2.default.executeScript(tabId, {
-									code: 'document.getElementById("new-branch")\n\t\t\t\t\t\t.getElementsByTagName("a")[1]\n\t\t\t\t\t\t.getAttribute("' + attribute + '")'
-							});
-					}
-			}, {
-					key: 'getStorage',
-					value: function getStorage(item) {
-							return new Promise(function (resolve, reject) {
-									chrome.storage.sync.get(item, function (response) {
-											if (Object.keys(response).length === 0 && response.constructor === Object) return reject(response);
+	  _createClass(ChromeAPI, null, [{
+	    key: 'getCurrentTab',
+	    value: function getCurrentTab() {
+	      return _chrome2.default.query({ active: true });
+	    }
+	  }, {
+	    key: 'getNewBranchButtonAttribute',
+	    value: function getNewBranchButtonAttribute(tabId, attribute) {
+	      return _chrome2.default.executeScript(tabId, {
+	        code: 'document.getElementById("new-branch")\n\t\t\t\t\t\t.getElementsByTagName("a")[1]\n\t\t\t\t\t\t.getAttribute("' + attribute + '")'
+	      });
+	    }
+	  }, {
+	    key: 'getStorage',
+	    value: function getStorage(item) {
+	      return new Promise(function (resolve, reject) {
+	        chrome.storage.sync.get(item, function (response) {
+	          if (Object.keys(response).length === 0 && response.constructor === Object) return reject(response);
 
-											return resolve({ data: response[item] });
-									});
-							});
-					}
-			}]);
+	          return resolve({ data: response[item] });
+	        });
+	      });
+	    }
+	  }, {
+	    key: 'clearStorage',
+	    value: function clearStorage() {
+	      return new Promise(function (resolve) {
+	        chrome.storage.sync.clear(resolve);
+	      });
+	    }
+	  }]);
 
-			return ChromeAPI;
+	  return ChromeAPI;
 	}();
 
 	exports.default = ChromeAPI;
@@ -23551,10 +23575,17 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var API_URL = 'https://gitlab.com/api/v3';
-	// https://gitlab.com/api/v3/user?private_token=
 
 	var getPrivateToken = function getPrivateToken(accessToken) {
 		return '?private_token=' + accessToken;
+	};
+	var addUrlPrefix = function addUrlPrefix(url) {
+		return API_URL + '/' + url;
+	};
+	var createRequestUrl = function createRequestUrl(_ref) {
+		var pathname = _ref.pathname;
+		var accessToken = _ref.accessToken;
+		return addUrlPrefix(pathname) + getPrivateToken(accessToken);
 	};
 
 	var GitlabAPI = function () {
@@ -23564,10 +23595,12 @@
 
 		_createClass(GitlabAPI, null, [{
 			key: 'getUser',
-			value: function getUser(_ref) {
-				var accessToken = _ref.accessToken;
+			value: function getUser(_ref2) {
+				var accessToken = _ref2.accessToken;
 
-				return fetch(API_URL + '/user' + getPrivateToken(accessToken)).then(function (response) {
+				return fetch(createRequestUrl({ pathname: 'user', accessToken: accessToken })).then(function (response) {
+					if (!response.ok) throw { status: response.status, statusText: response.statusText };
+
 					return response.json();
 				});
 			}
@@ -24161,9 +24194,9 @@
 
 	var _appBar2 = _interopRequireDefault(_appBar);
 
-	var _avatar = __webpack_require__(212);
+	var _projects = __webpack_require__(213);
 
-	var _avatar2 = _interopRequireDefault(_avatar);
+	var _projects2 = _interopRequireDefault(_projects);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -24183,51 +24216,16 @@
 	  }
 
 	  _createClass(Main, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      $(this.dropdown).dropdown();
-	    }
-	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
 	        'div',
 	        null,
-	        _react2.default.createElement(_appBar2.default, { avatarUrl: this.props.user.avatarUrl }),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'ui celled selection list' },
-	          [1, 2, 3, 4, 5, 6].map(function (item, index) {
-	            return _react2.default.createElement(
-	              'div',
-	              { style: { padding: 10 }, key: index, className: 'item' },
-	              _react2.default.createElement(
-	                'div',
-	                { className: 'content' },
-	                _react2.default.createElement(
-	                  'div',
-	                  { className: 'projects__item__action right floated content' },
-	                  _react2.default.createElement(
-	                    'div',
-	                    { style: { fontSize: '0.8rem' }, className: 'ui button positive' },
-	                    _react2.default.createElement('i', { className: 'icon plus' }),
-	                    'Issue'
-	                  )
-	                ),
-	                _react2.default.createElement(
-	                  'div',
-	                  { className: 'description' },
-	                  'Leonardo Luiz'
-	                ),
-	                _react2.default.createElement(
-	                  'div',
-	                  { className: 'header' },
-	                  'html-scraper-planet-node-js'
-	                )
-	              )
-	            );
-	          })
-	        )
+	        _react2.default.createElement(_appBar2.default, {
+	          avatarUrl: this.props.user.avatarUrl,
+	          onClickRemoveToken: this.props.onRemoveAccessToken
+	        }),
+	        _react2.default.createElement(_projects2.default, null)
 	      );
 	    }
 	  }]);
@@ -24263,7 +24261,15 @@
 
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* global $ */
+
+	var styles = {
+	  container: { display: 'flex', 'alignItems': 'center' },
+	  input: { flexGrow: 1 },
+	  dropdown: { marginLeft: 10 },
+	  dropdownIcon: { margin: 0 },
+	  dropdownMenu: { left: -75 }
+	};
 
 	var AppBar = function (_React$Component) {
 	  _inherits(AppBar, _React$Component);
@@ -24277,7 +24283,11 @@
 	  _createClass(AppBar, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      $(this.dropdown).dropdown();
+	      var onClickRemoveToken = this.props.onClickRemoveToken;
+
+	      $(this.dropdown).dropdown({
+	        onChange: onClickRemoveToken
+	      });
 	    }
 	  }, {
 	    key: 'render',
@@ -24286,27 +24296,33 @@
 
 	      return _react2.default.createElement(
 	        'div',
-	        { style: { display: 'flex', 'alignItems': 'center' } },
+	        { style: styles.container },
 	        _react2.default.createElement(
 	          'div',
-	          { style: { flexGrow: 1 }, className: 'ui icon input' },
+	          { style: styles.input, className: 'ui icon input' },
 	          _react2.default.createElement('i', { className: 'search icon' }),
 	          _react2.default.createElement('input', { type: 'text', placeholder: 'Filter by name...' })
 	        ),
 	        _react2.default.createElement(
 	          'div',
-	          { style: { marginLeft: 10 }, ref: function ref(el) {
+	          {
+	            style: styles.dropdown,
+	            ref: function ref(el) {
 	              return _this2.dropdown = el;
-	            }, className: 'ui dropdown' },
+	            },
+	            className: 'ui dropdown'
+	          },
 	          _react2.default.createElement(_avatar2.default, { url: this.props.avatarUrl }),
 	          ' ',
-	          _react2.default.createElement('i', { style: { margin: 0 }, className: 'dropdown icon' }),
+	          _react2.default.createElement('i', { style: styles.dropdownIcon, className: 'dropdown icon' }),
 	          _react2.default.createElement(
 	            'div',
-	            { style: { left: -85 }, className: 'menu' },
+	            { style: styles.dropdownMenu, className: 'menu' },
 	            _react2.default.createElement(
 	              'div',
-	              { className: 'item' },
+	              {
+	                className: 'item'
+	              },
 	              'Remove Token'
 	            )
 	          )
@@ -24356,862 +24372,204 @@
 	  value: true
 	});
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _projects = __webpack_require__(214);
 
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _clipboard = __webpack_require__(214);
-
-	var _clipboard2 = _interopRequireDefault(_clipboard);
+	var _projects2 = _interopRequireDefault(_projects);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var ClipboardInput = function (_React$Component) {
-	  _inherits(ClipboardInput, _React$Component);
-
-	  function ClipboardInput() {
-	    var _ref;
-
-	    var _temp, _this, _ret;
-
-	    _classCallCheck(this, ClipboardInput);
-
-	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
-	    }
-
-	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ClipboardInput.__proto__ || Object.getPrototypeOf(ClipboardInput)).call.apply(_ref, [this].concat(args))), _this), _this.addClipboardListener = function () {
-	      new _clipboard2.default(_this.button);
-	    }, _temp), _possibleConstructorReturn(_this, _ret);
-	  }
-
-	  _createClass(ClipboardInput, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      this.addClipboardListener();
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _this2 = this;
-
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'clipboard-input ui action input' },
-	        _react2.default.createElement('input', {
-	          id: 'branch-name',
-	          type: 'text',
-	          readOnly: true,
-	          value: this.props.value
-	        }),
-	        _react2.default.createElement(
-	          'button',
-	          {
-	            ref: function ref(el) {
-	              return _this2.button = el;
-	            },
-	            className: 'ui icon button',
-	            'data-clipboard-target': '#branch-name',
-	            title: 'Copy to clipboard'
-	          },
-	          _react2.default.createElement('i', { className: 'copy icon' })
-	        )
-	      );
-	    }
-	  }]);
-
-	  return ClipboardInput;
-	}(_react2.default.Component);
-
-	exports.default = ClipboardInput;
+	exports.default = _projects2.default;
 
 /***/ },
 /* 214 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (global, factory) {
-	    if (true) {
-	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [module, __webpack_require__(215), __webpack_require__(217), __webpack_require__(218)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	    } else if (typeof exports !== "undefined") {
-	        factory(module, require('./clipboard-action'), require('tiny-emitter'), require('good-listener'));
-	    } else {
-	        var mod = {
-	            exports: {}
-	        };
-	        factory(mod, global.clipboardAction, global.tinyEmitter, global.goodListener);
-	        global.clipboard = mod.exports;
-	    }
-	})(this, function (module, _clipboardAction, _tinyEmitter, _goodListener) {
-	    'use strict';
+	'use strict';
 
-	    var _clipboardAction2 = _interopRequireDefault(_clipboardAction);
+	var _react = __webpack_require__(1);
 
-	    var _tinyEmitter2 = _interopRequireDefault(_tinyEmitter);
+	var _react2 = _interopRequireDefault(_react);
 
-	    var _goodListener2 = _interopRequireDefault(_goodListener);
+	var _list = __webpack_require__(215);
 
-	    function _interopRequireDefault(obj) {
-	        return obj && obj.__esModule ? obj : {
-	            default: obj
-	        };
-	    }
+	var _list2 = _interopRequireDefault(_list);
 
-	    function _classCallCheck(instance, Constructor) {
-	        if (!(instance instanceof Constructor)) {
-	            throw new TypeError("Cannot call a class as a function");
-	        }
-	    }
+	var _projectItem = __webpack_require__(217);
 
-	    function _possibleConstructorReturn(self, call) {
-	        if (!self) {
-	            throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-	        }
+	var _projectItem2 = _interopRequireDefault(_projectItem);
 
-	        return call && (typeof call === "object" || typeof call === "function") ? call : self;
-	    }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	    function _inherits(subClass, superClass) {
-	        if (typeof superClass !== "function" && superClass !== null) {
-	            throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-	        }
+	var Projects = function Projects(props) {
+	  return _react2.default.createElement(
+	    _list2.default,
+	    null,
+	    [1, 2, 3, 4, 5, 6].map(function (item, index) {
+	      return _react2.default.createElement(_projectItem2.default, {
+	        key: index,
+	        name: 'html-scraper-planet-node-js',
+	        nameSpace: 'Leonardo Luiz'
+	      });
+	    })
+	  );
+	};
 
-	        subClass.prototype = Object.create(superClass && superClass.prototype, {
-	            constructor: {
-	                value: subClass,
-	                enumerable: false,
-	                writable: true,
-	                configurable: true
-	            }
-	        });
-	        if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-	    }
+	Projects.propTypes = {
+	  children: _react2.default.PropTypes.array
+	};
 
-	    var Clipboard = function (_Emitter) {
-	        _inherits(Clipboard, _Emitter);
-
-	        /**
-	         * @param {String|HTMLElement|HTMLCollection|NodeList} trigger
-	         * @param {Object} options
-	         */
-
-	        function Clipboard(trigger, options) {
-	            _classCallCheck(this, Clipboard);
-
-	            var _this = _possibleConstructorReturn(this, _Emitter.call(this));
-
-	            _this.resolveOptions(options);
-	            _this.listenClick(trigger);
-	            return _this;
-	        }
-
-	        /**
-	         * Defines if attributes would be resolved using internal setter functions
-	         * or custom functions that were passed in the constructor.
-	         * @param {Object} options
-	         */
-
-
-	        Clipboard.prototype.resolveOptions = function resolveOptions() {
-	            var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-	            this.action = typeof options.action === 'function' ? options.action : this.defaultAction;
-	            this.target = typeof options.target === 'function' ? options.target : this.defaultTarget;
-	            this.text = typeof options.text === 'function' ? options.text : this.defaultText;
-	        };
-
-	        Clipboard.prototype.listenClick = function listenClick(trigger) {
-	            var _this2 = this;
-
-	            this.listener = (0, _goodListener2.default)(trigger, 'click', function (e) {
-	                return _this2.onClick(e);
-	            });
-	        };
-
-	        Clipboard.prototype.onClick = function onClick(e) {
-	            var trigger = e.delegateTarget || e.currentTarget;
-
-	            if (this.clipboardAction) {
-	                this.clipboardAction = null;
-	            }
-
-	            this.clipboardAction = new _clipboardAction2.default({
-	                action: this.action(trigger),
-	                target: this.target(trigger),
-	                text: this.text(trigger),
-	                trigger: trigger,
-	                emitter: this
-	            });
-	        };
-
-	        Clipboard.prototype.defaultAction = function defaultAction(trigger) {
-	            return getAttributeValue('action', trigger);
-	        };
-
-	        Clipboard.prototype.defaultTarget = function defaultTarget(trigger) {
-	            var selector = getAttributeValue('target', trigger);
-
-	            if (selector) {
-	                return document.querySelector(selector);
-	            }
-	        };
-
-	        Clipboard.prototype.defaultText = function defaultText(trigger) {
-	            return getAttributeValue('text', trigger);
-	        };
-
-	        Clipboard.prototype.destroy = function destroy() {
-	            this.listener.destroy();
-
-	            if (this.clipboardAction) {
-	                this.clipboardAction.destroy();
-	                this.clipboardAction = null;
-	            }
-	        };
-
-	        return Clipboard;
-	    }(_tinyEmitter2.default);
-
-	    /**
-	     * Helper function to retrieve attribute value.
-	     * @param {String} suffix
-	     * @param {Element} element
-	     */
-	    function getAttributeValue(suffix, element) {
-	        var attribute = 'data-clipboard-' + suffix;
-
-	        if (!element.hasAttribute(attribute)) {
-	            return;
-	        }
-
-	        return element.getAttribute(attribute);
-	    }
-
-	    module.exports = Clipboard;
-	});
+	module.exports = Projects;
 
 /***/ },
 /* 215 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (global, factory) {
-	    if (true) {
-	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [module, __webpack_require__(216)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	    } else if (typeof exports !== "undefined") {
-	        factory(module, require('select'));
-	    } else {
-	        var mod = {
-	            exports: {}
-	        };
-	        factory(mod, global.select);
-	        global.clipboardAction = mod.exports;
-	    }
-	})(this, function (module, _select) {
-	    'use strict';
+	'use strict';
 
-	    var _select2 = _interopRequireDefault(_select);
-
-	    function _interopRequireDefault(obj) {
-	        return obj && obj.__esModule ? obj : {
-	            default: obj
-	        };
-	    }
-
-	    var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
-	        return typeof obj;
-	    } : function (obj) {
-	        return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
-	    };
-
-	    function _classCallCheck(instance, Constructor) {
-	        if (!(instance instanceof Constructor)) {
-	            throw new TypeError("Cannot call a class as a function");
-	        }
-	    }
-
-	    var _createClass = function () {
-	        function defineProperties(target, props) {
-	            for (var i = 0; i < props.length; i++) {
-	                var descriptor = props[i];
-	                descriptor.enumerable = descriptor.enumerable || false;
-	                descriptor.configurable = true;
-	                if ("value" in descriptor) descriptor.writable = true;
-	                Object.defineProperty(target, descriptor.key, descriptor);
-	            }
-	        }
-
-	        return function (Constructor, protoProps, staticProps) {
-	            if (protoProps) defineProperties(Constructor.prototype, protoProps);
-	            if (staticProps) defineProperties(Constructor, staticProps);
-	            return Constructor;
-	        };
-	    }();
-
-	    var ClipboardAction = function () {
-	        /**
-	         * @param {Object} options
-	         */
-
-	        function ClipboardAction(options) {
-	            _classCallCheck(this, ClipboardAction);
-
-	            this.resolveOptions(options);
-	            this.initSelection();
-	        }
-
-	        /**
-	         * Defines base properties passed from constructor.
-	         * @param {Object} options
-	         */
-
-
-	        ClipboardAction.prototype.resolveOptions = function resolveOptions() {
-	            var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-	            this.action = options.action;
-	            this.emitter = options.emitter;
-	            this.target = options.target;
-	            this.text = options.text;
-	            this.trigger = options.trigger;
-
-	            this.selectedText = '';
-	        };
-
-	        ClipboardAction.prototype.initSelection = function initSelection() {
-	            if (this.text) {
-	                this.selectFake();
-	            } else if (this.target) {
-	                this.selectTarget();
-	            }
-	        };
-
-	        ClipboardAction.prototype.selectFake = function selectFake() {
-	            var _this = this;
-
-	            var isRTL = document.documentElement.getAttribute('dir') == 'rtl';
-
-	            this.removeFake();
-
-	            this.fakeHandlerCallback = function () {
-	                return _this.removeFake();
-	            };
-	            this.fakeHandler = document.body.addEventListener('click', this.fakeHandlerCallback) || true;
-
-	            this.fakeElem = document.createElement('textarea');
-	            // Prevent zooming on iOS
-	            this.fakeElem.style.fontSize = '12pt';
-	            // Reset box model
-	            this.fakeElem.style.border = '0';
-	            this.fakeElem.style.padding = '0';
-	            this.fakeElem.style.margin = '0';
-	            // Move element out of screen horizontally
-	            this.fakeElem.style.position = 'absolute';
-	            this.fakeElem.style[isRTL ? 'right' : 'left'] = '-9999px';
-	            // Move element to the same position vertically
-	            this.fakeElem.style.top = (window.pageYOffset || document.documentElement.scrollTop) + 'px';
-	            this.fakeElem.setAttribute('readonly', '');
-	            this.fakeElem.value = this.text;
-
-	            document.body.appendChild(this.fakeElem);
-
-	            this.selectedText = (0, _select2.default)(this.fakeElem);
-	            this.copyText();
-	        };
-
-	        ClipboardAction.prototype.removeFake = function removeFake() {
-	            if (this.fakeHandler) {
-	                document.body.removeEventListener('click', this.fakeHandlerCallback);
-	                this.fakeHandler = null;
-	                this.fakeHandlerCallback = null;
-	            }
-
-	            if (this.fakeElem) {
-	                document.body.removeChild(this.fakeElem);
-	                this.fakeElem = null;
-	            }
-	        };
-
-	        ClipboardAction.prototype.selectTarget = function selectTarget() {
-	            this.selectedText = (0, _select2.default)(this.target);
-	            this.copyText();
-	        };
-
-	        ClipboardAction.prototype.copyText = function copyText() {
-	            var succeeded = undefined;
-
-	            try {
-	                succeeded = document.execCommand(this.action);
-	            } catch (err) {
-	                succeeded = false;
-	            }
-
-	            this.handleResult(succeeded);
-	        };
-
-	        ClipboardAction.prototype.handleResult = function handleResult(succeeded) {
-	            if (succeeded) {
-	                this.emitter.emit('success', {
-	                    action: this.action,
-	                    text: this.selectedText,
-	                    trigger: this.trigger,
-	                    clearSelection: this.clearSelection.bind(this)
-	                });
-	            } else {
-	                this.emitter.emit('error', {
-	                    action: this.action,
-	                    trigger: this.trigger,
-	                    clearSelection: this.clearSelection.bind(this)
-	                });
-	            }
-	        };
-
-	        ClipboardAction.prototype.clearSelection = function clearSelection() {
-	            if (this.target) {
-	                this.target.blur();
-	            }
-
-	            window.getSelection().removeAllRanges();
-	        };
-
-	        ClipboardAction.prototype.destroy = function destroy() {
-	            this.removeFake();
-	        };
-
-	        _createClass(ClipboardAction, [{
-	            key: 'action',
-	            set: function set() {
-	                var action = arguments.length <= 0 || arguments[0] === undefined ? 'copy' : arguments[0];
-
-	                this._action = action;
-
-	                if (this._action !== 'copy' && this._action !== 'cut') {
-	                    throw new Error('Invalid "action" value, use either "copy" or "cut"');
-	                }
-	            },
-	            get: function get() {
-	                return this._action;
-	            }
-	        }, {
-	            key: 'target',
-	            set: function set(target) {
-	                if (target !== undefined) {
-	                    if (target && (typeof target === 'undefined' ? 'undefined' : _typeof(target)) === 'object' && target.nodeType === 1) {
-	                        if (this.action === 'copy' && target.hasAttribute('disabled')) {
-	                            throw new Error('Invalid "target" attribute. Please use "readonly" instead of "disabled" attribute');
-	                        }
-
-	                        if (this.action === 'cut' && (target.hasAttribute('readonly') || target.hasAttribute('disabled'))) {
-	                            throw new Error('Invalid "target" attribute. You can\'t cut text from elements with "readonly" or "disabled" attributes');
-	                        }
-
-	                        this._target = target;
-	                    } else {
-	                        throw new Error('Invalid "target" value, use a valid Element');
-	                    }
-	                }
-	            },
-	            get: function get() {
-	                return this._target;
-	            }
-	        }]);
-
-	        return ClipboardAction;
-	    }();
-
-	    module.exports = ClipboardAction;
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
 	});
+
+	var _list = __webpack_require__(216);
+
+	var _list2 = _interopRequireDefault(_list);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _list2.default;
 
 /***/ },
 /* 216 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	function select(element) {
-	    var selectedText;
+	"use strict";
 
-	    if (element.nodeName === 'INPUT' || element.nodeName === 'TEXTAREA') {
-	        element.focus();
-	        element.setSelectionRange(0, element.value.length);
+	var _react = __webpack_require__(1);
 
-	        selectedText = element.value;
-	    }
-	    else {
-	        if (element.hasAttribute('contenteditable')) {
-	            element.focus();
-	        }
+	var _react2 = _interopRequireDefault(_react);
 
-	        var selection = window.getSelection();
-	        var range = document.createRange();
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	        range.selectNodeContents(element);
-	        selection.removeAllRanges();
-	        selection.addRange(range);
+	var List = function List(props) {
+	  return _react2.default.createElement(
+	    "div",
+	    { className: "ui celled selection list" },
+	    props.children
+	  );
+	};
 
-	        selectedText = selection.toString();
-	    }
+	List.propTypes = {
+	  children: _react2.default.PropTypes.array
+	};
 
-	    return selectedText;
-	}
-
-	module.exports = select;
-
+	module.exports = List;
 
 /***/ },
 /* 217 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	function E () {
-	  // Keep this empty so it's easier to inherit from
-	  // (via https://github.com/lipsmack from https://github.com/scottcorgan/tiny-emitter/issues/3)
-	}
+	'use strict';
 
-	E.prototype = {
-	  on: function (name, callback, ctx) {
-	    var e = this.e || (this.e = {});
+	var _react = __webpack_require__(1);
 
-	    (e[name] || (e[name] = [])).push({
-	      fn: callback,
-	      ctx: ctx
-	    });
+	var _react2 = _interopRequireDefault(_react);
 
-	    return this;
+	var _item = __webpack_require__(218);
+
+	var _item2 = _interopRequireDefault(_item);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var ProjectItem = function ProjectItem(props) {
+	  return _react2.default.createElement(
+	    _item2.default,
+	    { onClick: props.onClick },
+	    _react2.default.createElement(
+	      'div',
+	      { className: 'projects__item__action right floated content' },
+	      _react2.default.createElement(
+	        'div',
+	        {
+	          className: 'ui button positive',
+	          style: { fontSize: '0.8rem' },
+	          onClick: props.onClickIssue
+	        },
+	        _react2.default.createElement('i', { className: 'icon plus' }),
+	        'Issue'
+	      )
+	    ),
+	    _react2.default.createElement(
+	      'div',
+	      { className: 'description' },
+	      props.nameSpace
+	    ),
+	    _react2.default.createElement(
+	      'div',
+	      { className: 'header' },
+	      props.name
+	    )
+	  );
+	};
+
+	ProjectItem.propTypes = {
+	  name: _react2.default.PropTypes.string,
+	  nameSpace: _react2.default.PropTypes.string,
+	  onClick: _react2.default.PropTypes.func,
+	  onClickIssue: _react2.default.PropTypes.func
+	};
+
+	ProjectItem.defaultProps = {
+	  onClick: function onClick() {
+	    return 1;
 	  },
-
-	  once: function (name, callback, ctx) {
-	    var self = this;
-	    function listener () {
-	      self.off(name, listener);
-	      callback.apply(ctx, arguments);
-	    };
-
-	    listener._ = callback
-	    return this.on(name, listener, ctx);
-	  },
-
-	  emit: function (name) {
-	    var data = [].slice.call(arguments, 1);
-	    var evtArr = ((this.e || (this.e = {}))[name] || []).slice();
-	    var i = 0;
-	    var len = evtArr.length;
-
-	    for (i; i < len; i++) {
-	      evtArr[i].fn.apply(evtArr[i].ctx, data);
-	    }
-
-	    return this;
-	  },
-
-	  off: function (name, callback) {
-	    var e = this.e || (this.e = {});
-	    var evts = e[name];
-	    var liveEvents = [];
-
-	    if (evts && callback) {
-	      for (var i = 0, len = evts.length; i < len; i++) {
-	        if (evts[i].fn !== callback && evts[i].fn._ !== callback)
-	          liveEvents.push(evts[i]);
-	      }
-	    }
-
-	    // Remove event from queue to prevent memory leak
-	    // Suggested by https://github.com/lazd
-	    // Ref: https://github.com/scottcorgan/tiny-emitter/commit/c6ebfaa9bc973b33d110a84a307742b7cf94c953#commitcomment-5024910
-
-	    (liveEvents.length)
-	      ? e[name] = liveEvents
-	      : delete e[name];
-
-	    return this;
+	  onClickIssue: function onClickIssue() {
+	    return 1;
 	  }
 	};
 
-	module.exports = E;
-
+	module.exports = ProjectItem;
 
 /***/ },
 /* 218 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var is = __webpack_require__(219);
-	var delegate = __webpack_require__(220);
+	"use strict";
 
-	/**
-	 * Validates all params and calls the right
-	 * listener function based on its target type.
-	 *
-	 * @param {String|HTMLElement|HTMLCollection|NodeList} target
-	 * @param {String} type
-	 * @param {Function} callback
-	 * @return {Object}
-	 */
-	function listen(target, type, callback) {
-	    if (!target && !type && !callback) {
-	        throw new Error('Missing required arguments');
-	    }
+	var _react = __webpack_require__(1);
 
-	    if (!is.string(type)) {
-	        throw new TypeError('Second argument must be a String');
-	    }
+	var _react2 = _interopRequireDefault(_react);
 
-	    if (!is.fn(callback)) {
-	        throw new TypeError('Third argument must be a Function');
-	    }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	    if (is.node(target)) {
-	        return listenNode(target, type, callback);
-	    }
-	    else if (is.nodeList(target)) {
-	        return listenNodeList(target, type, callback);
-	    }
-	    else if (is.string(target)) {
-	        return listenSelector(target, type, callback);
-	    }
-	    else {
-	        throw new TypeError('First argument must be a String, HTMLElement, HTMLCollection, or NodeList');
-	    }
-	}
+	var Item = function Item(props) {
+	  return _react2.default.createElement(
+	    "div",
+	    { style: { padding: 10 }, className: "item" },
+	    _react2.default.createElement(
+	      "div",
+	      { className: "content" },
+	      props.children
+	    )
+	  );
+	};
 
-	/**
-	 * Adds an event listener to a HTML element
-	 * and returns a remove listener function.
-	 *
-	 * @param {HTMLElement} node
-	 * @param {String} type
-	 * @param {Function} callback
-	 * @return {Object}
-	 */
-	function listenNode(node, type, callback) {
-	    node.addEventListener(type, callback);
+	Item.propTypes = {
+	  children: _react2.default.PropTypes.array
+	};
 
-	    return {
-	        destroy: function() {
-	            node.removeEventListener(type, callback);
-	        }
-	    }
-	}
-
-	/**
-	 * Add an event listener to a list of HTML elements
-	 * and returns a remove listener function.
-	 *
-	 * @param {NodeList|HTMLCollection} nodeList
-	 * @param {String} type
-	 * @param {Function} callback
-	 * @return {Object}
-	 */
-	function listenNodeList(nodeList, type, callback) {
-	    Array.prototype.forEach.call(nodeList, function(node) {
-	        node.addEventListener(type, callback);
-	    });
-
-	    return {
-	        destroy: function() {
-	            Array.prototype.forEach.call(nodeList, function(node) {
-	                node.removeEventListener(type, callback);
-	            });
-	        }
-	    }
-	}
-
-	/**
-	 * Add an event listener to a selector
-	 * and returns a remove listener function.
-	 *
-	 * @param {String} selector
-	 * @param {String} type
-	 * @param {Function} callback
-	 * @return {Object}
-	 */
-	function listenSelector(selector, type, callback) {
-	    return delegate(document.body, selector, type, callback);
-	}
-
-	module.exports = listen;
-
+	module.exports = Item;
 
 /***/ },
 /* 219 */
-/***/ function(module, exports) {
-
-	/**
-	 * Check if argument is a HTML element.
-	 *
-	 * @param {Object} value
-	 * @return {Boolean}
-	 */
-	exports.node = function(value) {
-	    return value !== undefined
-	        && value instanceof HTMLElement
-	        && value.nodeType === 1;
-	};
-
-	/**
-	 * Check if argument is a list of HTML elements.
-	 *
-	 * @param {Object} value
-	 * @return {Boolean}
-	 */
-	exports.nodeList = function(value) {
-	    var type = Object.prototype.toString.call(value);
-
-	    return value !== undefined
-	        && (type === '[object NodeList]' || type === '[object HTMLCollection]')
-	        && ('length' in value)
-	        && (value.length === 0 || exports.node(value[0]));
-	};
-
-	/**
-	 * Check if argument is a string.
-	 *
-	 * @param {Object} value
-	 * @return {Boolean}
-	 */
-	exports.string = function(value) {
-	    return typeof value === 'string'
-	        || value instanceof String;
-	};
-
-	/**
-	 * Check if argument is a function.
-	 *
-	 * @param {Object} value
-	 * @return {Boolean}
-	 */
-	exports.fn = function(value) {
-	    var type = Object.prototype.toString.call(value);
-
-	    return type === '[object Function]';
-	};
-
-
-/***/ },
-/* 220 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var closest = __webpack_require__(221);
-
-	/**
-	 * Delegates event to a selector.
-	 *
-	 * @param {Element} element
-	 * @param {String} selector
-	 * @param {String} type
-	 * @param {Function} callback
-	 * @param {Boolean} useCapture
-	 * @return {Object}
-	 */
-	function delegate(element, selector, type, callback, useCapture) {
-	    var listenerFn = listener.apply(this, arguments);
-
-	    element.addEventListener(type, listenerFn, useCapture);
-
-	    return {
-	        destroy: function() {
-	            element.removeEventListener(type, listenerFn, useCapture);
-	        }
-	    }
-	}
-
-	/**
-	 * Finds closest match and invokes callback.
-	 *
-	 * @param {Element} element
-	 * @param {String} selector
-	 * @param {String} type
-	 * @param {Function} callback
-	 * @return {Function}
-	 */
-	function listener(element, selector, type, callback) {
-	    return function(e) {
-	        e.delegateTarget = closest(e.target, selector, true);
-
-	        if (e.delegateTarget) {
-	            callback.call(element, e);
-	        }
-	    }
-	}
-
-	module.exports = delegate;
-
-
-/***/ },
-/* 221 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var matches = __webpack_require__(222)
-
-	module.exports = function (element, selector, checkYoSelf) {
-	  var parent = checkYoSelf ? element : element.parentNode
-
-	  while (parent && parent !== document) {
-	    if (matches(parent, selector)) return parent;
-	    parent = parent.parentNode
-	  }
-	}
-
-
-/***/ },
-/* 222 */
-/***/ function(module, exports) {
-
-	
-	/**
-	 * Element prototype.
-	 */
-
-	var proto = Element.prototype;
-
-	/**
-	 * Vendor function.
-	 */
-
-	var vendor = proto.matchesSelector
-	  || proto.webkitMatchesSelector
-	  || proto.mozMatchesSelector
-	  || proto.msMatchesSelector
-	  || proto.oMatchesSelector;
-
-	/**
-	 * Expose `match()`.
-	 */
-
-	module.exports = match;
-
-	/**
-	 * Match `el` to `selector`.
-	 *
-	 * @param {Element} el
-	 * @param {String} selector
-	 * @return {Boolean}
-	 * @api public
-	 */
-
-	function match(el, selector) {
-	  if (vendor) return vendor.call(el, selector);
-	  var nodes = el.parentNode.querySelectorAll(selector);
-	  for (var i = 0; i < nodes.length; ++i) {
-	    if (nodes[i] == el) return true;
-	  }
-	  return false;
-	}
-
-/***/ },
-/* 223 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(224);
+	var content = __webpack_require__(220);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(226)(content, {});
+	var update = __webpack_require__(222)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -25228,10 +24586,10 @@
 	}
 
 /***/ },
-/* 224 */
+/* 220 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(225)();
+	exports = module.exports = __webpack_require__(221)();
 	// imports
 
 
@@ -25242,7 +24600,7 @@
 
 
 /***/ },
-/* 225 */
+/* 221 */
 /***/ function(module, exports) {
 
 	/*
@@ -25298,7 +24656,7 @@
 
 
 /***/ },
-/* 226 */
+/* 222 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*

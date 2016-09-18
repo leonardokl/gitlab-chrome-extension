@@ -1,4 +1,8 @@
-import {FETCH_ACCESS_TOKEN, SAVE_ACCESS_TOKEN} from 'constants/action-types'
+import {
+  FETCH_ACCESS_TOKEN,
+  SAVE_ACCESS_TOKEN,
+  REMOVE_ACCESS_TOKEN
+} from 'constants/action-types'
 
 const initialState = {
   accessToken: null,
@@ -11,9 +15,10 @@ const initialState = {
 const user = (state = initialState, action) => {
   switch (action.type) {
   case FETCH_ACCESS_TOKEN:
-    return action.data
   case SAVE_ACCESS_TOKEN:
-    return {...state, accessToken: action.data}
+    return action.data
+  case REMOVE_ACCESS_TOKEN:
+    return initialState
   }
 
   return state
