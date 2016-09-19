@@ -4,7 +4,7 @@ import * as actions from 'actions'
 
 import AccessToken from 'ui/containers/access-token'
 import Main from 'ui/containers/main'
-import ClipboardInput from 'ui/components/clipboard-input'
+import IssueBranchName from 'ui/containers/issue-branch-name'
 import './styles/main.styl'
 
 class App extends React.Component {
@@ -17,14 +17,18 @@ class App extends React.Component {
 
     if (app.issueBranchName)
       return (
-        <ClipboardInput
-          value={`git checkout -b ${this.props.app.issueBranchName}`}
+        <IssueBranchName
+          branchName={this.props.app.issueBranchName}
         />
       )
 
     if (!user.accessToken)
       return (
-        <AccessToken onSave={this.props.onSaveAccessToken}/>
+        <AccessToken
+          loading={user.loading}
+          onCreateNewChromeTab={this.props.onCreateNewChromeTab}
+          onSave={this.props.onSaveAccessToken}
+        />
       )
 
     return (
@@ -34,6 +38,7 @@ class App extends React.Component {
         onDidMount={this.props.onMainDidMount}
         onRemoveAccessToken={this.props.onRemoveAccessToken}
         onChangeFilter={this.props.onSearchProjects}
+        onCreateNewChromeTab={this.props.onCreateNewChromeTab}
       />
     )
   }
@@ -69,6 +74,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   onRemoveAccessToken: () => {
     dispatch(actions.removeUserAccessToken())
+  },
+  onCreateNewChromeTab: (url) => {
+    dispatch(actions.createChromeNewTab(url))
   }
 })
 

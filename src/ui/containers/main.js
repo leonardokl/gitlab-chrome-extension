@@ -19,7 +19,8 @@ class Main extends React.Component {
           searching={projects.searching}
         />
         <Projects
-          list={projects.list}    
+          list={projects.list}
+          onCreateNewChromeTab={this.props.onCreateNewChromeTab}    
         />
       </div>
     )

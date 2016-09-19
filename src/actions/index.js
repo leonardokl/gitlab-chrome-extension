@@ -28,7 +28,20 @@ export const fetchUserAccessToken = () => (dispatch) => {
 		.catch(error => console.warn('error', error))
 }
 
+const saveUserAccessTokenRequest = () => (dispatch) => {
+	dispatch({
+		type: actionTypes.SAVE_ACCESS_TOKEN_REQUEST
+	})
+}
+
+const saveUserAccessTokenError = () => (dispatch) => {
+	dispatch({
+		type: actionTypes.SAVE_ACCESS_TOKEN_ERROR
+	})
+}
+
 export const saveUserAccessToken = (accessToken) => (dispatch) => {
+	dispatch(saveUserAccessTokenRequest())
 	API.gitlab.getUser({accessToken})
 		.then(response => {
 			const user = {
@@ -46,7 +59,7 @@ export const saveUserAccessToken = (accessToken) => (dispatch) => {
 				})
 			)
 		})
-		.catch(error => console.warn('saveUserAccessToken', error))
+		.catch(() => dispatch(saveUserAccessTokenError()))
 }
 
 export const removeUserAccessToken = () => (dispatch) => {
@@ -127,6 +140,10 @@ export const searchProjects = (value) => (dispatch, getState) => {
 			type: actionTypes.SEARCH_GITLAB_PROJECTS,
 			data: []
 		}))
+}
+
+export const createChromeNewTab = (url) => () => {
+	chrome.tabs.create({url})
 }
 
 export const fetchIssueBranchName = () => (dispatch) => {

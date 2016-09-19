@@ -2,7 +2,7 @@ const API_URL = 'https://gitlab.com/api/v3'
 
 const addUrlPrefix = (url) => `${API_URL}/${url}`
 const getPrivateToken = (accessToken) => `?private_token=${accessToken}`
-const getUrlParams = (params) => {
+const getUrlParams = (params = {}) => {
 	if (params.per_page)
 		return `&per_page=${params.per_page}`
 
