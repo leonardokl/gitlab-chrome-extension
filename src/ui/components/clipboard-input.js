@@ -21,7 +21,7 @@ class ClipboardInput extends React.Component {
         />
         <button
           ref={(el) => (this.button = el)}
-          className='ui icon button'
+          className='ui icon primary button'
           data-clipboard-target='#branch-name'
           title='Copy to clipboard'
         >
