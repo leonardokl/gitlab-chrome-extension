@@ -1,3 +1,13 @@
+<a name="0.3.1"></a>
+## [0.3.1](https://github.com/leonardokl/gitlab-chrome-extension/compare/v0.3.0...v0.3.1) (2016-09-20)
+
+
+### Bug Fixes
+
+* Prevent propagation in projects elements ([f71475d](https://github.com/leonardokl/gitlab-chrome-extension/commit/f71475d))
+
+
+
 <a name="0.3.0"></a>
 # [0.3.0](https://github.com/leonardokl/gitlab-chrome-extension/compare/v0.2.0...v0.3.0) (2016-09-19)
 
