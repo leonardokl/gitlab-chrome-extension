@@ -60,7 +60,7 @@
 
 	var _store2 = _interopRequireDefault(_store);
 
-	var _app = __webpack_require__(203);
+	var _app = __webpack_require__(204);
 
 	var _app2 = _interopRequireDefault(_app);
 
@@ -23124,12 +23124,17 @@
 
 	var _projects2 = _interopRequireDefault(_projects);
 
+	var _favoriteProjects = __webpack_require__(203);
+
+	var _favoriteProjects2 = _interopRequireDefault(_favoriteProjects);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = {
 	  app: _app2.default,
 	  user: _user2.default,
-	  projects: _projects2.default
+	  projects: _projects2.default,
+	  favoriteProjects: _favoriteProjects2.default
 	};
 
 /***/ },
@@ -23182,6 +23187,9 @@
 	var FETCH_GITLAB_PROJECTS = exports.FETCH_GITLAB_PROJECTS = 'FETCH_GITLAB_PROJECTS';
 	var SEARCH_GITLAB_PROJECTS = exports.SEARCH_GITLAB_PROJECTS = 'SEARCH_GITLAB_PROJECTS';
 	var SEARCH_GITLAB_PROJECTS_REQUEST = exports.SEARCH_GITLAB_PROJECTS_REQUEST = 'SEARCH_GITLAB_PROJECTS_REQUEST';
+	var FETCH_FAVORITE_PROJECTS = exports.FETCH_FAVORITE_PROJECTS = 'FETCH_FAVORITE_PROJECTS';
+	var ADD_PROJECT_TO_FAVORITES = exports.ADD_PROJECT_TO_FAVORITES = 'ADD_PROJECT_TO_FAVORITES';
+	var REMOVE_PROJECT_FROM_FAVORITES = exports.REMOVE_PROJECT_FROM_FAVORITES = 'REMOVE_PROJECT_FROM_FAVORITES';
 
 /***/ },
 /* 201 */
@@ -23243,6 +23251,7 @@
 
 	var initialState = {
 	  list: [],
+	  favorites: [],
 	  searching: false
 	};
 
@@ -23254,6 +23263,8 @@
 	    case _actionTypes.SEARCH_GITLAB_PROJECTS:
 	    case _actionTypes.FETCH_GITLAB_PROJECTS:
 	      return _extends({}, state, { list: action.data, searching: false });
+	    case _actionTypes.ADD_PROJECT_TO_FAVORITES:
+	      return state;
 	    case _actionTypes.SEARCH_GITLAB_PROJECTS_REQUEST:
 	      return _extends({}, state, { searching: true });
 	  }
@@ -23273,6 +23284,51 @@
 	  value: true
 	});
 
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _actionTypes = __webpack_require__(200);
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+	var initialState = {
+	  result: [],
+	  projects: {}
+	};
+
+	var projects = function projects() {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? initialState : arguments[0];
+	  var action = arguments[1];
+
+	  switch (action.type) {
+	    case _actionTypes.REMOVE_PROJECT_FROM_FAVORITES:
+	    case _actionTypes.ADD_PROJECT_TO_FAVORITES:
+	      var project = action.data.project;
+
+	      var normalizedProject = _defineProperty({}, project.id, project);
+
+	      return _extends({}, state, {
+	        result: [project.id].concat(_toConsumableArray(state.result)),
+	        projects: _extends({}, state.projects, _defineProperty({}, project.id, project))
+	      });
+	  }
+
+	  return state;
+	};
+
+	exports.default = projects;
+
+/***/ },
+/* 204 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _react = __webpack_require__(1);
@@ -23281,23 +23337,27 @@
 
 	var _reactRedux = __webpack_require__(172);
 
-	var _actions = __webpack_require__(204);
+	var _actions = __webpack_require__(205);
 
 	var actions = _interopRequireWildcard(_actions);
 
-	var _accessToken = __webpack_require__(210);
+	var _projects = __webpack_require__(241);
+
+	var _projects2 = _interopRequireDefault(_projects);
+
+	var _accessToken = __webpack_require__(211);
 
 	var _accessToken2 = _interopRequireDefault(_accessToken);
 
-	var _main = __webpack_require__(212);
+	var _main = __webpack_require__(213);
 
 	var _main2 = _interopRequireDefault(_main);
 
-	var _issueBranchName = __webpack_require__(222);
+	var _issueBranchName = __webpack_require__(224);
 
 	var _issueBranchName2 = _interopRequireDefault(_issueBranchName);
 
-	__webpack_require__(233);
+	__webpack_require__(235);
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -23330,26 +23390,35 @@
 	      var app = _props.app;
 	      var user = _props.user;
 	      var projects = _props.projects;
+	      var favoriteProjects = _props.favoriteProjects;
 
 
 	      if (app.issueBranchName) return _react2.default.createElement(_issueBranchName2.default, {
 	        branchName: this.props.app.issueBranchName
 	      });
 
-	      if (!user.accessToken) return _react2.default.createElement(_accessToken2.default, {
-	        loading: user.loading,
-	        onCreateNewChromeTab: this.props.onCreateNewChromeTab,
-	        onSave: this.props.onSaveAccessToken
-	      });
+	      if (!user.accessToken) return (
+	        // TODO: connect to state inside of container
+	        _react2.default.createElement(_accessToken2.default, {
+	          loading: user.loading,
+	          onCreateNewChromeTab: this.props.onCreateNewChromeTab,
+	          onSave: this.props.onSaveAccessToken
+	        })
+	      );
 
-	      return _react2.default.createElement(_main2.default, {
-	        user: user,
-	        projects: projects,
-	        onDidMount: this.props.onMainDidMount,
-	        onRemoveAccessToken: this.props.onRemoveAccessToken,
-	        onChangeFilter: this.props.onSearchProjects,
-	        onCreateNewChromeTab: this.props.onCreateNewChromeTab
-	      });
+	      return (
+	        // TODO: connect to state inside of container
+	        _react2.default.createElement(_main2.default, {
+	          user: user,
+	          projects: projects,
+	          favoriteProjects: favoriteProjects,
+	          onDidMount: this.props.onMainDidMount,
+	          onRemoveAccessToken: this.props.onRemoveAccessToken,
+	          onChangeFilter: this.props.onSearchProjects,
+	          onCreateNewChromeTab: this.props.onCreateNewChromeTab,
+	          onAddProjectToFavorites: this.props.onAddProjectToFavorites
+	        })
+	      );
 	    }
 	  }, {
 	    key: 'render',
@@ -23369,7 +23438,8 @@
 	  return {
 	    app: state.app,
 	    user: state.user,
-	    projects: state.projects
+	    projects: state.projects,
+	    favoriteProjects: state.favoriteProjects
 	  };
 	};
 
@@ -23381,6 +23451,9 @@
 	    },
 	    onMainDidMount: function onMainDidMount() {
 	      dispatch(actions.fetchProjects());
+	    },
+	    onAddProjectToFavorites: function onAddProjectToFavorites(projectId) {
+	      dispatch(actions.addProjectToFavorites(projectId));
 	    },
 	    onSearchProjects: function onSearchProjects(value) {
 	      dispatch(actions.searchProjects(value));
@@ -23400,7 +23473,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(App);
 
 /***/ },
-/* 204 */
+/* 205 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23408,9 +23481,9 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.fetchIssueBranchName = exports.createChromeNewTab = exports.searchProjects = exports.fetchProjects = exports.removeUserAccessToken = exports.saveUserAccessToken = exports.fetchUserAccessToken = undefined;
+	exports.fetchIssueBranchName = exports.createChromeNewTab = exports.searchProjects = exports.removeProjectFromFavorites = exports.addProjectToFavorites = exports.fetchFavoriteProjects = exports.fetchProjects = exports.removeUserAccessToken = exports.saveUserAccessToken = exports.fetchUserAccessToken = undefined;
 
-	var _api = __webpack_require__(205);
+	var _api = __webpack_require__(206);
 
 	var _api2 = _interopRequireDefault(_api);
 
@@ -23520,6 +23593,7 @@
 			_api2.default.gitlab.fetchProjects({ accessToken: state.user.accessToken }).then(function (response) {
 				var projects = response.map(function (project) {
 					return {
+						id: project.id,
 						name: project.name,
 						nameSpace: project.namespace.name,
 						webUrl: project.web_url,
@@ -23537,6 +23611,39 @@
 					type: actionTypes.FETCH_GITLAB_PROJECTS,
 					data: []
 				});
+			});
+		};
+	};
+
+	var fetchFavoriteProjects = exports.fetchFavoriteProjects = function fetchFavoriteProjects() {
+		return function (dispatch) {
+			dispatch({
+				type: actionTypes.FETCH_FAVORITE_PROJECTS
+			});
+		};
+	};
+
+	var addProjectToFavorites = exports.addProjectToFavorites = function addProjectToFavorites(projectId) {
+		return function (dispatch, getState) {
+			var projectsList = getState().projects.list;
+			var project = projectsList.find(function (project) {
+				return project.id === projectId;
+			});
+
+			dispatch({
+				type: actionTypes.ADD_PROJECT_TO_FAVORITES,
+				data: { project: project }
+			});
+		};
+	};
+
+	var removeProjectFromFavorites = exports.removeProjectFromFavorites = function removeProjectFromFavorites(projectId) {
+		return function (dispatch, getState) {
+			var projectsList = getState().projects.list;
+
+			dispatch({
+				type: actionTypes.REMOVE_PROJECT_FROM_FAVORITES,
+				data: { projectId: projectId }
 			});
 		};
 	};
@@ -23561,6 +23668,7 @@
 			_api2.default.gitlab.searchProjects({ accessToken: accessToken, value: value }).then(function (response) {
 				var projects = response.map(function (project) {
 					return {
+						id: project.id,
 						name: project.name,
 						nameSpace: project.namespace.name,
 						webUrl: project.web_url,
@@ -23601,7 +23709,7 @@
 	};
 
 /***/ },
-/* 205 */
+/* 206 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23610,11 +23718,11 @@
 	  value: true
 	});
 
-	var _chrome = __webpack_require__(206);
+	var _chrome = __webpack_require__(207);
 
 	var _chrome2 = _interopRequireDefault(_chrome);
 
-	var _gitlab = __webpack_require__(208);
+	var _gitlab = __webpack_require__(209);
 
 	var _gitlab2 = _interopRequireDefault(_gitlab);
 
@@ -23626,7 +23734,7 @@
 	};
 
 /***/ },
-/* 206 */
+/* 207 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23637,7 +23745,7 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /* global chrome */
 
-	var _chrome = __webpack_require__(207);
+	var _chrome = __webpack_require__(208);
 
 	var _chrome2 = _interopRequireDefault(_chrome);
 
@@ -23695,7 +23803,7 @@
 	exports.default = ChromeAPI;
 
 /***/ },
-/* 207 */
+/* 208 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -23747,7 +23855,7 @@
 	exports.default = Chrome;
 
 /***/ },
-/* 208 */
+/* 209 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(fetch) {'use strict';
@@ -23835,10 +23943,10 @@
 	}();
 
 	exports.default = GitlabAPI;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(209)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(210)))
 
 /***/ },
-/* 209 */
+/* 210 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/*** IMPORTS FROM imports-loader ***/
@@ -24285,7 +24393,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 210 */
+/* 211 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24300,7 +24408,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _classnames = __webpack_require__(211);
+	var _classnames = __webpack_require__(212);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -24410,7 +24518,7 @@
 	exports.default = AccessToken;
 
 /***/ },
-/* 211 */
+/* 212 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -24464,7 +24572,7 @@
 
 
 /***/ },
-/* 212 */
+/* 213 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24479,11 +24587,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _appBar = __webpack_require__(213);
+	var _appBar = __webpack_require__(214);
 
 	var _appBar2 = _interopRequireDefault(_appBar);
 
-	var _projects = __webpack_require__(216);
+	var _projects = __webpack_require__(217);
 
 	var _projects2 = _interopRequireDefault(_projects);
 
@@ -24512,9 +24620,11 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var projects = this.props.projects;
+	      var _props = this.props;
+	      var projects = _props.projects;
+	      var favoriteProjects = _props.favoriteProjects;
 
-
+	      console.log('main.favoriteProjects', favoriteProjects);
 	      return _react2.default.createElement(
 	        'div',
 	        null,
@@ -24526,7 +24636,8 @@
 	        }),
 	        _react2.default.createElement(_projects2.default, {
 	          list: projects.list,
-	          onCreateNewChromeTab: this.props.onCreateNewChromeTab
+	          onCreateNewChromeTab: this.props.onCreateNewChromeTab,
+	          onAddProjectToFavorites: this.props.onAddProjectToFavorites
 	        })
 	      );
 	    }
@@ -24538,7 +24649,7 @@
 	exports.default = Main;
 
 /***/ },
-/* 213 */
+/* 214 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24553,11 +24664,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _avatar = __webpack_require__(214);
+	var _avatar = __webpack_require__(215);
 
 	var _avatar2 = _interopRequireDefault(_avatar);
 
-	var _searchInput = __webpack_require__(215);
+	var _searchInput = __webpack_require__(216);
 
 	var _searchInput2 = _interopRequireDefault(_searchInput);
 
@@ -24652,7 +24763,7 @@
 	exports.default = AppBar;
 
 /***/ },
-/* 214 */
+/* 215 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24678,7 +24789,7 @@
 	module.exports = Avatar;
 
 /***/ },
-/* 215 */
+/* 216 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24687,7 +24798,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _classnames = __webpack_require__(211);
+	var _classnames = __webpack_require__(212);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -24730,7 +24841,7 @@
 	module.exports = SearchInput;
 
 /***/ },
-/* 216 */
+/* 217 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24739,7 +24850,7 @@
 	  value: true
 	});
 
-	var _projects = __webpack_require__(217);
+	var _projects = __webpack_require__(218);
 
 	var _projects2 = _interopRequireDefault(_projects);
 
@@ -24748,7 +24859,7 @@
 	exports.default = _projects2.default;
 
 /***/ },
-/* 217 */
+/* 218 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24757,11 +24868,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _list = __webpack_require__(218);
+	var _classnames = __webpack_require__(212);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	var _list = __webpack_require__(219);
 
 	var _list2 = _interopRequireDefault(_list);
 
-	var _projectItem = __webpack_require__(220);
+	var _projectItem = __webpack_require__(221);
 
 	var _projectItem2 = _interopRequireDefault(_projectItem);
 
@@ -24772,9 +24887,15 @@
 	    evt.stopPropagation();
 	    props.onCreateNewChromeTab(url);
 	  };
+
 	  var handleOnClickProjectIssue = function handleOnClickProjectIssue(evt, url) {
 	    evt.stopPropagation();
 	    props.onCreateNewChromeTab(url + '/issues/new?issue');
+	  };
+
+	  var handleOnClickFavorite = function handleOnClickFavorite(evt, projectId) {
+	    evt.stopPropagation();
+	    props.onAddProjectToFavorites(projectId);
 	  };
 
 	  return _react2.default.createElement(
@@ -24783,6 +24904,8 @@
 	    props.list.map(function (project, index) {
 	      return _react2.default.createElement(_projectItem2.default, {
 	        key: index,
+	        className: (0, _classnames2.default)('projects__item', { favorite: project.favorite }),
+	        favorite: project.favorite,
 	        name: project.name,
 	        nameSpace: project.nameSpace,
 	        url: project.webUrl,
@@ -24791,6 +24914,9 @@
 	        },
 	        onClickIssue: function onClickIssue(evt) {
 	          return handleOnClickProjectIssue(evt, project.webUrl);
+	        },
+	        onClickFavorite: function onClickFavorite(evt) {
+	          return handleOnClickFavorite(evt, project.id);
 	        }
 	      });
 	    })
@@ -24804,7 +24930,7 @@
 	module.exports = Projects;
 
 /***/ },
-/* 218 */
+/* 219 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24813,7 +24939,7 @@
 	  value: true
 	});
 
-	var _list = __webpack_require__(219);
+	var _list = __webpack_require__(220);
 
 	var _list2 = _interopRequireDefault(_list);
 
@@ -24822,7 +24948,7 @@
 	exports.default = _list2.default;
 
 /***/ },
-/* 219 */
+/* 220 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -24848,7 +24974,7 @@
 	module.exports = List;
 
 /***/ },
-/* 220 */
+/* 221 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24857,16 +24983,20 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _item = __webpack_require__(221);
+	var _item = __webpack_require__(222);
 
 	var _item2 = _interopRequireDefault(_item);
+
+	var _icon = __webpack_require__(223);
+
+	var _icon2 = _interopRequireDefault(_icon);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var ProjectItem = function ProjectItem(props) {
 	  return _react2.default.createElement(
 	    _item2.default,
-	    { onClick: props.onClick },
+	    { className: props.className, onClick: props.onClick },
 	    _react2.default.createElement(
 	      'div',
 	      { className: 'projects__item__action right floated content' },
@@ -24878,19 +25008,24 @@
 	          title: props.url + '/issues/new?issue',
 	          onClick: props.onClickIssue
 	        },
-	        _react2.default.createElement('i', { className: 'icon plus' }),
+	        _react2.default.createElement(_icon2.default, { name: 'plus' }),
 	        'Issue'
 	      )
 	    ),
 	    _react2.default.createElement(
 	      'div',
-	      { className: 'description' },
-	      props.nameSpace
+	      { className: 'header' },
+	      props.name + ' ',
+	      _react2.default.createElement(_icon2.default, {
+	        className: 'projects__item__favorite--hidden',
+	        name: props.favorite ? 'star' : 'empty star',
+	        onClick: props.onClickFavorite
+	      })
 	    ),
 	    _react2.default.createElement(
 	      'div',
-	      { className: 'header' },
-	      props.name
+	      { className: 'description' },
+	      props.nameSpace
 	    )
 	  );
 	};
@@ -24898,6 +25033,7 @@
 	ProjectItem.propTypes = {
 	  name: _react2.default.PropTypes.string,
 	  nameSpace: _react2.default.PropTypes.string,
+	  favorite: _react2.default.PropTypes.bool,
 	  onClick: _react2.default.PropTypes.func,
 	  onClickIssue: _react2.default.PropTypes.func
 	};
@@ -24914,47 +25050,6 @@
 	module.exports = ProjectItem;
 
 /***/ },
-/* 221 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var Item = function Item(props) {
-	  return _react2.default.createElement(
-	    "div",
-	    {
-	      style: { padding: 10 },
-	      className: "item",
-	      onClick: props.onClick
-	    },
-	    _react2.default.createElement(
-	      "div",
-	      { className: "content" },
-	      props.children
-	    )
-	  );
-	};
-
-	Item.propTypes = {
-	  children: _react2.default.PropTypes.array,
-	  onClick: _react2.default.PropTypes.func
-	};
-
-	Item.defaultProps = {
-	  onClick: function onClick() {
-	    return 1;
-	  }
-	};
-
-	module.exports = Item;
-
-/***/ },
 /* 222 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -24964,7 +25059,87 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _clipboardInput = __webpack_require__(223);
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Item = function Item(props) {
+	  return _react2.default.createElement(
+	    'div',
+	    {
+	      style: { padding: 10 },
+	      className: props.className + ' item',
+	      onClick: props.onClick
+	    },
+	    _react2.default.createElement(
+	      'div',
+	      { className: 'content' },
+	      props.children
+	    )
+	  );
+	};
+
+	Item.propTypes = {
+	  children: _react2.default.PropTypes.array,
+	  className: _react2.default.PropTypes.string,
+	  onClick: _react2.default.PropTypes.func
+	};
+
+	Item.defaultProps = {
+	  className: '',
+	  onClick: function onClick() {
+	    return 1;
+	  }
+	};
+
+	module.exports = Item;
+
+/***/ },
+/* 223 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Icon = function Icon(props) {
+	  return _react2.default.createElement('i', {
+	    style: props.color ? { color: props.color } : {},
+	    className: props.className + ' ' + props.name + ' icon',
+	    onClick: props.onClick
+	  });
+	};
+
+	Icon.propTypes = {
+	  className: _react2.default.PropTypes.string,
+	  color: _react2.default.PropTypes.string,
+	  name: _react2.default.PropTypes.string,
+	  onClick: _react2.default.PropTypes.func
+	};
+
+	Icon.defaultProps = {
+	  className: '',
+	  name: 'gitlab',
+	  onClick: function onClick() {
+	    return 1;
+	  }
+	};
+
+	module.exports = Icon;
+
+/***/ },
+/* 224 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _clipboardInput = __webpack_require__(225);
 
 	var _clipboardInput2 = _interopRequireDefault(_clipboardInput);
 
@@ -24992,7 +25167,7 @@
 	module.exports = IssueBranchName;
 
 /***/ },
-/* 223 */
+/* 225 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25007,7 +25182,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _clipboard = __webpack_require__(224);
+	var _clipboard = __webpack_require__(226);
 
 	var _clipboard2 = _interopRequireDefault(_clipboard);
 
@@ -25079,12 +25254,12 @@
 	exports.default = ClipboardInput;
 
 /***/ },
-/* 224 */
+/* 226 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (global, factory) {
 	    if (true) {
-	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [module, __webpack_require__(225), __webpack_require__(227), __webpack_require__(228)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [module, __webpack_require__(227), __webpack_require__(229), __webpack_require__(230)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	    } else if (typeof exports !== "undefined") {
 	        factory(module, require('./clipboard-action'), require('tiny-emitter'), require('good-listener'));
 	    } else {
@@ -25243,12 +25418,12 @@
 	});
 
 /***/ },
-/* 225 */
+/* 227 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (global, factory) {
 	    if (true) {
-	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [module, __webpack_require__(226)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [module, __webpack_require__(228)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	    } else if (typeof exports !== "undefined") {
 	        factory(module, require('select'));
 	    } else {
@@ -25474,7 +25649,7 @@
 	});
 
 /***/ },
-/* 226 */
+/* 228 */
 /***/ function(module, exports) {
 
 	function select(element) {
@@ -25508,7 +25683,7 @@
 
 
 /***/ },
-/* 227 */
+/* 229 */
 /***/ function(module, exports) {
 
 	function E () {
@@ -25580,11 +25755,11 @@
 
 
 /***/ },
-/* 228 */
+/* 230 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var is = __webpack_require__(229);
-	var delegate = __webpack_require__(230);
+	var is = __webpack_require__(231);
+	var delegate = __webpack_require__(232);
 
 	/**
 	 * Validates all params and calls the right
@@ -25681,7 +25856,7 @@
 
 
 /***/ },
-/* 229 */
+/* 231 */
 /***/ function(module, exports) {
 
 	/**
@@ -25736,10 +25911,10 @@
 
 
 /***/ },
-/* 230 */
+/* 232 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var closest = __webpack_require__(231);
+	var closest = __webpack_require__(233);
 
 	/**
 	 * Delegates event to a selector.
@@ -25786,10 +25961,10 @@
 
 
 /***/ },
-/* 231 */
+/* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var matches = __webpack_require__(232)
+	var matches = __webpack_require__(234)
 
 	module.exports = function (element, selector, checkYoSelf) {
 	  var parent = checkYoSelf ? element : element.parentNode
@@ -25802,7 +25977,7 @@
 
 
 /***/ },
-/* 232 */
+/* 234 */
 /***/ function(module, exports) {
 
 	
@@ -25847,16 +26022,16 @@
 	}
 
 /***/ },
-/* 233 */
+/* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(234);
+	var content = __webpack_require__(236);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(236)(content, {});
+	var update = __webpack_require__(238)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -25873,21 +26048,21 @@
 	}
 
 /***/ },
-/* 234 */
+/* 236 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(235)();
+	exports = module.exports = __webpack_require__(237)();
 	// imports
 
 
 	// module
-	exports.push([module.id, "body,\nhtml {\n  height: initial;\n}\n.max-width {\n  width: 100%;\n}\n.container {\n  margin: 10px;\n}\n.projects__item__action {\n  visibility: hidden;\n}\n.item:hover .projects__item__action {\n  visibility: visible;\n}\n.clipboard-input {\n  width: 100%;\n}\n.ui.dropdown.menu {\n  left: -75px;\n}\n.title {\n  margin-bottom: 10px !important;\n  color: rgba(45,45,45,0.87) !important;\n  text-align: center !important;\n}\ninput::selection {\n  background: #cce1fe;\n}\n", ""]);
+	exports.push([module.id, "body,\nhtml {\n  height: initial;\n}\n.max-width {\n  width: 100%;\n}\n.container {\n  margin: 10px;\n}\n.projects__item .projects__item__favorite--hidden {\n  visibility: hidden;\n}\n.projects__item:hover .projects__item__favorite--hidden {\n  visibility: visible;\n}\n.projects__item.favorite .projects__item__favorite--hidden {\n  visibility: visible;\n  color: #fca326;\n}\n.projects__item__action {\n  visibility: hidden;\n}\n.projects__item__favorite--hidden {\n  color: #808080;\n}\n.projects__item__favorite--hidden:hover {\n  color: #fca326;\n}\n.item:hover .projects__item__action {\n  visibility: visible;\n}\n.clipboard-input {\n  width: 100%;\n}\n.ui.dropdown.menu {\n  left: -75px;\n}\n.title {\n  margin-bottom: 10px !important;\n  color: rgba(45,45,45,0.87) !important;\n  text-align: center !important;\n}\ninput::selection {\n  background: #cce1fe;\n}\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 235 */
+/* 237 */
 /***/ function(module, exports) {
 
 	/*
@@ -25943,7 +26118,7 @@
 
 
 /***/ },
-/* 236 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -26193,6 +26368,25 @@
 			URL.revokeObjectURL(oldSrc);
 	}
 
+
+/***/ },
+/* 239 */,
+/* 240 */,
+/* 241 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var projectsSelector = exports.projectsSelector = function projectsSelector(state) {
+	  return state.projects.list.map(function (project) {
+	    project.favorite = project.id === state.favoriteProjects.projects[project.id];
+
+	    return project;
+	  });
+	};
 
 /***/ }
 /******/ ]);

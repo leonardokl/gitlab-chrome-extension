@@ -9,8 +9,25 @@ body, html
 .container
   margin 10px
 
+.projects__item
+  .projects__item__favorite--hidden
+    visibility hidden
+  &:hover
+    .projects__item__favorite--hidden
+      visibility visible
+
+.projects__item.favorite
+  .projects__item__favorite--hidden
+    visibility visible
+    color #fca326
+
 .projects__item__action
   visibility hidden
+
+.projects__item__favorite--hidden
+  color grey
+  &:hover
+    color #fca326
 
 .item
   &:hover

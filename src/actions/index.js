@@ -90,6 +90,7 @@ export const fetchProjects = () => (dispatch, getState) => {
 	API.gitlab.fetchProjects({accessToken: state.user.accessToken})
 		.then((response) => {
 			const projects = response.map(project => ({
+				id: project.id,
 				name: project.name,
 				nameSpace: project.namespace.name,
 				webUrl: project.web_url,
@@ -108,6 +109,32 @@ export const fetchProjects = () => (dispatch, getState) => {
 		}))
 }
 
+export const fetchFavoriteProjects = () => (dispatch) => {
+	dispatch({
+		type: actionTypes.FETCH_FAVORITE_PROJECTS,
+	})
+}
+
+export const addProjectToFavorites = (projectId) => (dispatch, getState) => {
+	const projectsList = getState().projects.list
+	const project = projectsList.find(project => project.id === projectId)
+
+	dispatch({
+		type: actionTypes.ADD_PROJECT_TO_FAVORITES,
+		data: {project}
+	})
+}
+
+export const removeProjectFromFavorites = (projectId) => (dispatch, getState) => {
+	const projectsList = getState().projects.list
+
+	dispatch({
+		type: actionTypes.REMOVE_PROJECT_FROM_FAVORITES,
+		data: {projectId}
+	})
+}
+
+
 const searchProjectsRequest = () => (dispatch) => {
 	dispatch({
 		type: actionTypes.SEARCH_GITLAB_PROJECTS_REQUEST
@@ -125,6 +152,7 @@ export const searchProjects = (value) => (dispatch, getState) => {
 	API.gitlab.searchProjects({accessToken, value})
 		.then(response => {
 			const projects = response.map(project => ({
+				id: project.id,
 				name: project.name,
 				nameSpace: project.namespace.name,
 				webUrl: project.web_url,

@@ -8,8 +8,8 @@ class Main extends React.Component {
   }
 
   render() {
-    const {projects} = this.props
-
+    const {projects, favoriteProjects} = this.props
+console.log('main.favoriteProjects', favoriteProjects)
     return (
       <div>
         <AppBar
@@ -20,7 +20,8 @@ class Main extends React.Component {
         />
         <Projects
           list={projects.list}
-          onCreateNewChromeTab={this.props.onCreateNewChromeTab}    
+          onCreateNewChromeTab={this.props.onCreateNewChromeTab}
+          onAddProjectToFavorites={this.props.onAddProjectToFavorites}
         />
       </div>
     )

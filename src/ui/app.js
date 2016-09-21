@@ -2,6 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import * as actions from 'actions'
 
+import projectsSelector from 'selectors/projects'
 import AccessToken from 'ui/containers/access-token'
 import Main from 'ui/containers/main'
 import IssueBranchName from 'ui/containers/issue-branch-name'
@@ -13,7 +14,7 @@ class App extends React.Component {
   }
 
   renderContent() {
-    const {app, user, projects} = this.props
+    const {app, user, projects, favoriteProjects} = this.props
 
     if (app.issueBranchName)
       return (
@@ -24,6 +25,7 @@ class App extends React.Component {
 
     if (!user.accessToken)
       return (
+        // TODO: connect to state inside of container
         <AccessToken
           loading={user.loading}
           onCreateNewChromeTab={this.props.onCreateNewChromeTab}
@@ -32,13 +34,16 @@ class App extends React.Component {
       )
 
     return (
+      // TODO: connect to state inside of container
       <Main
         user={user}
         projects={projects}
+        favoriteProjects={favoriteProjects}
         onDidMount={this.props.onMainDidMount}
         onRemoveAccessToken={this.props.onRemoveAccessToken}
         onChangeFilter={this.props.onSearchProjects}
         onCreateNewChromeTab={this.props.onCreateNewChromeTab}
+        onAddProjectToFavorites={this.props.onAddProjectToFavorites}
       />
     )
   }
@@ -55,7 +60,8 @@ class App extends React.Component {
 const mapStateToProps = (state) => ({
   app: state.app,
   user: state.user,
-  projects: state.projects
+  projects: state.projects,
+  favoriteProjects: state.favoriteProjects,
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -65,6 +71,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   onMainDidMount: () => {
     dispatch(actions.fetchProjects())
+  },
+  onAddProjectToFavorites: (projectId) => {
+      dispatch(actions.addProjectToFavorites(projectId))
   },
   onSearchProjects: (value) => {
     dispatch(actions.searchProjects(value))
