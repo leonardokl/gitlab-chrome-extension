@@ -43,7 +43,7 @@ class App extends React.Component {
         onRemoveAccessToken={this.props.onRemoveAccessToken}
         onChangeFilter={this.props.onSearchProjects}
         onCreateNewChromeTab={this.props.onCreateNewChromeTab}
-        onAddProjectToFavorites={this.props.onAddProjectToFavorites}
+        onAddProjectToFavorites={this.props.onToggleProjectFavorite}
       />
     )
   }
@@ -72,8 +72,8 @@ const mapDispatchToProps = (dispatch) => ({
   onMainDidMount: () => {
     dispatch(actions.fetchProjects())
   },
-  onAddProjectToFavorites: (projectId) => {
-      dispatch(actions.addProjectToFavorites(projectId))
+  onToggleProjectFavorite: (projectId) => {
+      dispatch(actions.toggleProjectFavorite(projectId))
   },
   onSearchProjects: (value) => {
     dispatch(actions.searchProjects(value))

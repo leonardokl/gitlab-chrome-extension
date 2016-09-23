@@ -1,7 +1,7 @@
 /* global chrome */
 
 import API from 'api'
-import * as actionTypes from 'constants/action-types'
+import * as action from 'constants/action-types'
 
 const fetchBranchNameAttribute = (tabId) => {
 	return new Promise((resolve, reject) => {
@@ -21,7 +21,7 @@ export const fetchUserAccessToken = () => (dispatch) => {
 			const user = response.data
 
 			dispatch({
-				type: actionTypes.FETCH_ACCESS_TOKEN,
+				type: action.FETCH_ACCESS_TOKEN,
 				data: user
 			})
 		})
@@ -30,13 +30,13 @@ export const fetchUserAccessToken = () => (dispatch) => {
 
 const saveUserAccessTokenRequest = () => (dispatch) => {
 	dispatch({
-		type: actionTypes.SAVE_ACCESS_TOKEN_REQUEST
+		type: action.SAVE_ACCESS_TOKEN_REQUEST
 	})
 }
 
 const saveUserAccessTokenError = () => (dispatch) => {
 	dispatch({
-		type: actionTypes.SAVE_ACCESS_TOKEN_ERROR
+		type: action.SAVE_ACCESS_TOKEN_ERROR
 	})
 }
 
@@ -54,7 +54,7 @@ export const saveUserAccessToken = (accessToken) => (dispatch) => {
 
 			chrome.storage.sync.set({user}, () =>
 				dispatch({
-					type: actionTypes.SAVE_ACCESS_TOKEN,
+					type: action.SAVE_ACCESS_TOKEN,
 					data: user
 				})
 			)
@@ -65,7 +65,7 @@ export const saveUserAccessToken = (accessToken) => (dispatch) => {
 export const removeUserAccessToken = () => (dispatch) => {
 	API.chrome.clearStorage()
 		.then(() => dispatch({
-			type: actionTypes.REMOVE_ACCESS_TOKEN,
+			type: action.REMOVE_ACCESS_TOKEN,
 		}))
 }
 
@@ -73,7 +73,7 @@ const fetchStorageProjects = () => (dispatch) => {
 	API.chrome.getStorage('projects')
 		.then(response => {
 			dispatch({
-				type: actionTypes.FETCH_GITLAB_PROJECTS,
+				type: action.FETCH_GITLAB_PROJECTS,
 				data: response.data
 			})
 		})
@@ -86,7 +86,7 @@ const saveProjectsToStorage = (projects) => {
 export const fetchProjects = () => (dispatch, getState) => {
 	const state = getState()
 
-	dispatch(fetchStorageProjects())
+	//dispatch(fetchStorageProjects())
 	API.gitlab.fetchProjects({accessToken: state.user.accessToken})
 		.then((response) => {
 			const projects = response.map(project => ({
@@ -98,46 +98,74 @@ export const fetchProjects = () => (dispatch, getState) => {
 			}))
 
 			dispatch({
-				type: actionTypes.FETCH_GITLAB_PROJECTS,
+				type: action.FETCH_GITLAB_PROJECTS,
 				data: projects
 			})
 			saveProjectsToStorage(projects)
 		})
 		.catch(() => dispatch({
-			type: actionTypes.FETCH_GITLAB_PROJECTS,
+			type: action.FETCH_GITLAB_PROJECTS,
 			data: []
 		}))
 }
 
 export const fetchFavoriteProjects = () => (dispatch) => {
 	dispatch({
-		type: actionTypes.FETCH_FAVORITE_PROJECTS,
+		type: action.FETCH_FAVORITE_PROJECTS,
 	})
 }
 
-export const addProjectToFavorites = (projectId) => (dispatch, getState) => {
-	const projectsList = getState().projects.list
-	const project = projectsList.find(project => project.id === projectId)
+const addProjectToFavorites = (project) => (dispatch) => {
+	API.favorites.create({project})
+		.then(response => (
+			dispatch({
+				type: action.ADD_PROJECT_TO_FAVORITES,
+				data: {
+					project,
+				}
+			})
+		))
+		.catch(error => console.warn(error))
+}
+
+const removeProjectFromFavorites = (projectId) => (dispatch, getState) => {
+	const favoriteIds = getState().favoriteProjects.result
+	const projectIndex = favoriteIds.findIndex(id => id === projectId)
 
 	dispatch({
-		type: actionTypes.ADD_PROJECT_TO_FAVORITES,
-		data: {project}
+		type: action.REMOVE_PROJECT_FROM_FAVORITES,
+		index: projectIndex,
 	})
 }
 
-export const removeProjectFromFavorites = (projectId) => (dispatch, getState) => {
+const addOrRemoveProjectFromFavorites = (project) => (dispatch) => {
+	if (project.favorite)
+		return dispatch(addProjectToFavorites(project))
+
+	return dispatch(removeProjectFromFavorites(project.id))
+}
+
+export const toggleProjectFavorite = (projectId) => (dispatch, getState) => {
 	const projectsList = getState().projects.list
+	const projectIndex = projectsList.findIndex(project => project.id === projectId)
+	const project = {
+		...projectsList[projectIndex],
+		favorite: !(projectsList[projectIndex].favorite)
+	}
 
+	dispatch(addOrRemoveProjectFromFavorites(project))
 	dispatch({
-		type: actionTypes.REMOVE_PROJECT_FROM_FAVORITES,
-		data: {projectId}
+		type: action.TOGGLE_PROJECT_FAVORITE,
+		data: {
+			project,
+			index: projectIndex
+		}
 	})
 }
-
 
 const searchProjectsRequest = () => (dispatch) => {
 	dispatch({
-		type: actionTypes.SEARCH_GITLAB_PROJECTS_REQUEST
+		type: action.SEARCH_GITLAB_PROJECTS_REQUEST
 	})
 }
 
@@ -160,12 +188,12 @@ export const searchProjects = (value) => (dispatch, getState) => {
 			}))
 
 			dispatch({
-				type: actionTypes.SEARCH_GITLAB_PROJECTS,
+				type: action.SEARCH_GITLAB_PROJECTS,
 				data: projects
 			})
 		})
 		.catch(() => dispatch({
-			type: actionTypes.SEARCH_GITLAB_PROJECTS,
+			type: action.SEARCH_GITLAB_PROJECTS,
 			data: []
 		}))
 }
@@ -179,7 +207,7 @@ export const fetchIssueBranchName = () => (dispatch) => {
     .then(tab => {
       fetchBranchNameAttribute(tab.id)
         .then((response) => dispatch({
-          type: actionTypes.FETCH_ISSUE_BRANCH_NAME,
+          type: action.FETCH_ISSUE_BRANCH_NAME,
           data: response
         }))
     })

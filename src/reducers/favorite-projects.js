@@ -11,6 +11,17 @@ const initialState = {
 const projects = (state = initialState, action) => {
   switch (action.type) {
   case REMOVE_PROJECT_FROM_FAVORITES:
+    return {
+      ...state,
+      projects: {
+        ...state.projects,
+        [state.result[action.index]]: false
+      },
+      result: [
+        ...state.result.slice(0, action.index),
+        ...state.result.slice(action.index + 1)
+      ]
+    }
   case ADD_PROJECT_TO_FAVORITES:
     const {project} = action.data
     const normalizedProject = {[project.id]: project}

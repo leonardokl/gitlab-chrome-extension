@@ -9,7 +9,8 @@ class Main extends React.Component {
 
   render() {
     const {projects, favoriteProjects} = this.props
-console.log('main.favoriteProjects', favoriteProjects)
+console.log('main.PROJECTS', projects)
+console.log('main.FAVORITES', favoriteProjects);
     return (
       <div>
         <AppBar

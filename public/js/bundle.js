@@ -23188,6 +23188,7 @@
 	var SEARCH_GITLAB_PROJECTS = exports.SEARCH_GITLAB_PROJECTS = 'SEARCH_GITLAB_PROJECTS';
 	var SEARCH_GITLAB_PROJECTS_REQUEST = exports.SEARCH_GITLAB_PROJECTS_REQUEST = 'SEARCH_GITLAB_PROJECTS_REQUEST';
 	var FETCH_FAVORITE_PROJECTS = exports.FETCH_FAVORITE_PROJECTS = 'FETCH_FAVORITE_PROJECTS';
+	var TOGGLE_PROJECT_FAVORITE = exports.TOGGLE_PROJECT_FAVORITE = 'TOGGLE_PROJECT_FAVORITE';
 	var ADD_PROJECT_TO_FAVORITES = exports.ADD_PROJECT_TO_FAVORITES = 'ADD_PROJECT_TO_FAVORITES';
 	var REMOVE_PROJECT_FROM_FAVORITES = exports.REMOVE_PROJECT_FROM_FAVORITES = 'REMOVE_PROJECT_FROM_FAVORITES';
 
@@ -23249,12 +23250,15 @@
 
 	var _actionTypes = __webpack_require__(200);
 
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 	var initialState = {
 	  list: [],
 	  favorites: [],
 	  searching: false
 	};
-
+	// ...state.alternatives.slice(0, action.index),
+	// ...state.alternatives.slice(action.index + 1)
 	var projects = function projects() {
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? initialState : arguments[0];
 	  var action = arguments[1];
@@ -23263,8 +23267,16 @@
 	    case _actionTypes.SEARCH_GITLAB_PROJECTS:
 	    case _actionTypes.FETCH_GITLAB_PROJECTS:
 	      return _extends({}, state, { list: action.data, searching: false });
-	    case _actionTypes.ADD_PROJECT_TO_FAVORITES:
-	      return state;
+	    case _actionTypes.TOGGLE_PROJECT_FAVORITE:
+	      var _action$data = action.data;
+	      var index = _action$data.index;
+	      var project = _action$data.project;
+
+
+	      return _extends({}, state, {
+	        list: [].concat(_toConsumableArray(state.list.slice(0, index)), [project], _toConsumableArray(state.list.slice(index + 1)))
+	      });
+
 	    case _actionTypes.SEARCH_GITLAB_PROJECTS_REQUEST:
 	      return _extends({}, state, { searching: true });
 	  }
@@ -23303,6 +23315,10 @@
 
 	  switch (action.type) {
 	    case _actionTypes.REMOVE_PROJECT_FROM_FAVORITES:
+	      return _extends({}, state, {
+	        projects: _extends({}, state.projects, _defineProperty({}, state.result[action.index], false)),
+	        result: [].concat(_toConsumableArray(state.result.slice(0, action.index)), _toConsumableArray(state.result.slice(action.index + 1)))
+	      });
 	    case _actionTypes.ADD_PROJECT_TO_FAVORITES:
 	      var project = action.data.project;
 
@@ -23341,23 +23357,23 @@
 
 	var actions = _interopRequireWildcard(_actions);
 
-	var _projects = __webpack_require__(241);
+	var _projects = __webpack_require__(212);
 
 	var _projects2 = _interopRequireDefault(_projects);
 
-	var _accessToken = __webpack_require__(211);
+	var _accessToken = __webpack_require__(213);
 
 	var _accessToken2 = _interopRequireDefault(_accessToken);
 
-	var _main = __webpack_require__(213);
+	var _main = __webpack_require__(215);
 
 	var _main2 = _interopRequireDefault(_main);
 
-	var _issueBranchName = __webpack_require__(224);
+	var _issueBranchName = __webpack_require__(226);
 
 	var _issueBranchName2 = _interopRequireDefault(_issueBranchName);
 
-	__webpack_require__(235);
+	__webpack_require__(237);
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -23416,7 +23432,7 @@
 	          onRemoveAccessToken: this.props.onRemoveAccessToken,
 	          onChangeFilter: this.props.onSearchProjects,
 	          onCreateNewChromeTab: this.props.onCreateNewChromeTab,
-	          onAddProjectToFavorites: this.props.onAddProjectToFavorites
+	          onAddProjectToFavorites: this.props.onToggleProjectFavorite
 	        })
 	      );
 	    }
@@ -23452,8 +23468,8 @@
 	    onMainDidMount: function onMainDidMount() {
 	      dispatch(actions.fetchProjects());
 	    },
-	    onAddProjectToFavorites: function onAddProjectToFavorites(projectId) {
-	      dispatch(actions.addProjectToFavorites(projectId));
+	    onToggleProjectFavorite: function onToggleProjectFavorite(projectId) {
+	      dispatch(actions.toggleProjectFavorite(projectId));
 	    },
 	    onSearchProjects: function onSearchProjects(value) {
 	      dispatch(actions.searchProjects(value));
@@ -23481,7 +23497,9 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.fetchIssueBranchName = exports.createChromeNewTab = exports.searchProjects = exports.removeProjectFromFavorites = exports.addProjectToFavorites = exports.fetchFavoriteProjects = exports.fetchProjects = exports.removeUserAccessToken = exports.saveUserAccessToken = exports.fetchUserAccessToken = undefined;
+	exports.fetchIssueBranchName = exports.createChromeNewTab = exports.searchProjects = exports.toggleProjectFavorite = exports.fetchFavoriteProjects = exports.fetchProjects = exports.removeUserAccessToken = exports.saveUserAccessToken = exports.fetchUserAccessToken = undefined;
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /* global chrome */
 
 	var _api = __webpack_require__(206);
 
@@ -23489,13 +23507,11 @@
 
 	var _actionTypes = __webpack_require__(200);
 
-	var actionTypes = _interopRequireWildcard(_actionTypes);
+	var action = _interopRequireWildcard(_actionTypes);
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	/* global chrome */
 
 	var fetchBranchNameAttribute = function fetchBranchNameAttribute(tabId) {
 		return new Promise(function (resolve, reject) {
@@ -23511,7 +23527,7 @@
 				var user = response.data;
 
 				dispatch({
-					type: actionTypes.FETCH_ACCESS_TOKEN,
+					type: action.FETCH_ACCESS_TOKEN,
 					data: user
 				});
 			}).catch(function (error) {
@@ -23523,7 +23539,7 @@
 	var saveUserAccessTokenRequest = function saveUserAccessTokenRequest() {
 		return function (dispatch) {
 			dispatch({
-				type: actionTypes.SAVE_ACCESS_TOKEN_REQUEST
+				type: action.SAVE_ACCESS_TOKEN_REQUEST
 			});
 		};
 	};
@@ -23531,7 +23547,7 @@
 	var saveUserAccessTokenError = function saveUserAccessTokenError() {
 		return function (dispatch) {
 			dispatch({
-				type: actionTypes.SAVE_ACCESS_TOKEN_ERROR
+				type: action.SAVE_ACCESS_TOKEN_ERROR
 			});
 		};
 	};
@@ -23550,7 +23566,7 @@
 
 				chrome.storage.sync.set({ user: user }, function () {
 					return dispatch({
-						type: actionTypes.SAVE_ACCESS_TOKEN,
+						type: action.SAVE_ACCESS_TOKEN,
 						data: user
 					});
 				});
@@ -23564,7 +23580,7 @@
 		return function (dispatch) {
 			_api2.default.chrome.clearStorage().then(function () {
 				return dispatch({
-					type: actionTypes.REMOVE_ACCESS_TOKEN
+					type: action.REMOVE_ACCESS_TOKEN
 				});
 			});
 		};
@@ -23574,7 +23590,7 @@
 		return function (dispatch) {
 			_api2.default.chrome.getStorage('projects').then(function (response) {
 				dispatch({
-					type: actionTypes.FETCH_GITLAB_PROJECTS,
+					type: action.FETCH_GITLAB_PROJECTS,
 					data: response.data
 				});
 			});
@@ -23589,7 +23605,7 @@
 		return function (dispatch, getState) {
 			var state = getState();
 
-			dispatch(fetchStorageProjects());
+			//dispatch(fetchStorageProjects())
 			_api2.default.gitlab.fetchProjects({ accessToken: state.user.accessToken }).then(function (response) {
 				var projects = response.map(function (project) {
 					return {
@@ -23602,13 +23618,13 @@
 				});
 
 				dispatch({
-					type: actionTypes.FETCH_GITLAB_PROJECTS,
+					type: action.FETCH_GITLAB_PROJECTS,
 					data: projects
 				});
 				saveProjectsToStorage(projects);
 			}).catch(function () {
 				return dispatch({
-					type: actionTypes.FETCH_GITLAB_PROJECTS,
+					type: action.FETCH_GITLAB_PROJECTS,
 					data: []
 				});
 			});
@@ -23618,32 +23634,65 @@
 	var fetchFavoriteProjects = exports.fetchFavoriteProjects = function fetchFavoriteProjects() {
 		return function (dispatch) {
 			dispatch({
-				type: actionTypes.FETCH_FAVORITE_PROJECTS
+				type: action.FETCH_FAVORITE_PROJECTS
 			});
 		};
 	};
 
-	var addProjectToFavorites = exports.addProjectToFavorites = function addProjectToFavorites(projectId) {
+	var addProjectToFavorites = function addProjectToFavorites(project) {
+		return function (dispatch) {
+			_api2.default.favorites.create({ project: project }).then(function (response) {
+				return dispatch({
+					type: action.ADD_PROJECT_TO_FAVORITES,
+					data: {
+						project: project
+					}
+				});
+			}).catch(function (error) {
+				return console.warn(error);
+			});
+		};
+	};
+
+	var removeProjectFromFavorites = function removeProjectFromFavorites(projectId) {
+		return function (dispatch, getState) {
+			var favoriteIds = getState().favoriteProjects.result;
+			var projectIndex = favoriteIds.findIndex(function (id) {
+				return id === projectId;
+			});
+
+			dispatch({
+				type: action.REMOVE_PROJECT_FROM_FAVORITES,
+				index: projectIndex
+			});
+		};
+	};
+
+	var addOrRemoveProjectFromFavorites = function addOrRemoveProjectFromFavorites(project) {
+		return function (dispatch) {
+			if (project.favorite) return dispatch(addProjectToFavorites(project));
+
+			return dispatch(removeProjectFromFavorites(project.id));
+		};
+	};
+
+	var toggleProjectFavorite = exports.toggleProjectFavorite = function toggleProjectFavorite(projectId) {
 		return function (dispatch, getState) {
 			var projectsList = getState().projects.list;
-			var project = projectsList.find(function (project) {
+			var projectIndex = projectsList.findIndex(function (project) {
 				return project.id === projectId;
 			});
-
-			dispatch({
-				type: actionTypes.ADD_PROJECT_TO_FAVORITES,
-				data: { project: project }
+			var project = _extends({}, projectsList[projectIndex], {
+				favorite: !projectsList[projectIndex].favorite
 			});
-		};
-	};
 
-	var removeProjectFromFavorites = exports.removeProjectFromFavorites = function removeProjectFromFavorites(projectId) {
-		return function (dispatch, getState) {
-			var projectsList = getState().projects.list;
-
+			dispatch(addOrRemoveProjectFromFavorites(project));
 			dispatch({
-				type: actionTypes.REMOVE_PROJECT_FROM_FAVORITES,
-				data: { projectId: projectId }
+				type: action.TOGGLE_PROJECT_FAVORITE,
+				data: {
+					project: project,
+					index: projectIndex
+				}
 			});
 		};
 	};
@@ -23651,7 +23700,7 @@
 	var searchProjectsRequest = function searchProjectsRequest() {
 		return function (dispatch) {
 			dispatch({
-				type: actionTypes.SEARCH_GITLAB_PROJECTS_REQUEST
+				type: action.SEARCH_GITLAB_PROJECTS_REQUEST
 			});
 		};
 	};
@@ -23677,12 +23726,12 @@
 				});
 
 				dispatch({
-					type: actionTypes.SEARCH_GITLAB_PROJECTS,
+					type: action.SEARCH_GITLAB_PROJECTS,
 					data: projects
 				});
 			}).catch(function () {
 				return dispatch({
-					type: actionTypes.SEARCH_GITLAB_PROJECTS,
+					type: action.SEARCH_GITLAB_PROJECTS,
 					data: []
 				});
 			});
@@ -23700,7 +23749,7 @@
 			_api2.default.chrome.getCurrentTab().then(function (tab) {
 				fetchBranchNameAttribute(tab.id).then(function (response) {
 					return dispatch({
-						type: actionTypes.FETCH_ISSUE_BRANCH_NAME,
+						type: action.FETCH_ISSUE_BRANCH_NAME,
 						data: response
 					});
 				});
@@ -23726,11 +23775,16 @@
 
 	var _gitlab2 = _interopRequireDefault(_gitlab);
 
+	var _favorites = __webpack_require__(211);
+
+	var _favorites2 = _interopRequireDefault(_favorites);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = {
 	  chrome: _chrome2.default,
-	  gitlab: _gitlab2.default
+	  gitlab: _gitlab2.default,
+	  favorites: _favorites2.default
 	};
 
 /***/ },
@@ -23879,9 +23933,13 @@
 	var getUrlParams = function getUrlParams() {
 		var params = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-		if (params.per_page) return '&per_page=' + params.per_page;
+		var urlParams = '';
 
-		return '';
+		if (params.per_page) urlParams = '&per_page=' + params.per_page;
+
+		if (params.search) urlParams += '&search=' + params.search;
+
+		return urlParams;
 	};
 	var createRequestUrl = function createRequestUrl(_ref) {
 		var pathname = _ref.pathname;
@@ -23926,11 +23984,11 @@
 			value: function searchProjects(_ref4) {
 				var accessToken = _ref4.accessToken;
 				var value = _ref4.value;
-				console.log('api.searchProjects');
+
 				return fetch(createRequestUrl({
 					accessToken: accessToken,
-					pathname: 'projects/search/' + value,
-					params: { per_page: 6 }
+					pathname: 'projects',
+					params: { per_page: 6, search: value }
 				})).then(function (response) {
 					if (!response.ok) throw { status: response.status, statusText: response.statusText };
 
@@ -24404,11 +24462,82 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+	var _chrome = __webpack_require__(207);
+
+	var _chrome2 = _interopRequireDefault(_chrome);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var FavoritesAPI = function () {
+	  function FavoritesAPI() {
+	    _classCallCheck(this, FavoritesAPI);
+	  }
+
+	  _createClass(FavoritesAPI, null, [{
+	    key: 'get',
+	    value: function get() {
+	      console.log('GET');
+	      return _chrome2.default.getStorage('projects');
+	    }
+	  }, {
+	    key: 'remove',
+	    value: function remove(_ref) {
+	      var accessToken = _ref.accessToken;
+	    }
+	  }, {
+	    key: 'create',
+	    value: function create(_ref2) {
+	      var project = _ref2.project;
+
+	      return FavoritesAPI.get().then(function (response) {
+	        var projects = response.data;
+
+	        console.log('CREATE', projects);
+	      });
+	    }
+	  }]);
+
+	  return FavoritesAPI;
+	}();
+
+	exports.default = FavoritesAPI;
+
+/***/ },
+/* 212 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var projectsSelector = exports.projectsSelector = function projectsSelector(state) {
+	  return state.projects.list.map(function (project) {
+	    project.favorite = project.id === state.favoriteProjects.projects[project.id];
+
+	    return project;
+	  });
+	};
+
+/***/ },
+/* 213 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _classnames = __webpack_require__(212);
+	var _classnames = __webpack_require__(214);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -24518,7 +24647,7 @@
 	exports.default = AccessToken;
 
 /***/ },
-/* 212 */
+/* 214 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -24572,7 +24701,7 @@
 
 
 /***/ },
-/* 213 */
+/* 215 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24587,11 +24716,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _appBar = __webpack_require__(214);
+	var _appBar = __webpack_require__(216);
 
 	var _appBar2 = _interopRequireDefault(_appBar);
 
-	var _projects = __webpack_require__(217);
+	var _projects = __webpack_require__(219);
 
 	var _projects2 = _interopRequireDefault(_projects);
 
@@ -24624,7 +24753,8 @@
 	      var projects = _props.projects;
 	      var favoriteProjects = _props.favoriteProjects;
 
-	      console.log('main.favoriteProjects', favoriteProjects);
+	      console.log('main.PROJECTS', projects);
+	      console.log('main.FAVORITES', favoriteProjects);
 	      return _react2.default.createElement(
 	        'div',
 	        null,
@@ -24649,7 +24779,7 @@
 	exports.default = Main;
 
 /***/ },
-/* 214 */
+/* 216 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24664,11 +24794,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _avatar = __webpack_require__(215);
+	var _avatar = __webpack_require__(217);
 
 	var _avatar2 = _interopRequireDefault(_avatar);
 
-	var _searchInput = __webpack_require__(216);
+	var _searchInput = __webpack_require__(218);
 
 	var _searchInput2 = _interopRequireDefault(_searchInput);
 
@@ -24763,7 +24893,7 @@
 	exports.default = AppBar;
 
 /***/ },
-/* 215 */
+/* 217 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24789,7 +24919,7 @@
 	module.exports = Avatar;
 
 /***/ },
-/* 216 */
+/* 218 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24798,7 +24928,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _classnames = __webpack_require__(212);
+	var _classnames = __webpack_require__(214);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -24841,7 +24971,7 @@
 	module.exports = SearchInput;
 
 /***/ },
-/* 217 */
+/* 219 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24850,7 +24980,7 @@
 	  value: true
 	});
 
-	var _projects = __webpack_require__(218);
+	var _projects = __webpack_require__(220);
 
 	var _projects2 = _interopRequireDefault(_projects);
 
@@ -24859,7 +24989,7 @@
 	exports.default = _projects2.default;
 
 /***/ },
-/* 218 */
+/* 220 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24868,15 +24998,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _classnames = __webpack_require__(212);
+	var _classnames = __webpack_require__(214);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
-	var _list = __webpack_require__(219);
+	var _list = __webpack_require__(221);
 
 	var _list2 = _interopRequireDefault(_list);
 
-	var _projectItem = __webpack_require__(221);
+	var _projectItem = __webpack_require__(223);
 
 	var _projectItem2 = _interopRequireDefault(_projectItem);
 
@@ -24930,7 +25060,7 @@
 	module.exports = Projects;
 
 /***/ },
-/* 219 */
+/* 221 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24939,7 +25069,7 @@
 	  value: true
 	});
 
-	var _list = __webpack_require__(220);
+	var _list = __webpack_require__(222);
 
 	var _list2 = _interopRequireDefault(_list);
 
@@ -24948,7 +25078,7 @@
 	exports.default = _list2.default;
 
 /***/ },
-/* 220 */
+/* 222 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -24974,7 +25104,7 @@
 	module.exports = List;
 
 /***/ },
-/* 221 */
+/* 223 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24983,11 +25113,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _item = __webpack_require__(222);
+	var _item = __webpack_require__(224);
 
 	var _item2 = _interopRequireDefault(_item);
 
-	var _icon = __webpack_require__(223);
+	var _icon = __webpack_require__(225);
 
 	var _icon2 = _interopRequireDefault(_icon);
 
@@ -25050,7 +25180,7 @@
 	module.exports = ProjectItem;
 
 /***/ },
-/* 222 */
+/* 224 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25093,7 +25223,7 @@
 	module.exports = Item;
 
 /***/ },
-/* 223 */
+/* 225 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25130,7 +25260,7 @@
 	module.exports = Icon;
 
 /***/ },
-/* 224 */
+/* 226 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25139,7 +25269,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _clipboardInput = __webpack_require__(225);
+	var _clipboardInput = __webpack_require__(227);
 
 	var _clipboardInput2 = _interopRequireDefault(_clipboardInput);
 
@@ -25167,7 +25297,7 @@
 	module.exports = IssueBranchName;
 
 /***/ },
-/* 225 */
+/* 227 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25182,7 +25312,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _clipboard = __webpack_require__(226);
+	var _clipboard = __webpack_require__(228);
 
 	var _clipboard2 = _interopRequireDefault(_clipboard);
 
@@ -25254,12 +25384,12 @@
 	exports.default = ClipboardInput;
 
 /***/ },
-/* 226 */
+/* 228 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (global, factory) {
 	    if (true) {
-	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [module, __webpack_require__(227), __webpack_require__(229), __webpack_require__(230)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [module, __webpack_require__(229), __webpack_require__(231), __webpack_require__(232)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	    } else if (typeof exports !== "undefined") {
 	        factory(module, require('./clipboard-action'), require('tiny-emitter'), require('good-listener'));
 	    } else {
@@ -25418,12 +25548,12 @@
 	});
 
 /***/ },
-/* 227 */
+/* 229 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (global, factory) {
 	    if (true) {
-	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [module, __webpack_require__(228)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [module, __webpack_require__(230)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	    } else if (typeof exports !== "undefined") {
 	        factory(module, require('select'));
 	    } else {
@@ -25649,7 +25779,7 @@
 	});
 
 /***/ },
-/* 228 */
+/* 230 */
 /***/ function(module, exports) {
 
 	function select(element) {
@@ -25683,7 +25813,7 @@
 
 
 /***/ },
-/* 229 */
+/* 231 */
 /***/ function(module, exports) {
 
 	function E () {
@@ -25755,11 +25885,11 @@
 
 
 /***/ },
-/* 230 */
+/* 232 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var is = __webpack_require__(231);
-	var delegate = __webpack_require__(232);
+	var is = __webpack_require__(233);
+	var delegate = __webpack_require__(234);
 
 	/**
 	 * Validates all params and calls the right
@@ -25856,7 +25986,7 @@
 
 
 /***/ },
-/* 231 */
+/* 233 */
 /***/ function(module, exports) {
 
 	/**
@@ -25911,10 +26041,10 @@
 
 
 /***/ },
-/* 232 */
+/* 234 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var closest = __webpack_require__(233);
+	var closest = __webpack_require__(235);
 
 	/**
 	 * Delegates event to a selector.
@@ -25961,10 +26091,10 @@
 
 
 /***/ },
-/* 233 */
+/* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var matches = __webpack_require__(234)
+	var matches = __webpack_require__(236)
 
 	module.exports = function (element, selector, checkYoSelf) {
 	  var parent = checkYoSelf ? element : element.parentNode
@@ -25977,7 +26107,7 @@
 
 
 /***/ },
-/* 234 */
+/* 236 */
 /***/ function(module, exports) {
 
 	
@@ -26022,16 +26152,16 @@
 	}
 
 /***/ },
-/* 235 */
+/* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(236);
+	var content = __webpack_require__(238);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(238)(content, {});
+	var update = __webpack_require__(240)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -26048,10 +26178,10 @@
 	}
 
 /***/ },
-/* 236 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(237)();
+	exports = module.exports = __webpack_require__(239)();
 	// imports
 
 
@@ -26062,7 +26192,7 @@
 
 
 /***/ },
-/* 237 */
+/* 239 */
 /***/ function(module, exports) {
 
 	/*
@@ -26118,7 +26248,7 @@
 
 
 /***/ },
-/* 238 */
+/* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -26368,25 +26498,6 @@
 			URL.revokeObjectURL(oldSrc);
 	}
 
-
-/***/ },
-/* 239 */,
-/* 240 */,
-/* 241 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var projectsSelector = exports.projectsSelector = function projectsSelector(state) {
-	  return state.projects.list.map(function (project) {
-	    project.favorite = project.id === state.favoriteProjects.projects[project.id];
-
-	    return project;
-	  });
-	};
 
 /***/ }
 /******/ ]);

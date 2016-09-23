@@ -3,10 +3,15 @@ const API_URL = 'https://gitlab.com/api/v3'
 const addUrlPrefix = (url) => `${API_URL}/${url}`
 const getPrivateToken = (accessToken) => `?private_token=${accessToken}`
 const getUrlParams = (params = {}) => {
-	if (params.per_page)
-		return `&per_page=${params.per_page}`
+	let urlParams = ''
 
-	return ''
+	if (params.per_page)
+		urlParams = `&per_page=${params.per_page}`
+
+	if (params.search)
+		urlParams += `&search=${params.search}`
+
+	return urlParams
 }
 const createRequestUrl = ({pathname, accessToken, params}) => (
 	addUrlPrefix(pathname) + getPrivateToken(accessToken) + getUrlParams(params)
@@ -37,11 +42,11 @@ class GitlabAPI {
 			})
 	}
 
-	static searchProjects({accessToken, value}) {console.log('api.searchProjects');
+	static searchProjects({accessToken, value}) {
 		return fetch(createRequestUrl({
 			accessToken,
-			pathname: `projects/search/${value}`,
-			params: {per_page: 6}
+			pathname: 'projects',
+			params: {per_page: 6, search: value}
 		}))
       .then(response => {
 				if (!response.ok)
