@@ -1,3 +1,16 @@
+<a name="0.4.0"></a>
+# [0.4.0](https://github.com/leonardokl/gitlab-chrome-extension/compare/v0.3.1...v0.4.0) (2016-09-24)
+
+
+### Features
+
+* Add option to mark projects as favorites ([b824bfa](https://github.com/leonardokl/gitlab-chrome-extension/commit/b824bfa))
+* Change the color of clipboard button ([408644f](https://github.com/leonardokl/gitlab-chrome-extension/commit/408644f))
+* Search only your repository projects ([8fb08dd](https://github.com/leonardokl/gitlab-chrome-extension/commit/8fb08dd))
+* Set favorite projects to top list ([7ca3d8d](https://github.com/leonardokl/gitlab-chrome-extension/commit/7ca3d8d))
+
+
+
 <a name="0.3.1"></a>
 ## [0.3.1](https://github.com/leonardokl/gitlab-chrome-extension/compare/v0.3.0...v0.3.1) (2016-09-20)
 
