@@ -3,6 +3,7 @@
 ## Features
   - Find your projects
   - Open the issue page of a project
+  - Save your favorite projects
   - Copy to clipboard an issue branch name
 
 ![alt text](src/assets/main-page.png)
