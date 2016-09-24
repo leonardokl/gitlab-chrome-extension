@@ -23254,7 +23254,6 @@
 
 	var initialState = {
 	  list: [],
-	  favorites: [],
 	  searching: false
 	};
 	// ...state.alternatives.slice(0, action.index),
@@ -23300,10 +23299,6 @@
 
 	var _actionTypes = __webpack_require__(200);
 
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 	var initialState = {
 	  result: [],
 	  projects: {}
@@ -23314,20 +23309,11 @@
 	  var action = arguments[1];
 
 	  switch (action.type) {
+	    case _actionTypes.FETCH_FAVORITE_PROJECTS:
+	      return _extends({}, state, action.favoriteProjects);
 	    case _actionTypes.REMOVE_PROJECT_FROM_FAVORITES:
-	      return _extends({}, state, {
-	        projects: _extends({}, state.projects, _defineProperty({}, state.result[action.index], false)),
-	        result: [].concat(_toConsumableArray(state.result.slice(0, action.index)), _toConsumableArray(state.result.slice(action.index + 1)))
-	      });
 	    case _actionTypes.ADD_PROJECT_TO_FAVORITES:
-	      var project = action.data.project;
-
-	      var normalizedProject = _defineProperty({}, project.id, project);
-
-	      return _extends({}, state, {
-	        result: [project.id].concat(_toConsumableArray(state.result)),
-	        projects: _extends({}, state.projects, _defineProperty({}, project.id, project))
-	      });
+	      return _extends({}, state, action.data.favoriteProjects);
 	  }
 
 	  return state;
@@ -23499,7 +23485,7 @@
 	});
 	exports.fetchIssueBranchName = exports.createChromeNewTab = exports.searchProjects = exports.toggleProjectFavorite = exports.fetchFavoriteProjects = exports.fetchProjects = exports.removeUserAccessToken = exports.saveUserAccessToken = exports.fetchUserAccessToken = undefined;
 
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /* global chrome */
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	var _api = __webpack_require__(206);
 
@@ -23512,6 +23498,10 @@
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } } /* global chrome */
 
 	var fetchBranchNameAttribute = function fetchBranchNameAttribute(tabId) {
 		return new Promise(function (resolve, reject) {
@@ -23597,36 +23587,55 @@
 		};
 	};
 
-	var saveProjectsToStorage = function saveProjectsToStorage(projects) {
-		_api2.default.chrome.setStorage({ projects: projects });
+	var fetchStorageFavorites = function fetchStorageFavorites() {
+		return function (dispatch) {
+			return new Promise(function (resolve) {
+				_api2.default.chrome.getStorage('favorites').then(function (response) {
+					dispatch({
+						type: action.FETCH_FAVORITE_PROJECTS,
+						favoriteProjects: response.data
+					});
+					resolve(response);
+				}).catch(resolve);
+			});
+		};
 	};
 
-	var fetchProjects = exports.fetchProjects = function fetchProjects() {
-		return function (dispatch, getState) {
-			var state = getState();
+	var getProjectSchema = function getProjectSchema(project) {
+		return {
+			id: project.id,
+			name: project.name,
+			nameSpace: project.namespace.name,
+			webUrl: project.web_url,
+			sshUrl: project.ssh_url_to_repo
+		};
+	};
 
-			//dispatch(fetchStorageProjects())
-			_api2.default.gitlab.fetchProjects({ accessToken: state.user.accessToken }).then(function (response) {
-				var projects = response.map(function (project) {
-					return {
-						id: project.id,
-						name: project.name,
-						nameSpace: project.namespace.name,
-						webUrl: project.web_url,
-						sshUrl: project.ssh_url_to_repo
-					};
-				});
+	var fetchGitlabProjects = function fetchGitlabProjects() {
+		return function (dispatch, getState) {
+			var accessToken = getState().user.accessToken;
+
+
+			_api2.default.gitlab.fetchProjects({ accessToken: accessToken }).then(function (response) {
+				var projects = response.map(getProjectSchema);
 
 				dispatch({
 					type: action.FETCH_GITLAB_PROJECTS,
 					data: projects
 				});
-				saveProjectsToStorage(projects);
 			}).catch(function () {
 				return dispatch({
 					type: action.FETCH_GITLAB_PROJECTS,
 					data: []
 				});
+			});
+		};
+	};
+
+	var fetchProjects = exports.fetchProjects = function fetchProjects() {
+		return function (dispatch) {
+			dispatch(fetchStorageFavorites()).then(function () {
+				return dispatch(fetchGitlabProjects());
 			});
 		};
 	};
@@ -23639,13 +23648,26 @@
 		};
 	};
 
+	var updateFavoritesStorage = function updateFavoritesStorage(favorites) {
+		return _api2.default.chrome.setStorage({ favorites: favorites });
+	};
+
 	var addProjectToFavorites = function addProjectToFavorites(project) {
-		return function (dispatch) {
-			_api2.default.favorites.create({ project: project }).then(function (response) {
+		return function (dispatch, getState) {
+			var _getState = getState();
+
+			var favoriteProjects = _getState.favoriteProjects;
+
+			var favoriteProjectsUpdate = {
+				result: [project.id].concat(_toConsumableArray(favoriteProjects.result)),
+				projects: _extends({}, favoriteProjects.projects, _defineProperty({}, project.id, project))
+			};
+
+			updateFavoritesStorage(favoriteProjectsUpdate).then(function () {
 				return dispatch({
 					type: action.ADD_PROJECT_TO_FAVORITES,
 					data: {
-						project: project
+						favoriteProjects: favoriteProjectsUpdate
 					}
 				});
 			}).catch(function (error) {
@@ -23656,14 +23678,27 @@
 
 	var removeProjectFromFavorites = function removeProjectFromFavorites(projectId) {
 		return function (dispatch, getState) {
-			var favoriteIds = getState().favoriteProjects.result;
-			var projectIndex = favoriteIds.findIndex(function (id) {
+			var _getState2 = getState();
+
+			var favoriteProjects = _getState2.favoriteProjects;
+
+			var projectIndex = favoriteProjects.result.findIndex(function (id) {
 				return id === projectId;
 			});
+			var favoriteProjectsUpdate = {
+				projects: _extends({}, favoriteProjects.projects, _defineProperty({}, favoriteProjects.result[projectIndex], false)),
+				result: [].concat(_toConsumableArray(favoriteProjects.result.slice(0, projectIndex)), _toConsumableArray(favoriteProjects.result.slice(projectIndex + 1)))
+			};
 
-			dispatch({
-				type: action.REMOVE_PROJECT_FROM_FAVORITES,
-				index: projectIndex
+			delete favoriteProjectsUpdate.projects[projectId];
+
+			updateFavoritesStorage(favoriteProjectsUpdate).then(function () {
+				return dispatch({
+					type: action.REMOVE_PROJECT_FROM_FAVORITES,
+					data: {
+						favoriteProjects: favoriteProjectsUpdate
+					}
+				});
 			});
 		};
 	};
@@ -24766,6 +24801,7 @@
 	        }),
 	        _react2.default.createElement(_projects2.default, {
 	          list: projects.list,
+	          favoriteProjects: favoriteProjects,
 	          onCreateNewChromeTab: this.props.onCreateNewChromeTab,
 	          onAddProjectToFavorites: this.props.onAddProjectToFavorites
 	        })
@@ -25034,8 +25070,10 @@
 	    props.list.map(function (project, index) {
 	      return _react2.default.createElement(_projectItem2.default, {
 	        key: index,
-	        className: (0, _classnames2.default)('projects__item', { favorite: project.favorite }),
-	        favorite: project.favorite,
+	        className: (0, _classnames2.default)('projects__item', {
+	          favorite: !!props.favoriteProjects.projects[project.id]
+	        }),
+	        favorite: !!props.favoriteProjects.projects[project.id],
 	        name: project.name,
 	        nameSpace: project.nameSpace,
 	        url: project.webUrl,

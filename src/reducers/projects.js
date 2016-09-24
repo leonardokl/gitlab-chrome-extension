@@ -7,7 +7,6 @@ import {
 
 const initialState = {
   list: [],
-  favorites: [],
   searching: false
 }
 // ...state.alternatives.slice(0, action.index),

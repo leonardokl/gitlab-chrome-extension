@@ -24,8 +24,10 @@ const Projects = (props) => {
       {props.list.map((project, index) =>
         <ProjectItem
           key={index}
-          className={cn('projects__item', {favorite: project.favorite})}
-          favorite={project.favorite}
+          className={cn('projects__item', {
+            favorite: !!(props.favoriteProjects.projects[project.id])
+          })}
+          favorite={!!(props.favoriteProjects.projects[project.id])}
           name={project.name}
           nameSpace={project.nameSpace}
           url={project.webUrl}

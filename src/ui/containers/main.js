@@ -21,6 +21,7 @@ console.log('main.FAVORITES', favoriteProjects);
         />
         <Projects
           list={projects.list}
+          favoriteProjects={favoriteProjects}
           onCreateNewChromeTab={this.props.onCreateNewChromeTab}
           onAddProjectToFavorites={this.props.onAddProjectToFavorites}
         />

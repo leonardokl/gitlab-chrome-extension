@@ -79,34 +79,49 @@ const fetchStorageProjects = () => (dispatch) => {
 		})
 }
 
-const saveProjectsToStorage = (projects) => {
-	API.chrome.setStorage({projects})
+const fetchStorageFavorites = () => (dispatch) => {
+	return new Promise(resolve => {
+		API.chrome.getStorage('favorites')
+		.then(response => {
+			dispatch({
+				type: action.FETCH_FAVORITE_PROJECTS,
+				favoriteProjects: response.data
+			})
+			resolve(response)
+		})
+		.catch(resolve)
+	})
 }
 
-export const fetchProjects = () => (dispatch, getState) => {
-	const state = getState()
+const getProjectSchema = (project) => ({
+	id: project.id,
+	name: project.name,
+	nameSpace: project.namespace.name,
+	webUrl: project.web_url,
+	sshUrl: project.ssh_url_to_repo
+})
 
-	//dispatch(fetchStorageProjects())
-	API.gitlab.fetchProjects({accessToken: state.user.accessToken})
+const fetchGitlabProjects = () => (dispatch, getState) => {
+	const {accessToken} = getState().user
+
+	API.gitlab.fetchProjects({accessToken})
 		.then((response) => {
-			const projects = response.map(project => ({
-				id: project.id,
-				name: project.name,
-				nameSpace: project.namespace.name,
-				webUrl: project.web_url,
-				sshUrl: project.ssh_url_to_repo
-			}))
+			const projects = response.map(getProjectSchema)
 
 			dispatch({
 				type: action.FETCH_GITLAB_PROJECTS,
 				data: projects
 			})
-			saveProjectsToStorage(projects)
 		})
 		.catch(() => dispatch({
 			type: action.FETCH_GITLAB_PROJECTS,
 			data: []
 		}))
+}
+
+export const fetchProjects = () => (dispatch) => {
+	dispatch(fetchStorageFavorites())
+		.then(() => dispatch(fetchGitlabProjects()))
 }
 
 export const fetchFavoriteProjects = () => (dispatch) => {
@@ -115,13 +130,23 @@ export const fetchFavoriteProjects = () => (dispatch) => {
 	})
 }
 
-const addProjectToFavorites = (project) => (dispatch) => {
-	API.favorites.create({project})
-		.then(response => (
+const updateFavoritesStorage = (favorites) => {
+	return API.chrome.setStorage({favorites})
+}
+
+const addProjectToFavorites = (project) => (dispatch, getState) => {
+	const {favoriteProjects} = getState()
+	const favoriteProjectsUpdate = {
+		result: [project.id, ...favoriteProjects.result],
+		projects: {...favoriteProjects.projects, [project.id]: project}
+	}
+
+	updateFavoritesStorage(favoriteProjectsUpdate)
+		.then(() => (
 			dispatch({
 				type: action.ADD_PROJECT_TO_FAVORITES,
 				data: {
-					project,
+					favoriteProjects: favoriteProjectsUpdate
 				}
 			})
 		))
@@ -129,13 +154,30 @@ const addProjectToFavorites = (project) => (dispatch) => {
 }
 
 const removeProjectFromFavorites = (projectId) => (dispatch, getState) => {
-	const favoriteIds = getState().favoriteProjects.result
-	const projectIndex = favoriteIds.findIndex(id => id === projectId)
+	const {favoriteProjects} = getState()
+	const projectIndex = favoriteProjects.result.findIndex(id => id === projectId)
+	const favoriteProjectsUpdate = {
+		projects: {
+			...favoriteProjects.projects,
+			[favoriteProjects.result[projectIndex]]: false
+		},
+		result: [
+			...favoriteProjects.result.slice(0, projectIndex),
+			...favoriteProjects.result.slice(projectIndex + 1)
+		]
+	}
 
-	dispatch({
-		type: action.REMOVE_PROJECT_FROM_FAVORITES,
-		index: projectIndex,
-	})
+	delete favoriteProjectsUpdate.projects[projectId]
+
+	updateFavoritesStorage(favoriteProjectsUpdate)
+		.then(() =>
+			dispatch({
+				type: action.REMOVE_PROJECT_FROM_FAVORITES,
+				data: {
+					favoriteProjects: favoriteProjectsUpdate
+				}
+			})
+		)
 }
 
 const addOrRemoveProjectFromFavorites = (project) => (dispatch) => {
