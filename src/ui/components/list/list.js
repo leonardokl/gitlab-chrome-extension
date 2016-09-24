@@ -1,7 +1,7 @@
 import React from 'react'
 
 const List = (props) => (
-  <div className="ui celled selection list">
+  <div style={{marginTop: 10, marginBottom: 0}} className="ui divided selection list">
     {props.children}
   </div>
 )

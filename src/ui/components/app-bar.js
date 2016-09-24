@@ -5,7 +5,14 @@ import Avatar from 'ui/components/avatar'
 import SearchInput from 'ui/components/search-input'
 
 const styles = {
-  container: {display: 'flex', 'alignItems': 'center'},
+  container: {
+    backgroundColor: '#FAFAFA',
+    borderBottom: '1px solid #e5e5e5',
+    display: 'flex',
+    alignItems: 'center',
+    margin: '-10px -10px 0 -10px',
+    padding: 10
+  },
   input: {flexGrow: 1},
   dropdown: {marginLeft: 10},
   dropdownIcon: {margin: 0},

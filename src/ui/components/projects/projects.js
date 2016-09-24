@@ -1,8 +1,11 @@
 import React from 'react'
 import cn from 'classnames'
 import _ from 'underscore'
+import PerfectScrollBar from 'ui/components/perfect-scrollbar'
 import List from 'ui/components/list'
 import ProjectItem from './project-item'
+import Loader from './loader'
+import NotFound from './not-found'
 
 const Projects = (props) => {
   const handleOnClickProject = (evt, url) => {
@@ -22,27 +25,38 @@ const Projects = (props) => {
 
   const getProjects = () => (
     _.uniq(props.list, project => project.id)
-      .filter((project, index) => index < 6)
   )
 
+  const renderContent = () => {
+    if (!props.list.length && !props.fetching)
+      return (<NotFound />)
+
+    return (
+      <List>
+        {getProjects().map((project, index) =>
+          <ProjectItem
+            key={index}
+            className={cn('projects__item', {
+              favorite: !!(props.favoriteProjects.projects[project.id])
+            })}
+            favorite={!!(props.favoriteProjects.projects[project.id])}
+            name={project.name}
+            nameSpace={project.nameSpace}
+            url={project.webUrl}
+            onClick={(evt) => handleOnClickProject(evt, project.webUrl)}
+            onClickIssue={(evt) => handleOnClickProjectIssue(evt, project.webUrl)}
+            onClickFavorite={(evt) => handleOnClickFavorite(evt, project.id)}
+            />
+        )}
+        {props.fetching && <Loader />}
+      </List>
+    )
+  }
+
   return (
-    <List>
-      {getProjects().map((project, index) =>
-        <ProjectItem
-          key={index}
-          className={cn('projects__item', {
-            favorite: !!(props.favoriteProjects.projects[project.id])
-          })}
-          favorite={!!(props.favoriteProjects.projects[project.id])}
-          name={project.name}
-          nameSpace={project.nameSpace}
-          url={project.webUrl}
-          onClick={(evt) => handleOnClickProject(evt, project.webUrl)}
-          onClickIssue={(evt) => handleOnClickProjectIssue(evt, project.webUrl)}
-          onClickFavorite={(evt) => handleOnClickFavorite(evt, project.id)}
-        />
-      )}
-    </List>
+    <PerfectScrollBar>
+      {renderContent()}
+    </PerfectScrollBar>
   )
 }
 
