@@ -69,23 +69,20 @@ export const removeUserAccessToken = () => (dispatch) => {
 		}))
 }
 
-const fetchStorageProjects = () => (dispatch) => {
-	API.chrome.getStorage('projects')
-		.then(response => {
-			dispatch({
-				type: action.FETCH_GITLAB_PROJECTS,
-				data: response.data
-			})
-		})
-}
+const denormalizeFavoriteProjects = (favoriteProjects) => (
+	favoriteProjects.result.map(id => favoriteProjects.projects[id])
+)
 
 const fetchStorageFavorites = () => (dispatch) => {
 	return new Promise(resolve => {
 		API.chrome.getStorage('favorites')
 		.then(response => {
+			const favoriteProjects = response.data
+
 			dispatch({
+				favoriteProjects,
 				type: action.FETCH_FAVORITE_PROJECTS,
-				favoriteProjects: response.data
+				denormalizedFavoriteProjects: denormalizeFavoriteProjects(favoriteProjects)
 			})
 			resolve(response)
 		})
@@ -103,6 +100,7 @@ const getProjectSchema = (project) => ({
 
 const fetchGitlabProjects = () => (dispatch, getState) => {
 	const {accessToken} = getState().user
+	const favoriteProjects = denormalizeFavoriteProjects(getState().favoriteProjects)
 
 	API.gitlab.fetchProjects({accessToken})
 		.then((response) => {
@@ -110,12 +108,12 @@ const fetchGitlabProjects = () => (dispatch, getState) => {
 
 			dispatch({
 				type: action.FETCH_GITLAB_PROJECTS,
-				data: projects
+				data: [...favoriteProjects, ...projects]
 			})
 		})
 		.catch(() => dispatch({
 			type: action.FETCH_GITLAB_PROJECTS,
-			data: []
+			data: favoriteProjects
 		}))
 }
 
@@ -180,8 +178,10 @@ const removeProjectFromFavorites = (projectId) => (dispatch, getState) => {
 		)
 }
 
-const addOrRemoveProjectFromFavorites = (project) => (dispatch) => {
-	if (project.favorite)
+const addOrRemoveProjectFromFavorites = (project) => (dispatch, getState) => {
+	const {favoriteProjects} = getState()
+
+	if (!favoriteProjects.projects[project.id])
 		return dispatch(addProjectToFavorites(project))
 
 	return dispatch(removeProjectFromFavorites(project.id))

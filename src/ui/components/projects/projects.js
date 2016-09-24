@@ -1,5 +1,6 @@
 import React from 'react'
 import cn from 'classnames'
+import _ from 'underscore'
 import List from 'ui/components/list'
 import ProjectItem from './project-item'
 
@@ -19,9 +20,14 @@ const Projects = (props) => {
     props.onAddProjectToFavorites(projectId)
   }
 
+  const getProjects = () => (
+    _.uniq(props.list, project => project.id)
+      .filter((project, index) => index < 6)
+  )
+
   return (
     <List>
-      {props.list.map((project, index) =>
+      {getProjects().map((project, index) =>
         <ProjectItem
           key={index}
           className={cn('projects__item', {
