@@ -5,10 +5,22 @@ const styles = {
   container: {flexGrow: 1},
 }
 
+let timeToSubmit
+
 const SearchInput = (props) => {
   const handleOnKeyPress = (evt) => {
     if (evt.key === 'Enter')
       props.onSubmit(evt.target.value)
+  }
+
+  const handleOnChange = (evt) => {
+    const {value} = evt.target
+
+    clearTimeout(timeToSubmit)
+
+    timeToSubmit = setTimeout(() => {
+      props.onSubmit(value)
+    }, 900)
   }
 
   return (
@@ -18,19 +30,23 @@ const SearchInput = (props) => {
     >
       <i className='search icon'></i>
       <input
+        autoFocus
         type='text'
         placeholder={props.placeholder}
         onKeyPress={handleOnKeyPress}
+        onChange={props.onChange}
       />
     </div>
   )
 }
 
 SearchInput.propTypes = {
-  onSubmit: React.PropTypes.func,
+  onChange: React.PropTypes.func,
+  onSubmit: React.PropTypes.func
 }
 
 SearchInput.defaultProps = {
+  onChange: () => 1,
   onSubmit: () => 1
 }
 

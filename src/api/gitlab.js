@@ -32,7 +32,7 @@ class GitlabAPI {
 		return fetch(createRequestUrl({
 			accessToken,
 			pathname: 'projects',
-			params: {per_page: 6}
+			params: {per_page: 10}
 		}))
       .then(response => {
 				if (!response.ok)
@@ -46,7 +46,7 @@ class GitlabAPI {
 		return fetch(createRequestUrl({
 			accessToken,
 			pathname: 'projects',
-			params: {per_page: 6, search: value}
+			params: {per_page: 10, search: value}
 		}))
       .then(response => {
 				if (!response.ok)

@@ -98,6 +98,10 @@ const getProjectSchema = (project) => ({
 	sshUrl: project.ssh_url_to_repo
 })
 
+const fetchProjectsRequest = () => (dispatch) => {
+	dispatch({type: action.FETCH_GITLAB_PROJECTS_REQUEST})
+}
+
 const fetchGitlabProjects = () => (dispatch, getState) => {
 	const {accessToken} = getState().user
 	const favoriteProjects = denormalizeFavoriteProjects(getState().favoriteProjects)
@@ -118,6 +122,7 @@ const fetchGitlabProjects = () => (dispatch, getState) => {
 }
 
 export const fetchProjects = () => (dispatch) => {
+	dispatch(fetchProjectsRequest())
 	dispatch(fetchStorageFavorites())
 		.then(() => dispatch(fetchGitlabProjects()))
 }
@@ -202,6 +207,13 @@ export const toggleProjectFavorite = (projectId) => (dispatch, getState) => {
 			project,
 			index: projectIndex
 		}
+	})
+}
+
+export const filterProjects = (projectName) => (dispatch) => {
+	dispatch({
+		type: action.FILTER_PROJECTS,
+		data: {name: projectName}
 	})
 }
 
