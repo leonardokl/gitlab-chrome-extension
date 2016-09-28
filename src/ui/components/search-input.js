@@ -5,10 +5,22 @@ const styles = {
   container: {flexGrow: 1},
 }
 
+let timeToSubmit
+
 const SearchInput = (props) => {
   const handleOnKeyPress = (evt) => {
     if (evt.key === 'Enter')
       props.onSubmit(evt.target.value)
+  }
+
+  const handleOnChange = (evt) => {
+    const {value} = evt.target
+
+    clearTimeout(timeToSubmit)
+
+    timeToSubmit = setTimeout(() => {
+      props.onSubmit(value)
+    }, 900)
   }
 
   return (
@@ -21,6 +33,7 @@ const SearchInput = (props) => {
         type='text'
         placeholder={props.placeholder}
         onKeyPress={handleOnKeyPress}
+        onChange={handleOnChange}
       />
     </div>
   )

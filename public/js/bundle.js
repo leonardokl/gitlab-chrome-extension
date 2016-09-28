@@ -23348,11 +23348,11 @@
 
 	var _main2 = _interopRequireDefault(_main);
 
-	var _issueBranchName = __webpack_require__(227);
+	var _issueBranchName = __webpack_require__(255);
 
 	var _issueBranchName2 = _interopRequireDefault(_issueBranchName);
 
-	__webpack_require__(238);
+	__webpack_require__(266);
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -24986,9 +24986,22 @@
 	  container: { flexGrow: 1 }
 	};
 
+	var timeToSubmit = void 0;
+
 	var SearchInput = function SearchInput(props) {
 	  var handleOnKeyPress = function handleOnKeyPress(evt) {
 	    if (evt.key === 'Enter') props.onSubmit(evt.target.value);
+	  };
+
+	  var handleOnChange = function handleOnChange(evt) {
+	    var value = evt.target.value;
+
+
+	    clearTimeout(timeToSubmit);
+
+	    timeToSubmit = setTimeout(function () {
+	      props.onSubmit(value);
+	    }, 900);
 	  };
 
 	  return _react2.default.createElement(
@@ -25001,7 +25014,8 @@
 	    _react2.default.createElement('input', {
 	      type: 'text',
 	      placeholder: props.placeholder,
-	      onKeyPress: handleOnKeyPress
+	      onKeyPress: handleOnKeyPress,
+	      onChange: handleOnChange
 	    })
 	  );
 	};
@@ -25054,23 +25068,23 @@
 
 	var _underscore2 = _interopRequireDefault(_underscore);
 
-	var _perfectScrollbar = __webpack_require__(242);
+	var _perfectScrollbar = __webpack_require__(222);
 
 	var _perfectScrollbar2 = _interopRequireDefault(_perfectScrollbar);
 
-	var _list = __webpack_require__(222);
+	var _list = __webpack_require__(248);
 
 	var _list2 = _interopRequireDefault(_list);
 
-	var _projectItem = __webpack_require__(224);
+	var _projectItem = __webpack_require__(250);
 
 	var _projectItem2 = _interopRequireDefault(_projectItem);
 
-	var _loader = __webpack_require__(269);
+	var _loader = __webpack_require__(253);
 
 	var _loader2 = _interopRequireDefault(_loader);
 
-	var _notFound = __webpack_require__(268);
+	var _notFound = __webpack_require__(254);
 
 	var _notFound2 = _interopRequireDefault(_notFound);
 
@@ -26706,252 +26720,17 @@
 	  value: true
 	});
 
-	var _list = __webpack_require__(223);
-
-	var _list2 = _interopRequireDefault(_list);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = _list2.default;
-
-/***/ },
-/* 223 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var List = function List(props) {
-	  return _react2.default.createElement(
-	    "div",
-	    { style: { marginTop: 10, marginBottom: 0 }, className: "ui divided selection list" },
-	    props.children
-	  );
-	};
-
-	List.propTypes = {
-	  children: _react2.default.PropTypes.array
-	};
-
-	module.exports = List;
-
-/***/ },
-/* 224 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _item = __webpack_require__(225);
-
-	var _item2 = _interopRequireDefault(_item);
-
-	var _icon = __webpack_require__(226);
-
-	var _icon2 = _interopRequireDefault(_icon);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var ProjectItem = function ProjectItem(props) {
-	  return _react2.default.createElement(
-	    _item2.default,
-	    { className: props.className, onClick: props.onClick },
-	    _react2.default.createElement(
-	      'div',
-	      { className: 'projects__item__action right floated content' },
-	      _react2.default.createElement(
-	        'div',
-	        {
-	          className: 'ui button positive',
-	          style: { fontSize: '0.8rem' },
-	          title: props.url + '/issues/new?issue',
-	          onClick: props.onClickIssue
-	        },
-	        _react2.default.createElement(_icon2.default, { name: 'plus' }),
-	        'Issue'
-	      )
-	    ),
-	    _react2.default.createElement(
-	      'div',
-	      { className: 'header' },
-	      props.name + ' ',
-	      _react2.default.createElement(_icon2.default, {
-	        className: 'projects__item__favorite--hidden',
-	        name: props.favorite ? 'star' : 'empty star',
-	        onClick: props.onClickFavorite
-	      })
-	    ),
-	    _react2.default.createElement(
-	      'div',
-	      { className: 'description' },
-	      props.nameSpace
-	    )
-	  );
-	};
-
-	ProjectItem.propTypes = {
-	  name: _react2.default.PropTypes.string,
-	  nameSpace: _react2.default.PropTypes.string,
-	  favorite: _react2.default.PropTypes.bool,
-	  onClick: _react2.default.PropTypes.func,
-	  onClickIssue: _react2.default.PropTypes.func
-	};
-
-	ProjectItem.defaultProps = {
-	  onClick: function onClick() {
-	    return 1;
-	  },
-	  onClickIssue: function onClickIssue() {
-	    return 1;
-	  }
-	};
-
-	module.exports = ProjectItem;
-
-/***/ },
-/* 225 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var Item = function Item(props) {
-	  return _react2.default.createElement(
-	    'div',
-	    {
-	      style: { padding: 10 },
-	      className: props.className + ' item',
-	      onClick: props.onClick
-	    },
-	    _react2.default.createElement(
-	      'div',
-	      { className: 'content' },
-	      props.children
-	    )
-	  );
-	};
-
-	Item.propTypes = {
-	  children: _react2.default.PropTypes.array,
-	  className: _react2.default.PropTypes.string,
-	  onClick: _react2.default.PropTypes.func
-	};
-
-	Item.defaultProps = {
-	  className: '',
-	  onClick: function onClick() {
-	    return 1;
-	  }
-	};
-
-	module.exports = Item;
-
-/***/ },
-/* 226 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var Icon = function Icon(props) {
-	  return _react2.default.createElement('i', {
-	    style: props.color ? { color: props.color } : {},
-	    className: props.className + ' ' + props.name + ' icon',
-	    onClick: props.onClick
-	  });
-	};
-
-	Icon.propTypes = {
-	  className: _react2.default.PropTypes.string,
-	  color: _react2.default.PropTypes.string,
-	  name: _react2.default.PropTypes.string,
-	  onClick: _react2.default.PropTypes.func
-	};
-
-	Icon.defaultProps = {
-	  className: '',
-	  name: 'gitlab',
-	  onClick: function onClick() {
-	    return 1;
-	  }
-	};
-
-	module.exports = Icon;
-
-/***/ },
-/* 227 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _clipboardInput = __webpack_require__(228);
-
-	var _clipboardInput2 = _interopRequireDefault(_clipboardInput);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var IssueBranchName = function IssueBranchName(props) {
-	  return _react2.default.createElement(
-	    'div',
-	    null,
-	    _react2.default.createElement(
-	      'h4',
-	      { className: 'ui header title' },
-	      'Copy branch name'
-	    ),
-	    _react2.default.createElement(_clipboardInput2.default, {
-	      value: 'git checkout -b ' + props.branchName
-	    })
-	  );
-	};
-
-	IssueBranchName.propTypes = {
-	  branchName: _react2.default.PropTypes.string
-	};
-
-	module.exports = IssueBranchName;
-
-/***/ },
-/* 228 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _clipboard = __webpack_require__(229);
+	var _perfectScrollbar = __webpack_require__(223);
 
-	var _clipboard2 = _interopRequireDefault(_clipboard);
+	var _perfectScrollbar2 = _interopRequireDefault(_perfectScrollbar);
+
+	__webpack_require__(244);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -26961,29 +26740,24 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var ClipboardInput = function (_React$Component) {
-	  _inherits(ClipboardInput, _React$Component);
+	var PerfectScrollBar = function (_React$Component) {
+	  _inherits(PerfectScrollBar, _React$Component);
 
-	  function ClipboardInput() {
-	    var _ref;
+	  function PerfectScrollBar() {
+	    _classCallCheck(this, PerfectScrollBar);
 
-	    var _temp, _this, _ret;
-
-	    _classCallCheck(this, ClipboardInput);
-
-	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
-	    }
-
-	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ClipboardInput.__proto__ || Object.getPrototypeOf(ClipboardInput)).call.apply(_ref, [this].concat(args))), _this), _this.addClipboardListener = function () {
-	      new _clipboard2.default(_this.button);
-	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	    return _possibleConstructorReturn(this, (PerfectScrollBar.__proto__ || Object.getPrototypeOf(PerfectScrollBar)).apply(this, arguments));
 	  }
 
-	  _createClass(ClipboardInput, [{
+	  _createClass(PerfectScrollBar, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      this.addClipboardListener();
+	      _perfectScrollbar2.default.initialize(this.el);
+	    }
+	  }, {
+	    key: 'componentDidUpdate',
+	    value: function componentDidUpdate() {
+	      _perfectScrollbar2.default.update(this.el);
 	    }
 	  }, {
 	    key: 'render',
@@ -26992,688 +26766,711 @@
 
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'clipboard-input ui action input' },
-	        _react2.default.createElement('input', {
-	          id: 'branch-name',
-	          type: 'text',
-	          readOnly: true,
-	          value: this.props.value
-	        }),
-	        _react2.default.createElement(
-	          'button',
-	          {
-	            ref: function ref(el) {
-	              return _this2.button = el;
-	            },
-	            className: 'ui icon primary button',
-	            'data-clipboard-target': '#branch-name',
-	            title: 'Copy to clipboard'
+	        {
+	          ref: function ref(el) {
+	            return _this2.el = el;
 	          },
-	          _react2.default.createElement('i', { className: 'copy icon' })
-	        )
+	          style: {
+	            maxHeight: 300,
+	            overflow: 'auto',
+	            position: 'relative'
+	          }
+	        },
+	        this.props.children
 	      );
 	    }
 	  }]);
 
-	  return ClipboardInput;
+	  return PerfectScrollBar;
 	}(_react2.default.Component);
 
-	exports.default = ClipboardInput;
+	exports.default = PerfectScrollBar;
+
+/***/ },
+/* 223 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	module.exports = __webpack_require__(224);
+
+
+/***/ },
+/* 224 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var destroy = __webpack_require__(225);
+	var initialize = __webpack_require__(233);
+	var update = __webpack_require__(243);
+
+	module.exports = {
+	  initialize: initialize,
+	  update: update,
+	  destroy: destroy
+	};
+
+
+/***/ },
+/* 225 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _ = __webpack_require__(226);
+	var dom = __webpack_require__(228);
+	var instances = __webpack_require__(229);
+
+	module.exports = function (element) {
+	  var i = instances.get(element);
+
+	  if (!i) {
+	    return;
+	  }
+
+	  i.event.unbindAll();
+	  dom.remove(i.scrollbarX);
+	  dom.remove(i.scrollbarY);
+	  dom.remove(i.scrollbarXRail);
+	  dom.remove(i.scrollbarYRail);
+	  _.removePsClasses(element);
+
+	  instances.remove(element);
+	};
+
+
+/***/ },
+/* 226 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var cls = __webpack_require__(227);
+	var dom = __webpack_require__(228);
+
+	var toInt = exports.toInt = function (x) {
+	  return parseInt(x, 10) || 0;
+	};
+
+	var clone = exports.clone = function (obj) {
+	  if (obj === null) {
+	    return null;
+	  } else if (obj.constructor === Array) {
+	    return obj.map(clone);
+	  } else if (typeof obj === 'object') {
+	    var result = {};
+	    for (var key in obj) {
+	      result[key] = clone(obj[key]);
+	    }
+	    return result;
+	  } else {
+	    return obj;
+	  }
+	};
+
+	exports.extend = function (original, source) {
+	  var result = clone(original);
+	  for (var key in source) {
+	    result[key] = clone(source[key]);
+	  }
+	  return result;
+	};
+
+	exports.isEditable = function (el) {
+	  return dom.matches(el, "input,[contenteditable]") ||
+	         dom.matches(el, "select,[contenteditable]") ||
+	         dom.matches(el, "textarea,[contenteditable]") ||
+	         dom.matches(el, "button,[contenteditable]");
+	};
+
+	exports.removePsClasses = function (element) {
+	  var clsList = cls.list(element);
+	  for (var i = 0; i < clsList.length; i++) {
+	    var className = clsList[i];
+	    if (className.indexOf('ps-') === 0) {
+	      cls.remove(element, className);
+	    }
+	  }
+	};
+
+	exports.outerWidth = function (element) {
+	  return toInt(dom.css(element, 'width')) +
+	         toInt(dom.css(element, 'paddingLeft')) +
+	         toInt(dom.css(element, 'paddingRight')) +
+	         toInt(dom.css(element, 'borderLeftWidth')) +
+	         toInt(dom.css(element, 'borderRightWidth'));
+	};
+
+	exports.startScrolling = function (element, axis) {
+	  cls.add(element, 'ps-in-scrolling');
+	  if (typeof axis !== 'undefined') {
+	    cls.add(element, 'ps-' + axis);
+	  } else {
+	    cls.add(element, 'ps-x');
+	    cls.add(element, 'ps-y');
+	  }
+	};
+
+	exports.stopScrolling = function (element, axis) {
+	  cls.remove(element, 'ps-in-scrolling');
+	  if (typeof axis !== 'undefined') {
+	    cls.remove(element, 'ps-' + axis);
+	  } else {
+	    cls.remove(element, 'ps-x');
+	    cls.remove(element, 'ps-y');
+	  }
+	};
+
+	exports.env = {
+	  isWebKit: 'WebkitAppearance' in document.documentElement.style,
+	  supportsTouch: (('ontouchstart' in window) || window.DocumentTouch && document instanceof window.DocumentTouch),
+	  supportsIePointer: window.navigator.msMaxTouchPoints !== null
+	};
+
+
+/***/ },
+/* 227 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	function oldAdd(element, className) {
+	  var classes = element.className.split(' ');
+	  if (classes.indexOf(className) < 0) {
+	    classes.push(className);
+	  }
+	  element.className = classes.join(' ');
+	}
+
+	function oldRemove(element, className) {
+	  var classes = element.className.split(' ');
+	  var idx = classes.indexOf(className);
+	  if (idx >= 0) {
+	    classes.splice(idx, 1);
+	  }
+	  element.className = classes.join(' ');
+	}
+
+	exports.add = function (element, className) {
+	  if (element.classList) {
+	    element.classList.add(className);
+	  } else {
+	    oldAdd(element, className);
+	  }
+	};
+
+	exports.remove = function (element, className) {
+	  if (element.classList) {
+	    element.classList.remove(className);
+	  } else {
+	    oldRemove(element, className);
+	  }
+	};
+
+	exports.list = function (element) {
+	  if (element.classList) {
+	    return Array.prototype.slice.apply(element.classList);
+	  } else {
+	    return element.className.split(' ');
+	  }
+	};
+
+
+/***/ },
+/* 228 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var DOM = {};
+
+	DOM.e = function (tagName, className) {
+	  var element = document.createElement(tagName);
+	  element.className = className;
+	  return element;
+	};
+
+	DOM.appendTo = function (child, parent) {
+	  parent.appendChild(child);
+	  return child;
+	};
+
+	function cssGet(element, styleName) {
+	  return window.getComputedStyle(element)[styleName];
+	}
+
+	function cssSet(element, styleName, styleValue) {
+	  if (typeof styleValue === 'number') {
+	    styleValue = styleValue.toString() + 'px';
+	  }
+	  element.style[styleName] = styleValue;
+	  return element;
+	}
+
+	function cssMultiSet(element, obj) {
+	  for (var key in obj) {
+	    var val = obj[key];
+	    if (typeof val === 'number') {
+	      val = val.toString() + 'px';
+	    }
+	    element.style[key] = val;
+	  }
+	  return element;
+	}
+
+	DOM.css = function (element, styleNameOrObject, styleValue) {
+	  if (typeof styleNameOrObject === 'object') {
+	    // multiple set with object
+	    return cssMultiSet(element, styleNameOrObject);
+	  } else {
+	    if (typeof styleValue === 'undefined') {
+	      return cssGet(element, styleNameOrObject);
+	    } else {
+	      return cssSet(element, styleNameOrObject, styleValue);
+	    }
+	  }
+	};
+
+	DOM.matches = function (element, query) {
+	  if (typeof element.matches !== 'undefined') {
+	    return element.matches(query);
+	  } else {
+	    if (typeof element.matchesSelector !== 'undefined') {
+	      return element.matchesSelector(query);
+	    } else if (typeof element.webkitMatchesSelector !== 'undefined') {
+	      return element.webkitMatchesSelector(query);
+	    } else if (typeof element.mozMatchesSelector !== 'undefined') {
+	      return element.mozMatchesSelector(query);
+	    } else if (typeof element.msMatchesSelector !== 'undefined') {
+	      return element.msMatchesSelector(query);
+	    }
+	  }
+	};
+
+	DOM.remove = function (element) {
+	  if (typeof element.remove !== 'undefined') {
+	    element.remove();
+	  } else {
+	    if (element.parentNode) {
+	      element.parentNode.removeChild(element);
+	    }
+	  }
+	};
+
+	DOM.queryChildren = function (element, selector) {
+	  return Array.prototype.filter.call(element.childNodes, function (child) {
+	    return DOM.matches(child, selector);
+	  });
+	};
+
+	module.exports = DOM;
+
 
 /***/ },
 /* 229 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (global, factory) {
-	    if (true) {
-	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [module, __webpack_require__(230), __webpack_require__(232), __webpack_require__(233)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	    } else if (typeof exports !== "undefined") {
-	        factory(module, require('./clipboard-action'), require('tiny-emitter'), require('good-listener'));
-	    } else {
-	        var mod = {
-	            exports: {}
-	        };
-	        factory(mod, global.clipboardAction, global.tinyEmitter, global.goodListener);
-	        global.clipboard = mod.exports;
-	    }
-	})(this, function (module, _clipboardAction, _tinyEmitter, _goodListener) {
-	    'use strict';
+	'use strict';
 
-	    var _clipboardAction2 = _interopRequireDefault(_clipboardAction);
+	var _ = __webpack_require__(226);
+	var cls = __webpack_require__(227);
+	var defaultSettings = __webpack_require__(230);
+	var dom = __webpack_require__(228);
+	var EventManager = __webpack_require__(231);
+	var guid = __webpack_require__(232);
 
-	    var _tinyEmitter2 = _interopRequireDefault(_tinyEmitter);
+	var instances = {};
 
-	    var _goodListener2 = _interopRequireDefault(_goodListener);
+	function Instance(element) {
+	  var i = this;
 
-	    function _interopRequireDefault(obj) {
-	        return obj && obj.__esModule ? obj : {
-	            default: obj
-	        };
-	    }
+	  i.settings = _.clone(defaultSettings);
+	  i.containerWidth = null;
+	  i.containerHeight = null;
+	  i.contentWidth = null;
+	  i.contentHeight = null;
 
-	    function _classCallCheck(instance, Constructor) {
-	        if (!(instance instanceof Constructor)) {
-	            throw new TypeError("Cannot call a class as a function");
-	        }
-	    }
+	  i.isRtl = dom.css(element, 'direction') === "rtl";
+	  i.isNegativeScroll = (function () {
+	    var originalScrollLeft = element.scrollLeft;
+	    var result = null;
+	    element.scrollLeft = -1;
+	    result = element.scrollLeft < 0;
+	    element.scrollLeft = originalScrollLeft;
+	    return result;
+	  })();
+	  i.negativeScrollAdjustment = i.isNegativeScroll ? element.scrollWidth - element.clientWidth : 0;
+	  i.event = new EventManager();
+	  i.ownerDocument = element.ownerDocument || document;
 
-	    function _possibleConstructorReturn(self, call) {
-	        if (!self) {
-	            throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-	        }
+	  function focus() {
+	    cls.add(element, 'ps-focus');
+	  }
 
-	        return call && (typeof call === "object" || typeof call === "function") ? call : self;
-	    }
+	  function blur() {
+	    cls.remove(element, 'ps-focus');
+	  }
 
-	    function _inherits(subClass, superClass) {
-	        if (typeof superClass !== "function" && superClass !== null) {
-	            throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-	        }
+	  i.scrollbarXRail = dom.appendTo(dom.e('div', 'ps-scrollbar-x-rail'), element);
+	  i.scrollbarX = dom.appendTo(dom.e('div', 'ps-scrollbar-x'), i.scrollbarXRail);
+	  i.scrollbarX.setAttribute('tabindex', 0);
+	  i.event.bind(i.scrollbarX, 'focus', focus);
+	  i.event.bind(i.scrollbarX, 'blur', blur);
+	  i.scrollbarXActive = null;
+	  i.scrollbarXWidth = null;
+	  i.scrollbarXLeft = null;
+	  i.scrollbarXBottom = _.toInt(dom.css(i.scrollbarXRail, 'bottom'));
+	  i.isScrollbarXUsingBottom = i.scrollbarXBottom === i.scrollbarXBottom; // !isNaN
+	  i.scrollbarXTop = i.isScrollbarXUsingBottom ? null : _.toInt(dom.css(i.scrollbarXRail, 'top'));
+	  i.railBorderXWidth = _.toInt(dom.css(i.scrollbarXRail, 'borderLeftWidth')) + _.toInt(dom.css(i.scrollbarXRail, 'borderRightWidth'));
+	  // Set rail to display:block to calculate margins
+	  dom.css(i.scrollbarXRail, 'display', 'block');
+	  i.railXMarginWidth = _.toInt(dom.css(i.scrollbarXRail, 'marginLeft')) + _.toInt(dom.css(i.scrollbarXRail, 'marginRight'));
+	  dom.css(i.scrollbarXRail, 'display', '');
+	  i.railXWidth = null;
+	  i.railXRatio = null;
 
-	        subClass.prototype = Object.create(superClass && superClass.prototype, {
-	            constructor: {
-	                value: subClass,
-	                enumerable: false,
-	                writable: true,
-	                configurable: true
-	            }
-	        });
-	        if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-	    }
+	  i.scrollbarYRail = dom.appendTo(dom.e('div', 'ps-scrollbar-y-rail'), element);
+	  i.scrollbarY = dom.appendTo(dom.e('div', 'ps-scrollbar-y'), i.scrollbarYRail);
+	  i.scrollbarY.setAttribute('tabindex', 0);
+	  i.event.bind(i.scrollbarY, 'focus', focus);
+	  i.event.bind(i.scrollbarY, 'blur', blur);
+	  i.scrollbarYActive = null;
+	  i.scrollbarYHeight = null;
+	  i.scrollbarYTop = null;
+	  i.scrollbarYRight = _.toInt(dom.css(i.scrollbarYRail, 'right'));
+	  i.isScrollbarYUsingRight = i.scrollbarYRight === i.scrollbarYRight; // !isNaN
+	  i.scrollbarYLeft = i.isScrollbarYUsingRight ? null : _.toInt(dom.css(i.scrollbarYRail, 'left'));
+	  i.scrollbarYOuterWidth = i.isRtl ? _.outerWidth(i.scrollbarY) : null;
+	  i.railBorderYWidth = _.toInt(dom.css(i.scrollbarYRail, 'borderTopWidth')) + _.toInt(dom.css(i.scrollbarYRail, 'borderBottomWidth'));
+	  dom.css(i.scrollbarYRail, 'display', 'block');
+	  i.railYMarginHeight = _.toInt(dom.css(i.scrollbarYRail, 'marginTop')) + _.toInt(dom.css(i.scrollbarYRail, 'marginBottom'));
+	  dom.css(i.scrollbarYRail, 'display', '');
+	  i.railYHeight = null;
+	  i.railYRatio = null;
+	}
 
-	    var Clipboard = function (_Emitter) {
-	        _inherits(Clipboard, _Emitter);
+	function getId(element) {
+	  return element.getAttribute('data-ps-id');
+	}
 
-	        /**
-	         * @param {String|HTMLElement|HTMLCollection|NodeList} trigger
-	         * @param {Object} options
-	         */
+	function setId(element, id) {
+	  element.setAttribute('data-ps-id', id);
+	}
 
-	        function Clipboard(trigger, options) {
-	            _classCallCheck(this, Clipboard);
+	function removeId(element) {
+	  element.removeAttribute('data-ps-id');
+	}
 
-	            var _this = _possibleConstructorReturn(this, _Emitter.call(this));
+	exports.add = function (element) {
+	  var newId = guid();
+	  setId(element, newId);
+	  instances[newId] = new Instance(element);
+	  return instances[newId];
+	};
 
-	            _this.resolveOptions(options);
-	            _this.listenClick(trigger);
-	            return _this;
-	        }
+	exports.remove = function (element) {
+	  delete instances[getId(element)];
+	  removeId(element);
+	};
 
-	        /**
-	         * Defines if attributes would be resolved using internal setter functions
-	         * or custom functions that were passed in the constructor.
-	         * @param {Object} options
-	         */
+	exports.get = function (element) {
+	  return instances[getId(element)];
+	};
 
-
-	        Clipboard.prototype.resolveOptions = function resolveOptions() {
-	            var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-	            this.action = typeof options.action === 'function' ? options.action : this.defaultAction;
-	            this.target = typeof options.target === 'function' ? options.target : this.defaultTarget;
-	            this.text = typeof options.text === 'function' ? options.text : this.defaultText;
-	        };
-
-	        Clipboard.prototype.listenClick = function listenClick(trigger) {
-	            var _this2 = this;
-
-	            this.listener = (0, _goodListener2.default)(trigger, 'click', function (e) {
-	                return _this2.onClick(e);
-	            });
-	        };
-
-	        Clipboard.prototype.onClick = function onClick(e) {
-	            var trigger = e.delegateTarget || e.currentTarget;
-
-	            if (this.clipboardAction) {
-	                this.clipboardAction = null;
-	            }
-
-	            this.clipboardAction = new _clipboardAction2.default({
-	                action: this.action(trigger),
-	                target: this.target(trigger),
-	                text: this.text(trigger),
-	                trigger: trigger,
-	                emitter: this
-	            });
-	        };
-
-	        Clipboard.prototype.defaultAction = function defaultAction(trigger) {
-	            return getAttributeValue('action', trigger);
-	        };
-
-	        Clipboard.prototype.defaultTarget = function defaultTarget(trigger) {
-	            var selector = getAttributeValue('target', trigger);
-
-	            if (selector) {
-	                return document.querySelector(selector);
-	            }
-	        };
-
-	        Clipboard.prototype.defaultText = function defaultText(trigger) {
-	            return getAttributeValue('text', trigger);
-	        };
-
-	        Clipboard.prototype.destroy = function destroy() {
-	            this.listener.destroy();
-
-	            if (this.clipboardAction) {
-	                this.clipboardAction.destroy();
-	                this.clipboardAction = null;
-	            }
-	        };
-
-	        return Clipboard;
-	    }(_tinyEmitter2.default);
-
-	    /**
-	     * Helper function to retrieve attribute value.
-	     * @param {String} suffix
-	     * @param {Element} element
-	     */
-	    function getAttributeValue(suffix, element) {
-	        var attribute = 'data-clipboard-' + suffix;
-
-	        if (!element.hasAttribute(attribute)) {
-	            return;
-	        }
-
-	        return element.getAttribute(attribute);
-	    }
-
-	    module.exports = Clipboard;
-	});
 
 /***/ },
 /* 230 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (global, factory) {
-	    if (true) {
-	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [module, __webpack_require__(231)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	    } else if (typeof exports !== "undefined") {
-	        factory(module, require('select'));
-	    } else {
-	        var mod = {
-	            exports: {}
-	        };
-	        factory(mod, global.select);
-	        global.clipboardAction = mod.exports;
-	    }
-	})(this, function (module, _select) {
-	    'use strict';
+	'use strict';
 
-	    var _select2 = _interopRequireDefault(_select);
+	module.exports = {
+	  handlers: ['click-rail', 'drag-scrollbar', 'keyboard', 'wheel', 'touch'],
+	  maxScrollbarLength: null,
+	  minScrollbarLength: null,
+	  scrollXMarginOffset: 0,
+	  scrollYMarginOffset: 0,
+	  stopPropagationOnClick: true,
+	  suppressScrollX: false,
+	  suppressScrollY: false,
+	  swipePropagation: true,
+	  useBothWheelAxes: false,
+	  wheelPropagation: false,
+	  wheelSpeed: 1,
+	  theme: 'default'
+	};
 
-	    function _interopRequireDefault(obj) {
-	        return obj && obj.__esModule ? obj : {
-	            default: obj
-	        };
-	    }
-
-	    var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
-	        return typeof obj;
-	    } : function (obj) {
-	        return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
-	    };
-
-	    function _classCallCheck(instance, Constructor) {
-	        if (!(instance instanceof Constructor)) {
-	            throw new TypeError("Cannot call a class as a function");
-	        }
-	    }
-
-	    var _createClass = function () {
-	        function defineProperties(target, props) {
-	            for (var i = 0; i < props.length; i++) {
-	                var descriptor = props[i];
-	                descriptor.enumerable = descriptor.enumerable || false;
-	                descriptor.configurable = true;
-	                if ("value" in descriptor) descriptor.writable = true;
-	                Object.defineProperty(target, descriptor.key, descriptor);
-	            }
-	        }
-
-	        return function (Constructor, protoProps, staticProps) {
-	            if (protoProps) defineProperties(Constructor.prototype, protoProps);
-	            if (staticProps) defineProperties(Constructor, staticProps);
-	            return Constructor;
-	        };
-	    }();
-
-	    var ClipboardAction = function () {
-	        /**
-	         * @param {Object} options
-	         */
-
-	        function ClipboardAction(options) {
-	            _classCallCheck(this, ClipboardAction);
-
-	            this.resolveOptions(options);
-	            this.initSelection();
-	        }
-
-	        /**
-	         * Defines base properties passed from constructor.
-	         * @param {Object} options
-	         */
-
-
-	        ClipboardAction.prototype.resolveOptions = function resolveOptions() {
-	            var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-	            this.action = options.action;
-	            this.emitter = options.emitter;
-	            this.target = options.target;
-	            this.text = options.text;
-	            this.trigger = options.trigger;
-
-	            this.selectedText = '';
-	        };
-
-	        ClipboardAction.prototype.initSelection = function initSelection() {
-	            if (this.text) {
-	                this.selectFake();
-	            } else if (this.target) {
-	                this.selectTarget();
-	            }
-	        };
-
-	        ClipboardAction.prototype.selectFake = function selectFake() {
-	            var _this = this;
-
-	            var isRTL = document.documentElement.getAttribute('dir') == 'rtl';
-
-	            this.removeFake();
-
-	            this.fakeHandlerCallback = function () {
-	                return _this.removeFake();
-	            };
-	            this.fakeHandler = document.body.addEventListener('click', this.fakeHandlerCallback) || true;
-
-	            this.fakeElem = document.createElement('textarea');
-	            // Prevent zooming on iOS
-	            this.fakeElem.style.fontSize = '12pt';
-	            // Reset box model
-	            this.fakeElem.style.border = '0';
-	            this.fakeElem.style.padding = '0';
-	            this.fakeElem.style.margin = '0';
-	            // Move element out of screen horizontally
-	            this.fakeElem.style.position = 'absolute';
-	            this.fakeElem.style[isRTL ? 'right' : 'left'] = '-9999px';
-	            // Move element to the same position vertically
-	            this.fakeElem.style.top = (window.pageYOffset || document.documentElement.scrollTop) + 'px';
-	            this.fakeElem.setAttribute('readonly', '');
-	            this.fakeElem.value = this.text;
-
-	            document.body.appendChild(this.fakeElem);
-
-	            this.selectedText = (0, _select2.default)(this.fakeElem);
-	            this.copyText();
-	        };
-
-	        ClipboardAction.prototype.removeFake = function removeFake() {
-	            if (this.fakeHandler) {
-	                document.body.removeEventListener('click', this.fakeHandlerCallback);
-	                this.fakeHandler = null;
-	                this.fakeHandlerCallback = null;
-	            }
-
-	            if (this.fakeElem) {
-	                document.body.removeChild(this.fakeElem);
-	                this.fakeElem = null;
-	            }
-	        };
-
-	        ClipboardAction.prototype.selectTarget = function selectTarget() {
-	            this.selectedText = (0, _select2.default)(this.target);
-	            this.copyText();
-	        };
-
-	        ClipboardAction.prototype.copyText = function copyText() {
-	            var succeeded = undefined;
-
-	            try {
-	                succeeded = document.execCommand(this.action);
-	            } catch (err) {
-	                succeeded = false;
-	            }
-
-	            this.handleResult(succeeded);
-	        };
-
-	        ClipboardAction.prototype.handleResult = function handleResult(succeeded) {
-	            if (succeeded) {
-	                this.emitter.emit('success', {
-	                    action: this.action,
-	                    text: this.selectedText,
-	                    trigger: this.trigger,
-	                    clearSelection: this.clearSelection.bind(this)
-	                });
-	            } else {
-	                this.emitter.emit('error', {
-	                    action: this.action,
-	                    trigger: this.trigger,
-	                    clearSelection: this.clearSelection.bind(this)
-	                });
-	            }
-	        };
-
-	        ClipboardAction.prototype.clearSelection = function clearSelection() {
-	            if (this.target) {
-	                this.target.blur();
-	            }
-
-	            window.getSelection().removeAllRanges();
-	        };
-
-	        ClipboardAction.prototype.destroy = function destroy() {
-	            this.removeFake();
-	        };
-
-	        _createClass(ClipboardAction, [{
-	            key: 'action',
-	            set: function set() {
-	                var action = arguments.length <= 0 || arguments[0] === undefined ? 'copy' : arguments[0];
-
-	                this._action = action;
-
-	                if (this._action !== 'copy' && this._action !== 'cut') {
-	                    throw new Error('Invalid "action" value, use either "copy" or "cut"');
-	                }
-	            },
-	            get: function get() {
-	                return this._action;
-	            }
-	        }, {
-	            key: 'target',
-	            set: function set(target) {
-	                if (target !== undefined) {
-	                    if (target && (typeof target === 'undefined' ? 'undefined' : _typeof(target)) === 'object' && target.nodeType === 1) {
-	                        if (this.action === 'copy' && target.hasAttribute('disabled')) {
-	                            throw new Error('Invalid "target" attribute. Please use "readonly" instead of "disabled" attribute');
-	                        }
-
-	                        if (this.action === 'cut' && (target.hasAttribute('readonly') || target.hasAttribute('disabled'))) {
-	                            throw new Error('Invalid "target" attribute. You can\'t cut text from elements with "readonly" or "disabled" attributes');
-	                        }
-
-	                        this._target = target;
-	                    } else {
-	                        throw new Error('Invalid "target" value, use a valid Element');
-	                    }
-	                }
-	            },
-	            get: function get() {
-	                return this._target;
-	            }
-	        }]);
-
-	        return ClipboardAction;
-	    }();
-
-	    module.exports = ClipboardAction;
-	});
 
 /***/ },
 /* 231 */
 /***/ function(module, exports) {
 
-	function select(element) {
-	    var selectedText;
+	'use strict';
 
-	    if (element.nodeName === 'INPUT' || element.nodeName === 'TEXTAREA') {
-	        element.focus();
-	        element.setSelectionRange(0, element.value.length);
+	var EventElement = function (element) {
+	  this.element = element;
+	  this.events = {};
+	};
 
-	        selectedText = element.value;
+	EventElement.prototype.bind = function (eventName, handler) {
+	  if (typeof this.events[eventName] === 'undefined') {
+	    this.events[eventName] = [];
+	  }
+	  this.events[eventName].push(handler);
+	  this.element.addEventListener(eventName, handler, false);
+	};
+
+	EventElement.prototype.unbind = function (eventName, handler) {
+	  var isHandlerProvided = (typeof handler !== 'undefined');
+	  this.events[eventName] = this.events[eventName].filter(function (hdlr) {
+	    if (isHandlerProvided && hdlr !== handler) {
+	      return true;
 	    }
-	    else {
-	        if (element.hasAttribute('contenteditable')) {
-	            element.focus();
-	        }
+	    this.element.removeEventListener(eventName, hdlr, false);
+	    return false;
+	  }, this);
+	};
 
-	        var selection = window.getSelection();
-	        var range = document.createRange();
+	EventElement.prototype.unbindAll = function () {
+	  for (var name in this.events) {
+	    this.unbind(name);
+	  }
+	};
 
-	        range.selectNodeContents(element);
-	        selection.removeAllRanges();
-	        selection.addRange(range);
+	var EventManager = function () {
+	  this.eventElements = [];
+	};
 
-	        selectedText = selection.toString();
-	    }
+	EventManager.prototype.eventElement = function (element) {
+	  var ee = this.eventElements.filter(function (eventElement) {
+	    return eventElement.element === element;
+	  })[0];
+	  if (typeof ee === 'undefined') {
+	    ee = new EventElement(element);
+	    this.eventElements.push(ee);
+	  }
+	  return ee;
+	};
 
-	    return selectedText;
-	}
+	EventManager.prototype.bind = function (element, eventName, handler) {
+	  this.eventElement(element).bind(eventName, handler);
+	};
 
-	module.exports = select;
+	EventManager.prototype.unbind = function (element, eventName, handler) {
+	  this.eventElement(element).unbind(eventName, handler);
+	};
+
+	EventManager.prototype.unbindAll = function () {
+	  for (var i = 0; i < this.eventElements.length; i++) {
+	    this.eventElements[i].unbindAll();
+	  }
+	};
+
+	EventManager.prototype.once = function (element, eventName, handler) {
+	  var ee = this.eventElement(element);
+	  var onceHandler = function (e) {
+	    ee.unbind(eventName, onceHandler);
+	    handler(e);
+	  };
+	  ee.bind(eventName, onceHandler);
+	};
+
+	module.exports = EventManager;
 
 
 /***/ },
 /* 232 */
 /***/ function(module, exports) {
 
-	function E () {
-	  // Keep this empty so it's easier to inherit from
-	  // (via https://github.com/lipsmack from https://github.com/scottcorgan/tiny-emitter/issues/3)
-	}
+	'use strict';
 
-	E.prototype = {
-	  on: function (name, callback, ctx) {
-	    var e = this.e || (this.e = {});
-
-	    (e[name] || (e[name] = [])).push({
-	      fn: callback,
-	      ctx: ctx
-	    });
-
-	    return this;
-	  },
-
-	  once: function (name, callback, ctx) {
-	    var self = this;
-	    function listener () {
-	      self.off(name, listener);
-	      callback.apply(ctx, arguments);
-	    };
-
-	    listener._ = callback
-	    return this.on(name, listener, ctx);
-	  },
-
-	  emit: function (name) {
-	    var data = [].slice.call(arguments, 1);
-	    var evtArr = ((this.e || (this.e = {}))[name] || []).slice();
-	    var i = 0;
-	    var len = evtArr.length;
-
-	    for (i; i < len; i++) {
-	      evtArr[i].fn.apply(evtArr[i].ctx, data);
-	    }
-
-	    return this;
-	  },
-
-	  off: function (name, callback) {
-	    var e = this.e || (this.e = {});
-	    var evts = e[name];
-	    var liveEvents = [];
-
-	    if (evts && callback) {
-	      for (var i = 0, len = evts.length; i < len; i++) {
-	        if (evts[i].fn !== callback && evts[i].fn._ !== callback)
-	          liveEvents.push(evts[i]);
-	      }
-	    }
-
-	    // Remove event from queue to prevent memory leak
-	    // Suggested by https://github.com/lazd
-	    // Ref: https://github.com/scottcorgan/tiny-emitter/commit/c6ebfaa9bc973b33d110a84a307742b7cf94c953#commitcomment-5024910
-
-	    (liveEvents.length)
-	      ? e[name] = liveEvents
-	      : delete e[name];
-
-	    return this;
+	module.exports = (function () {
+	  function s4() {
+	    return Math.floor((1 + Math.random()) * 0x10000)
+	               .toString(16)
+	               .substring(1);
 	  }
-	};
-
-	module.exports = E;
+	  return function () {
+	    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+	           s4() + '-' + s4() + s4() + s4();
+	  };
+	})();
 
 
 /***/ },
 /* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var is = __webpack_require__(234);
-	var delegate = __webpack_require__(235);
+	'use strict';
 
-	/**
-	 * Validates all params and calls the right
-	 * listener function based on its target type.
-	 *
-	 * @param {String|HTMLElement|HTMLCollection|NodeList} target
-	 * @param {String} type
-	 * @param {Function} callback
-	 * @return {Object}
-	 */
-	function listen(target, type, callback) {
-	    if (!target && !type && !callback) {
-	        throw new Error('Missing required arguments');
-	    }
+	var _ = __webpack_require__(226);
+	var cls = __webpack_require__(227);
+	var instances = __webpack_require__(229);
+	var updateGeometry = __webpack_require__(234);
 
-	    if (!is.string(type)) {
-	        throw new TypeError('Second argument must be a String');
-	    }
+	// Handlers
+	var handlers = {
+	  'click-rail': __webpack_require__(236),
+	  'drag-scrollbar': __webpack_require__(237),
+	  'keyboard': __webpack_require__(238),
+	  'wheel': __webpack_require__(239),
+	  'touch': __webpack_require__(240),
+	  'selection': __webpack_require__(241)
+	};
+	var nativeScrollHandler = __webpack_require__(242);
 
-	    if (!is.fn(callback)) {
-	        throw new TypeError('Third argument must be a Function');
-	    }
+	module.exports = function (element, userSettings) {
+	  userSettings = typeof userSettings === 'object' ? userSettings : {};
 
-	    if (is.node(target)) {
-	        return listenNode(target, type, callback);
-	    }
-	    else if (is.nodeList(target)) {
-	        return listenNodeList(target, type, callback);
-	    }
-	    else if (is.string(target)) {
-	        return listenSelector(target, type, callback);
-	    }
-	    else {
-	        throw new TypeError('First argument must be a String, HTMLElement, HTMLCollection, or NodeList');
-	    }
-	}
+	  cls.add(element, 'ps-container');
 
-	/**
-	 * Adds an event listener to a HTML element
-	 * and returns a remove listener function.
-	 *
-	 * @param {HTMLElement} node
-	 * @param {String} type
-	 * @param {Function} callback
-	 * @return {Object}
-	 */
-	function listenNode(node, type, callback) {
-	    node.addEventListener(type, callback);
+	  // Create a plugin instance.
+	  var i = instances.add(element);
 
-	    return {
-	        destroy: function() {
-	            node.removeEventListener(type, callback);
-	        }
-	    }
-	}
+	  i.settings = _.extend(i.settings, userSettings);
+	  cls.add(element, 'ps-theme-' + i.settings.theme);
 
-	/**
-	 * Add an event listener to a list of HTML elements
-	 * and returns a remove listener function.
-	 *
-	 * @param {NodeList|HTMLCollection} nodeList
-	 * @param {String} type
-	 * @param {Function} callback
-	 * @return {Object}
-	 */
-	function listenNodeList(nodeList, type, callback) {
-	    Array.prototype.forEach.call(nodeList, function(node) {
-	        node.addEventListener(type, callback);
-	    });
+	  i.settings.handlers.forEach(function (handlerName) {
+	    handlers[handlerName](element);
+	  });
 
-	    return {
-	        destroy: function() {
-	            Array.prototype.forEach.call(nodeList, function(node) {
-	                node.removeEventListener(type, callback);
-	            });
-	        }
-	    }
-	}
+	  nativeScrollHandler(element);
 
-	/**
-	 * Add an event listener to a selector
-	 * and returns a remove listener function.
-	 *
-	 * @param {String} selector
-	 * @param {String} type
-	 * @param {Function} callback
-	 * @return {Object}
-	 */
-	function listenSelector(selector, type, callback) {
-	    return delegate(document.body, selector, type, callback);
-	}
-
-	module.exports = listen;
+	  updateGeometry(element);
+	};
 
 
 /***/ },
 /* 234 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	/**
-	 * Check if argument is a HTML element.
-	 *
-	 * @param {Object} value
-	 * @return {Boolean}
-	 */
-	exports.node = function(value) {
-	    return value !== undefined
-	        && value instanceof HTMLElement
-	        && value.nodeType === 1;
-	};
+	'use strict';
 
-	/**
-	 * Check if argument is a list of HTML elements.
-	 *
-	 * @param {Object} value
-	 * @return {Boolean}
-	 */
-	exports.nodeList = function(value) {
-	    var type = Object.prototype.toString.call(value);
+	var _ = __webpack_require__(226);
+	var cls = __webpack_require__(227);
+	var dom = __webpack_require__(228);
+	var instances = __webpack_require__(229);
+	var updateScroll = __webpack_require__(235);
 
-	    return value !== undefined
-	        && (type === '[object NodeList]' || type === '[object HTMLCollection]')
-	        && ('length' in value)
-	        && (value.length === 0 || exports.node(value[0]));
-	};
+	function getThumbSize(i, thumbSize) {
+	  if (i.settings.minScrollbarLength) {
+	    thumbSize = Math.max(thumbSize, i.settings.minScrollbarLength);
+	  }
+	  if (i.settings.maxScrollbarLength) {
+	    thumbSize = Math.min(thumbSize, i.settings.maxScrollbarLength);
+	  }
+	  return thumbSize;
+	}
 
-	/**
-	 * Check if argument is a string.
-	 *
-	 * @param {Object} value
-	 * @return {Boolean}
-	 */
-	exports.string = function(value) {
-	    return typeof value === 'string'
-	        || value instanceof String;
-	};
+	function updateCss(element, i) {
+	  var xRailOffset = {width: i.railXWidth};
+	  if (i.isRtl) {
+	    xRailOffset.left = i.negativeScrollAdjustment + element.scrollLeft + i.containerWidth - i.contentWidth;
+	  } else {
+	    xRailOffset.left = element.scrollLeft;
+	  }
+	  if (i.isScrollbarXUsingBottom) {
+	    xRailOffset.bottom = i.scrollbarXBottom - element.scrollTop;
+	  } else {
+	    xRailOffset.top = i.scrollbarXTop + element.scrollTop;
+	  }
+	  dom.css(i.scrollbarXRail, xRailOffset);
 
-	/**
-	 * Check if argument is a function.
-	 *
-	 * @param {Object} value
-	 * @return {Boolean}
-	 */
-	exports.fn = function(value) {
-	    var type = Object.prototype.toString.call(value);
+	  var yRailOffset = {top: element.scrollTop, height: i.railYHeight};
+	  if (i.isScrollbarYUsingRight) {
+	    if (i.isRtl) {
+	      yRailOffset.right = i.contentWidth - (i.negativeScrollAdjustment + element.scrollLeft) - i.scrollbarYRight - i.scrollbarYOuterWidth;
+	    } else {
+	      yRailOffset.right = i.scrollbarYRight - element.scrollLeft;
+	    }
+	  } else {
+	    if (i.isRtl) {
+	      yRailOffset.left = i.negativeScrollAdjustment + element.scrollLeft + i.containerWidth * 2 - i.contentWidth - i.scrollbarYLeft - i.scrollbarYOuterWidth;
+	    } else {
+	      yRailOffset.left = i.scrollbarYLeft + element.scrollLeft;
+	    }
+	  }
+	  dom.css(i.scrollbarYRail, yRailOffset);
 
-	    return type === '[object Function]';
+	  dom.css(i.scrollbarX, {left: i.scrollbarXLeft, width: i.scrollbarXWidth - i.railBorderXWidth});
+	  dom.css(i.scrollbarY, {top: i.scrollbarYTop, height: i.scrollbarYHeight - i.railBorderYWidth});
+	}
+
+	module.exports = function (element) {
+	  var i = instances.get(element);
+
+	  i.containerWidth = element.clientWidth;
+	  i.containerHeight = element.clientHeight;
+	  i.contentWidth = element.scrollWidth;
+	  i.contentHeight = element.scrollHeight;
+
+	  var existingRails;
+	  if (!element.contains(i.scrollbarXRail)) {
+	    existingRails = dom.queryChildren(element, '.ps-scrollbar-x-rail');
+	    if (existingRails.length > 0) {
+	      existingRails.forEach(function (rail) {
+	        dom.remove(rail);
+	      });
+	    }
+	    dom.appendTo(i.scrollbarXRail, element);
+	  }
+	  if (!element.contains(i.scrollbarYRail)) {
+	    existingRails = dom.queryChildren(element, '.ps-scrollbar-y-rail');
+	    if (existingRails.length > 0) {
+	      existingRails.forEach(function (rail) {
+	        dom.remove(rail);
+	      });
+	    }
+	    dom.appendTo(i.scrollbarYRail, element);
+	  }
+
+	  if (!i.settings.suppressScrollX && i.containerWidth + i.settings.scrollXMarginOffset < i.contentWidth) {
+	    i.scrollbarXActive = true;
+	    i.railXWidth = i.containerWidth - i.railXMarginWidth;
+	    i.railXRatio = i.containerWidth / i.railXWidth;
+	    i.scrollbarXWidth = getThumbSize(i, _.toInt(i.railXWidth * i.containerWidth / i.contentWidth));
+	    i.scrollbarXLeft = _.toInt((i.negativeScrollAdjustment + element.scrollLeft) * (i.railXWidth - i.scrollbarXWidth) / (i.contentWidth - i.containerWidth));
+	  } else {
+	    i.scrollbarXActive = false;
+	  }
+
+	  if (!i.settings.suppressScrollY && i.containerHeight + i.settings.scrollYMarginOffset < i.contentHeight) {
+	    i.scrollbarYActive = true;
+	    i.railYHeight = i.containerHeight - i.railYMarginHeight;
+	    i.railYRatio = i.containerHeight / i.railYHeight;
+	    i.scrollbarYHeight = getThumbSize(i, _.toInt(i.railYHeight * i.containerHeight / i.contentHeight));
+	    i.scrollbarYTop = _.toInt(element.scrollTop * (i.railYHeight - i.scrollbarYHeight) / (i.contentHeight - i.containerHeight));
+	  } else {
+	    i.scrollbarYActive = false;
+	  }
+
+	  if (i.scrollbarXLeft >= i.railXWidth - i.scrollbarXWidth) {
+	    i.scrollbarXLeft = i.railXWidth - i.scrollbarXWidth;
+	  }
+	  if (i.scrollbarYTop >= i.railYHeight - i.scrollbarYHeight) {
+	    i.scrollbarYTop = i.railYHeight - i.scrollbarYHeight;
+	  }
+
+	  updateCss(element, i);
+
+	  if (i.scrollbarXActive) {
+	    cls.add(element, 'ps-active-x');
+	  } else {
+	    cls.remove(element, 'ps-active-x');
+	    i.scrollbarXWidth = 0;
+	    i.scrollbarXLeft = 0;
+	    updateScroll(element, 'left', 0);
+	  }
+	  if (i.scrollbarYActive) {
+	    cls.add(element, 'ps-active-y');
+	  } else {
+	    cls.remove(element, 'ps-active-y');
+	    i.scrollbarYHeight = 0;
+	    i.scrollbarYTop = 0;
+	    updateScroll(element, 'top', 0);
+	  }
 	};
 
 
@@ -27681,131 +27478,952 @@
 /* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var closest = __webpack_require__(236);
+	'use strict';
 
-	/**
-	 * Delegates event to a selector.
-	 *
-	 * @param {Element} element
-	 * @param {String} selector
-	 * @param {String} type
-	 * @param {Function} callback
-	 * @param {Boolean} useCapture
-	 * @return {Object}
-	 */
-	function delegate(element, selector, type, callback, useCapture) {
-	    var listenerFn = listener.apply(this, arguments);
+	var instances = __webpack_require__(229);
 
-	    element.addEventListener(type, listenerFn, useCapture);
+	var upEvent = document.createEvent('Event');
+	var downEvent = document.createEvent('Event');
+	var leftEvent = document.createEvent('Event');
+	var rightEvent = document.createEvent('Event');
+	var yEvent = document.createEvent('Event');
+	var xEvent = document.createEvent('Event');
+	var xStartEvent = document.createEvent('Event');
+	var xEndEvent = document.createEvent('Event');
+	var yStartEvent = document.createEvent('Event');
+	var yEndEvent = document.createEvent('Event');
+	var lastTop;
+	var lastLeft;
 
-	    return {
-	        destroy: function() {
-	            element.removeEventListener(type, listenerFn, useCapture);
-	        }
+	upEvent.initEvent('ps-scroll-up', true, true);
+	downEvent.initEvent('ps-scroll-down', true, true);
+	leftEvent.initEvent('ps-scroll-left', true, true);
+	rightEvent.initEvent('ps-scroll-right', true, true);
+	yEvent.initEvent('ps-scroll-y', true, true);
+	xEvent.initEvent('ps-scroll-x', true, true);
+	xStartEvent.initEvent('ps-x-reach-start', true, true);
+	xEndEvent.initEvent('ps-x-reach-end', true, true);
+	yStartEvent.initEvent('ps-y-reach-start', true, true);
+	yEndEvent.initEvent('ps-y-reach-end', true, true);
+
+	module.exports = function (element, axis, value) {
+	  if (typeof element === 'undefined') {
+	    throw 'You must provide an element to the update-scroll function';
+	  }
+
+	  if (typeof axis === 'undefined') {
+	    throw 'You must provide an axis to the update-scroll function';
+	  }
+
+	  if (typeof value === 'undefined') {
+	    throw 'You must provide a value to the update-scroll function';
+	  }
+
+	  if (axis === 'top' && value <= 0) {
+	    element.scrollTop = value = 0; // don't allow negative scroll
+	    element.dispatchEvent(yStartEvent);
+	  }
+
+	  if (axis === 'left' && value <= 0) {
+	    element.scrollLeft = value = 0; // don't allow negative scroll
+	    element.dispatchEvent(xStartEvent);
+	  }
+
+	  var i = instances.get(element);
+
+	  if (axis === 'top' && value >= i.contentHeight - i.containerHeight) {
+	    // don't allow scroll past container
+	    value = i.contentHeight - i.containerHeight;
+	    if (value - element.scrollTop <= 1) {
+	      // mitigates rounding errors on non-subpixel scroll values
+	      value = element.scrollTop;
+	    } else {
+	      element.scrollTop = value;
 	    }
-	}
+	    element.dispatchEvent(yEndEvent);
+	  }
 
-	/**
-	 * Finds closest match and invokes callback.
-	 *
-	 * @param {Element} element
-	 * @param {String} selector
-	 * @param {String} type
-	 * @param {Function} callback
-	 * @return {Function}
-	 */
-	function listener(element, selector, type, callback) {
-	    return function(e) {
-	        e.delegateTarget = closest(e.target, selector, true);
-
-	        if (e.delegateTarget) {
-	            callback.call(element, e);
-	        }
+	  if (axis === 'left' && value >= i.contentWidth - i.containerWidth) {
+	    // don't allow scroll past container
+	    value = i.contentWidth - i.containerWidth;
+	    if (value - element.scrollLeft <= 1) {
+	      // mitigates rounding errors on non-subpixel scroll values
+	      value = element.scrollLeft;
+	    } else {
+	      element.scrollLeft = value;
 	    }
-	}
+	    element.dispatchEvent(xEndEvent);
+	  }
 
-	module.exports = delegate;
+	  if (!lastTop) {
+	    lastTop = element.scrollTop;
+	  }
+
+	  if (!lastLeft) {
+	    lastLeft = element.scrollLeft;
+	  }
+
+	  if (axis === 'top' && value < lastTop) {
+	    element.dispatchEvent(upEvent);
+	  }
+
+	  if (axis === 'top' && value > lastTop) {
+	    element.dispatchEvent(downEvent);
+	  }
+
+	  if (axis === 'left' && value < lastLeft) {
+	    element.dispatchEvent(leftEvent);
+	  }
+
+	  if (axis === 'left' && value > lastLeft) {
+	    element.dispatchEvent(rightEvent);
+	  }
+
+	  if (axis === 'top') {
+	    element.scrollTop = lastTop = value;
+	    element.dispatchEvent(yEvent);
+	  }
+
+	  if (axis === 'left') {
+	    element.scrollLeft = lastLeft = value;
+	    element.dispatchEvent(xEvent);
+	  }
+
+	};
 
 
 /***/ },
 /* 236 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var matches = __webpack_require__(237)
+	'use strict';
 
-	module.exports = function (element, selector, checkYoSelf) {
-	  var parent = checkYoSelf ? element : element.parentNode
+	var _ = __webpack_require__(226);
+	var instances = __webpack_require__(229);
+	var updateGeometry = __webpack_require__(234);
+	var updateScroll = __webpack_require__(235);
 
-	  while (parent && parent !== document) {
-	    if (matches(parent, selector)) return parent;
-	    parent = parent.parentNode
+	function bindClickRailHandler(element, i) {
+	  function pageOffset(el) {
+	    return el.getBoundingClientRect();
 	  }
+	  var stopPropagation = function (e) { e.stopPropagation(); };
+
+	  if (i.settings.stopPropagationOnClick) {
+	    i.event.bind(i.scrollbarY, 'click', stopPropagation);
+	  }
+	  i.event.bind(i.scrollbarYRail, 'click', function (e) {
+	    var halfOfScrollbarLength = _.toInt(i.scrollbarYHeight / 2);
+	    var positionTop = i.railYRatio * (e.pageY - window.pageYOffset - pageOffset(i.scrollbarYRail).top - halfOfScrollbarLength);
+	    var maxPositionTop = i.railYRatio * (i.railYHeight - i.scrollbarYHeight);
+	    var positionRatio = positionTop / maxPositionTop;
+
+	    if (positionRatio < 0) {
+	      positionRatio = 0;
+	    } else if (positionRatio > 1) {
+	      positionRatio = 1;
+	    }
+
+	    updateScroll(element, 'top', (i.contentHeight - i.containerHeight) * positionRatio);
+	    updateGeometry(element);
+
+	    e.stopPropagation();
+	  });
+
+	  if (i.settings.stopPropagationOnClick) {
+	    i.event.bind(i.scrollbarX, 'click', stopPropagation);
+	  }
+	  i.event.bind(i.scrollbarXRail, 'click', function (e) {
+	    var halfOfScrollbarLength = _.toInt(i.scrollbarXWidth / 2);
+	    var positionLeft = i.railXRatio * (e.pageX - window.pageXOffset - pageOffset(i.scrollbarXRail).left - halfOfScrollbarLength);
+	    var maxPositionLeft = i.railXRatio * (i.railXWidth - i.scrollbarXWidth);
+	    var positionRatio = positionLeft / maxPositionLeft;
+
+	    if (positionRatio < 0) {
+	      positionRatio = 0;
+	    } else if (positionRatio > 1) {
+	      positionRatio = 1;
+	    }
+
+	    updateScroll(element, 'left', ((i.contentWidth - i.containerWidth) * positionRatio) - i.negativeScrollAdjustment);
+	    updateGeometry(element);
+
+	    e.stopPropagation();
+	  });
 	}
+
+	module.exports = function (element) {
+	  var i = instances.get(element);
+	  bindClickRailHandler(element, i);
+	};
 
 
 /***/ },
 /* 237 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	
-	/**
-	 * Element prototype.
-	 */
+	'use strict';
 
-	var proto = Element.prototype;
+	var _ = __webpack_require__(226);
+	var dom = __webpack_require__(228);
+	var instances = __webpack_require__(229);
+	var updateGeometry = __webpack_require__(234);
+	var updateScroll = __webpack_require__(235);
 
-	/**
-	 * Vendor function.
-	 */
+	function bindMouseScrollXHandler(element, i) {
+	  var currentLeft = null;
+	  var currentPageX = null;
 
-	var vendor = proto.matchesSelector
-	  || proto.webkitMatchesSelector
-	  || proto.mozMatchesSelector
-	  || proto.msMatchesSelector
-	  || proto.oMatchesSelector;
+	  function updateScrollLeft(deltaX) {
+	    var newLeft = currentLeft + (deltaX * i.railXRatio);
+	    var maxLeft = Math.max(0, i.scrollbarXRail.getBoundingClientRect().left) + (i.railXRatio * (i.railXWidth - i.scrollbarXWidth));
 
-	/**
-	 * Expose `match()`.
-	 */
+	    if (newLeft < 0) {
+	      i.scrollbarXLeft = 0;
+	    } else if (newLeft > maxLeft) {
+	      i.scrollbarXLeft = maxLeft;
+	    } else {
+	      i.scrollbarXLeft = newLeft;
+	    }
 
-	module.exports = match;
-
-	/**
-	 * Match `el` to `selector`.
-	 *
-	 * @param {Element} el
-	 * @param {String} selector
-	 * @return {Boolean}
-	 * @api public
-	 */
-
-	function match(el, selector) {
-	  if (vendor) return vendor.call(el, selector);
-	  var nodes = el.parentNode.querySelectorAll(selector);
-	  for (var i = 0; i < nodes.length; ++i) {
-	    if (nodes[i] == el) return true;
+	    var scrollLeft = _.toInt(i.scrollbarXLeft * (i.contentWidth - i.containerWidth) / (i.containerWidth - (i.railXRatio * i.scrollbarXWidth))) - i.negativeScrollAdjustment;
+	    updateScroll(element, 'left', scrollLeft);
 	  }
-	  return false;
+
+	  var mouseMoveHandler = function (e) {
+	    updateScrollLeft(e.pageX - currentPageX);
+	    updateGeometry(element);
+	    e.stopPropagation();
+	    e.preventDefault();
+	  };
+
+	  var mouseUpHandler = function () {
+	    _.stopScrolling(element, 'x');
+	    i.event.unbind(i.ownerDocument, 'mousemove', mouseMoveHandler);
+	  };
+
+	  i.event.bind(i.scrollbarX, 'mousedown', function (e) {
+	    currentPageX = e.pageX;
+	    currentLeft = _.toInt(dom.css(i.scrollbarX, 'left')) * i.railXRatio;
+	    _.startScrolling(element, 'x');
+
+	    i.event.bind(i.ownerDocument, 'mousemove', mouseMoveHandler);
+	    i.event.once(i.ownerDocument, 'mouseup', mouseUpHandler);
+
+	    e.stopPropagation();
+	    e.preventDefault();
+	  });
 	}
+
+	function bindMouseScrollYHandler(element, i) {
+	  var currentTop = null;
+	  var currentPageY = null;
+
+	  function updateScrollTop(deltaY) {
+	    var newTop = currentTop + (deltaY * i.railYRatio);
+	    var maxTop = Math.max(0, i.scrollbarYRail.getBoundingClientRect().top) + (i.railYRatio * (i.railYHeight - i.scrollbarYHeight));
+
+	    if (newTop < 0) {
+	      i.scrollbarYTop = 0;
+	    } else if (newTop > maxTop) {
+	      i.scrollbarYTop = maxTop;
+	    } else {
+	      i.scrollbarYTop = newTop;
+	    }
+
+	    var scrollTop = _.toInt(i.scrollbarYTop * (i.contentHeight - i.containerHeight) / (i.containerHeight - (i.railYRatio * i.scrollbarYHeight)));
+	    updateScroll(element, 'top', scrollTop);
+	  }
+
+	  var mouseMoveHandler = function (e) {
+	    updateScrollTop(e.pageY - currentPageY);
+	    updateGeometry(element);
+	    e.stopPropagation();
+	    e.preventDefault();
+	  };
+
+	  var mouseUpHandler = function () {
+	    _.stopScrolling(element, 'y');
+	    i.event.unbind(i.ownerDocument, 'mousemove', mouseMoveHandler);
+	  };
+
+	  i.event.bind(i.scrollbarY, 'mousedown', function (e) {
+	    currentPageY = e.pageY;
+	    currentTop = _.toInt(dom.css(i.scrollbarY, 'top')) * i.railYRatio;
+	    _.startScrolling(element, 'y');
+
+	    i.event.bind(i.ownerDocument, 'mousemove', mouseMoveHandler);
+	    i.event.once(i.ownerDocument, 'mouseup', mouseUpHandler);
+
+	    e.stopPropagation();
+	    e.preventDefault();
+	  });
+	}
+
+	module.exports = function (element) {
+	  var i = instances.get(element);
+	  bindMouseScrollXHandler(element, i);
+	  bindMouseScrollYHandler(element, i);
+	};
+
 
 /***/ },
 /* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	var _ = __webpack_require__(226);
+	var dom = __webpack_require__(228);
+	var instances = __webpack_require__(229);
+	var updateGeometry = __webpack_require__(234);
+	var updateScroll = __webpack_require__(235);
+
+	function bindKeyboardHandler(element, i) {
+	  var hovered = false;
+	  i.event.bind(element, 'mouseenter', function () {
+	    hovered = true;
+	  });
+	  i.event.bind(element, 'mouseleave', function () {
+	    hovered = false;
+	  });
+
+	  var shouldPrevent = false;
+	  function shouldPreventDefault(deltaX, deltaY) {
+	    var scrollTop = element.scrollTop;
+	    if (deltaX === 0) {
+	      if (!i.scrollbarYActive) {
+	        return false;
+	      }
+	      if ((scrollTop === 0 && deltaY > 0) || (scrollTop >= i.contentHeight - i.containerHeight && deltaY < 0)) {
+	        return !i.settings.wheelPropagation;
+	      }
+	    }
+
+	    var scrollLeft = element.scrollLeft;
+	    if (deltaY === 0) {
+	      if (!i.scrollbarXActive) {
+	        return false;
+	      }
+	      if ((scrollLeft === 0 && deltaX < 0) || (scrollLeft >= i.contentWidth - i.containerWidth && deltaX > 0)) {
+	        return !i.settings.wheelPropagation;
+	      }
+	    }
+	    return true;
+	  }
+
+	  i.event.bind(i.ownerDocument, 'keydown', function (e) {
+	    if ((e.isDefaultPrevented && e.isDefaultPrevented()) || e.defaultPrevented) {
+	      return;
+	    }
+
+	    var focused = dom.matches(i.scrollbarX, ':focus') ||
+	                  dom.matches(i.scrollbarY, ':focus');
+
+	    if (!hovered && !focused) {
+	      return;
+	    }
+
+	    var activeElement = document.activeElement ? document.activeElement : i.ownerDocument.activeElement;
+	    if (activeElement) {
+	      if (activeElement.tagName === 'IFRAME') {
+	        activeElement = activeElement.contentDocument.activeElement;
+	      } else {
+	        // go deeper if element is a webcomponent
+	        while (activeElement.shadowRoot) {
+	          activeElement = activeElement.shadowRoot.activeElement;
+	        }
+	      }
+	      if (_.isEditable(activeElement)) {
+	        return;
+	      }
+	    }
+
+	    var deltaX = 0;
+	    var deltaY = 0;
+
+	    switch (e.which) {
+	    case 37: // left
+	      deltaX = -30;
+	      break;
+	    case 38: // up
+	      deltaY = 30;
+	      break;
+	    case 39: // right
+	      deltaX = 30;
+	      break;
+	    case 40: // down
+	      deltaY = -30;
+	      break;
+	    case 33: // page up
+	      deltaY = 90;
+	      break;
+	    case 32: // space bar
+	      if (e.shiftKey) {
+	        deltaY = 90;
+	      } else {
+	        deltaY = -90;
+	      }
+	      break;
+	    case 34: // page down
+	      deltaY = -90;
+	      break;
+	    case 35: // end
+	      if (e.ctrlKey) {
+	        deltaY = -i.contentHeight;
+	      } else {
+	        deltaY = -i.containerHeight;
+	      }
+	      break;
+	    case 36: // home
+	      if (e.ctrlKey) {
+	        deltaY = element.scrollTop;
+	      } else {
+	        deltaY = i.containerHeight;
+	      }
+	      break;
+	    default:
+	      return;
+	    }
+
+	    updateScroll(element, 'top', element.scrollTop - deltaY);
+	    updateScroll(element, 'left', element.scrollLeft + deltaX);
+	    updateGeometry(element);
+
+	    shouldPrevent = shouldPreventDefault(deltaX, deltaY);
+	    if (shouldPrevent) {
+	      e.preventDefault();
+	    }
+	  });
+	}
+
+	module.exports = function (element) {
+	  var i = instances.get(element);
+	  bindKeyboardHandler(element, i);
+	};
+
+
+/***/ },
+/* 239 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var instances = __webpack_require__(229);
+	var updateGeometry = __webpack_require__(234);
+	var updateScroll = __webpack_require__(235);
+
+	function bindMouseWheelHandler(element, i) {
+	  var shouldPrevent = false;
+
+	  function shouldPreventDefault(deltaX, deltaY) {
+	    var scrollTop = element.scrollTop;
+	    if (deltaX === 0) {
+	      if (!i.scrollbarYActive) {
+	        return false;
+	      }
+	      if ((scrollTop === 0 && deltaY > 0) || (scrollTop >= i.contentHeight - i.containerHeight && deltaY < 0)) {
+	        return !i.settings.wheelPropagation;
+	      }
+	    }
+
+	    var scrollLeft = element.scrollLeft;
+	    if (deltaY === 0) {
+	      if (!i.scrollbarXActive) {
+	        return false;
+	      }
+	      if ((scrollLeft === 0 && deltaX < 0) || (scrollLeft >= i.contentWidth - i.containerWidth && deltaX > 0)) {
+	        return !i.settings.wheelPropagation;
+	      }
+	    }
+	    return true;
+	  }
+
+	  function getDeltaFromEvent(e) {
+	    var deltaX = e.deltaX;
+	    var deltaY = -1 * e.deltaY;
+
+	    if (typeof deltaX === "undefined" || typeof deltaY === "undefined") {
+	      // OS X Safari
+	      deltaX = -1 * e.wheelDeltaX / 6;
+	      deltaY = e.wheelDeltaY / 6;
+	    }
+
+	    if (e.deltaMode && e.deltaMode === 1) {
+	      // Firefox in deltaMode 1: Line scrolling
+	      deltaX *= 10;
+	      deltaY *= 10;
+	    }
+
+	    if (deltaX !== deltaX && deltaY !== deltaY/* NaN checks */) {
+	      // IE in some mouse drivers
+	      deltaX = 0;
+	      deltaY = e.wheelDelta;
+	    }
+
+	    return [deltaX, deltaY];
+	  }
+
+	  function shouldBeConsumedByChild(deltaX, deltaY) {
+	    var child = element.querySelector('textarea:hover, select[multiple]:hover, .ps-child:hover');
+	    if (child) {
+	      if (child.tagName !== 'TEXTAREA' && !window.getComputedStyle(child).overflow.match(/(scroll|auto)/)) {
+	        return false;
+	      }
+
+	      var maxScrollTop = child.scrollHeight - child.clientHeight;
+	      if (maxScrollTop > 0) {
+	        if (!(child.scrollTop === 0 && deltaY > 0) && !(child.scrollTop === maxScrollTop && deltaY < 0)) {
+	          return true;
+	        }
+	      }
+	      var maxScrollLeft = child.scrollLeft - child.clientWidth;
+	      if (maxScrollLeft > 0) {
+	        if (!(child.scrollLeft === 0 && deltaX < 0) && !(child.scrollLeft === maxScrollLeft && deltaX > 0)) {
+	          return true;
+	        }
+	      }
+	    }
+	    return false;
+	  }
+
+	  function mousewheelHandler(e) {
+	    var delta = getDeltaFromEvent(e);
+
+	    var deltaX = delta[0];
+	    var deltaY = delta[1];
+
+	    if (shouldBeConsumedByChild(deltaX, deltaY)) {
+	      return;
+	    }
+
+	    shouldPrevent = false;
+	    if (!i.settings.useBothWheelAxes) {
+	      // deltaX will only be used for horizontal scrolling and deltaY will
+	      // only be used for vertical scrolling - this is the default
+	      updateScroll(element, 'top', element.scrollTop - (deltaY * i.settings.wheelSpeed));
+	      updateScroll(element, 'left', element.scrollLeft + (deltaX * i.settings.wheelSpeed));
+	    } else if (i.scrollbarYActive && !i.scrollbarXActive) {
+	      // only vertical scrollbar is active and useBothWheelAxes option is
+	      // active, so let's scroll vertical bar using both mouse wheel axes
+	      if (deltaY) {
+	        updateScroll(element, 'top', element.scrollTop - (deltaY * i.settings.wheelSpeed));
+	      } else {
+	        updateScroll(element, 'top', element.scrollTop + (deltaX * i.settings.wheelSpeed));
+	      }
+	      shouldPrevent = true;
+	    } else if (i.scrollbarXActive && !i.scrollbarYActive) {
+	      // useBothWheelAxes and only horizontal bar is active, so use both
+	      // wheel axes for horizontal bar
+	      if (deltaX) {
+	        updateScroll(element, 'left', element.scrollLeft + (deltaX * i.settings.wheelSpeed));
+	      } else {
+	        updateScroll(element, 'left', element.scrollLeft - (deltaY * i.settings.wheelSpeed));
+	      }
+	      shouldPrevent = true;
+	    }
+
+	    updateGeometry(element);
+
+	    shouldPrevent = (shouldPrevent || shouldPreventDefault(deltaX, deltaY));
+	    if (shouldPrevent) {
+	      e.stopPropagation();
+	      e.preventDefault();
+	    }
+	  }
+
+	  if (typeof window.onwheel !== "undefined") {
+	    i.event.bind(element, 'wheel', mousewheelHandler);
+	  } else if (typeof window.onmousewheel !== "undefined") {
+	    i.event.bind(element, 'mousewheel', mousewheelHandler);
+	  }
+	}
+
+	module.exports = function (element) {
+	  var i = instances.get(element);
+	  bindMouseWheelHandler(element, i);
+	};
+
+
+/***/ },
+/* 240 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _ = __webpack_require__(226);
+	var instances = __webpack_require__(229);
+	var updateGeometry = __webpack_require__(234);
+	var updateScroll = __webpack_require__(235);
+
+	function bindTouchHandler(element, i, supportsTouch, supportsIePointer) {
+	  function shouldPreventDefault(deltaX, deltaY) {
+	    var scrollTop = element.scrollTop;
+	    var scrollLeft = element.scrollLeft;
+	    var magnitudeX = Math.abs(deltaX);
+	    var magnitudeY = Math.abs(deltaY);
+
+	    if (magnitudeY > magnitudeX) {
+	      // user is perhaps trying to swipe up/down the page
+
+	      if (((deltaY < 0) && (scrollTop === i.contentHeight - i.containerHeight)) ||
+	          ((deltaY > 0) && (scrollTop === 0))) {
+	        return !i.settings.swipePropagation;
+	      }
+	    } else if (magnitudeX > magnitudeY) {
+	      // user is perhaps trying to swipe left/right across the page
+
+	      if (((deltaX < 0) && (scrollLeft === i.contentWidth - i.containerWidth)) ||
+	          ((deltaX > 0) && (scrollLeft === 0))) {
+	        return !i.settings.swipePropagation;
+	      }
+	    }
+
+	    return true;
+	  }
+
+	  function applyTouchMove(differenceX, differenceY) {
+	    updateScroll(element, 'top', element.scrollTop - differenceY);
+	    updateScroll(element, 'left', element.scrollLeft - differenceX);
+
+	    updateGeometry(element);
+	  }
+
+	  var startOffset = {};
+	  var startTime = 0;
+	  var speed = {};
+	  var easingLoop = null;
+	  var inGlobalTouch = false;
+	  var inLocalTouch = false;
+
+	  function globalTouchStart() {
+	    inGlobalTouch = true;
+	  }
+	  function globalTouchEnd() {
+	    inGlobalTouch = false;
+	  }
+
+	  function getTouch(e) {
+	    if (e.targetTouches) {
+	      return e.targetTouches[0];
+	    } else {
+	      // Maybe IE pointer
+	      return e;
+	    }
+	  }
+	  function shouldHandle(e) {
+	    if (e.targetTouches && e.targetTouches.length === 1) {
+	      return true;
+	    }
+	    if (e.pointerType && e.pointerType !== 'mouse' && e.pointerType !== e.MSPOINTER_TYPE_MOUSE) {
+	      return true;
+	    }
+	    return false;
+	  }
+	  function touchStart(e) {
+	    if (shouldHandle(e)) {
+	      inLocalTouch = true;
+
+	      var touch = getTouch(e);
+
+	      startOffset.pageX = touch.pageX;
+	      startOffset.pageY = touch.pageY;
+
+	      startTime = (new Date()).getTime();
+
+	      if (easingLoop !== null) {
+	        clearInterval(easingLoop);
+	      }
+
+	      e.stopPropagation();
+	    }
+	  }
+	  function touchMove(e) {
+	    if (!inLocalTouch && i.settings.swipePropagation) {
+	      touchStart(e);
+	    }
+	    if (!inGlobalTouch && inLocalTouch && shouldHandle(e)) {
+	      var touch = getTouch(e);
+
+	      var currentOffset = {pageX: touch.pageX, pageY: touch.pageY};
+
+	      var differenceX = currentOffset.pageX - startOffset.pageX;
+	      var differenceY = currentOffset.pageY - startOffset.pageY;
+
+	      applyTouchMove(differenceX, differenceY);
+	      startOffset = currentOffset;
+
+	      var currentTime = (new Date()).getTime();
+
+	      var timeGap = currentTime - startTime;
+	      if (timeGap > 0) {
+	        speed.x = differenceX / timeGap;
+	        speed.y = differenceY / timeGap;
+	        startTime = currentTime;
+	      }
+
+	      if (shouldPreventDefault(differenceX, differenceY)) {
+	        e.stopPropagation();
+	        e.preventDefault();
+	      }
+	    }
+	  }
+	  function touchEnd() {
+	    if (!inGlobalTouch && inLocalTouch) {
+	      inLocalTouch = false;
+
+	      clearInterval(easingLoop);
+	      easingLoop = setInterval(function () {
+	        if (!instances.get(element)) {
+	          clearInterval(easingLoop);
+	          return;
+	        }
+
+	        if (Math.abs(speed.x) < 0.01 && Math.abs(speed.y) < 0.01) {
+	          clearInterval(easingLoop);
+	          return;
+	        }
+
+	        applyTouchMove(speed.x * 30, speed.y * 30);
+
+	        speed.x *= 0.8;
+	        speed.y *= 0.8;
+	      }, 10);
+	    }
+	  }
+
+	  if (supportsTouch) {
+	    i.event.bind(window, 'touchstart', globalTouchStart);
+	    i.event.bind(window, 'touchend', globalTouchEnd);
+	    i.event.bind(element, 'touchstart', touchStart);
+	    i.event.bind(element, 'touchmove', touchMove);
+	    i.event.bind(element, 'touchend', touchEnd);
+	  }
+
+	  if (supportsIePointer) {
+	    if (window.PointerEvent) {
+	      i.event.bind(window, 'pointerdown', globalTouchStart);
+	      i.event.bind(window, 'pointerup', globalTouchEnd);
+	      i.event.bind(element, 'pointerdown', touchStart);
+	      i.event.bind(element, 'pointermove', touchMove);
+	      i.event.bind(element, 'pointerup', touchEnd);
+	    } else if (window.MSPointerEvent) {
+	      i.event.bind(window, 'MSPointerDown', globalTouchStart);
+	      i.event.bind(window, 'MSPointerUp', globalTouchEnd);
+	      i.event.bind(element, 'MSPointerDown', touchStart);
+	      i.event.bind(element, 'MSPointerMove', touchMove);
+	      i.event.bind(element, 'MSPointerUp', touchEnd);
+	    }
+	  }
+	}
+
+	module.exports = function (element) {
+	  if (!_.env.supportsTouch && !_.env.supportsIePointer) {
+	    return;
+	  }
+
+	  var i = instances.get(element);
+	  bindTouchHandler(element, i, _.env.supportsTouch, _.env.supportsIePointer);
+	};
+
+
+/***/ },
+/* 241 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _ = __webpack_require__(226);
+	var instances = __webpack_require__(229);
+	var updateGeometry = __webpack_require__(234);
+	var updateScroll = __webpack_require__(235);
+
+	function bindSelectionHandler(element, i) {
+	  function getRangeNode() {
+	    var selection = window.getSelection ? window.getSelection() :
+	                    document.getSelection ? document.getSelection() : '';
+	    if (selection.toString().length === 0) {
+	      return null;
+	    } else {
+	      return selection.getRangeAt(0).commonAncestorContainer;
+	    }
+	  }
+
+	  var scrollingLoop = null;
+	  var scrollDiff = {top: 0, left: 0};
+	  function startScrolling() {
+	    if (!scrollingLoop) {
+	      scrollingLoop = setInterval(function () {
+	        if (!instances.get(element)) {
+	          clearInterval(scrollingLoop);
+	          return;
+	        }
+
+	        updateScroll(element, 'top', element.scrollTop + scrollDiff.top);
+	        updateScroll(element, 'left', element.scrollLeft + scrollDiff.left);
+	        updateGeometry(element);
+	      }, 50); // every .1 sec
+	    }
+	  }
+	  function stopScrolling() {
+	    if (scrollingLoop) {
+	      clearInterval(scrollingLoop);
+	      scrollingLoop = null;
+	    }
+	    _.stopScrolling(element);
+	  }
+
+	  var isSelected = false;
+	  i.event.bind(i.ownerDocument, 'selectionchange', function () {
+	    if (element.contains(getRangeNode())) {
+	      isSelected = true;
+	    } else {
+	      isSelected = false;
+	      stopScrolling();
+	    }
+	  });
+	  i.event.bind(window, 'mouseup', function () {
+	    if (isSelected) {
+	      isSelected = false;
+	      stopScrolling();
+	    }
+	  });
+
+	  i.event.bind(window, 'mousemove', function (e) {
+	    if (isSelected) {
+	      var mousePosition = {x: e.pageX, y: e.pageY};
+	      var containerGeometry = {
+	        left: element.offsetLeft,
+	        right: element.offsetLeft + element.offsetWidth,
+	        top: element.offsetTop,
+	        bottom: element.offsetTop + element.offsetHeight
+	      };
+
+	      if (mousePosition.x < containerGeometry.left + 3) {
+	        scrollDiff.left = -5;
+	        _.startScrolling(element, 'x');
+	      } else if (mousePosition.x > containerGeometry.right - 3) {
+	        scrollDiff.left = 5;
+	        _.startScrolling(element, 'x');
+	      } else {
+	        scrollDiff.left = 0;
+	      }
+
+	      if (mousePosition.y < containerGeometry.top + 3) {
+	        if (containerGeometry.top + 3 - mousePosition.y < 5) {
+	          scrollDiff.top = -5;
+	        } else {
+	          scrollDiff.top = -20;
+	        }
+	        _.startScrolling(element, 'y');
+	      } else if (mousePosition.y > containerGeometry.bottom - 3) {
+	        if (mousePosition.y - containerGeometry.bottom + 3 < 5) {
+	          scrollDiff.top = 5;
+	        } else {
+	          scrollDiff.top = 20;
+	        }
+	        _.startScrolling(element, 'y');
+	      } else {
+	        scrollDiff.top = 0;
+	      }
+
+	      if (scrollDiff.top === 0 && scrollDiff.left === 0) {
+	        stopScrolling();
+	      } else {
+	        startScrolling();
+	      }
+	    }
+	  });
+	}
+
+	module.exports = function (element) {
+	  var i = instances.get(element);
+	  bindSelectionHandler(element, i);
+	};
+
+
+/***/ },
+/* 242 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var instances = __webpack_require__(229);
+	var updateGeometry = __webpack_require__(234);
+
+	function bindNativeScrollHandler(element, i) {
+	  i.event.bind(element, 'scroll', function () {
+	    updateGeometry(element);
+	  });
+	}
+
+	module.exports = function (element) {
+	  var i = instances.get(element);
+	  bindNativeScrollHandler(element, i);
+	};
+
+
+/***/ },
+/* 243 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _ = __webpack_require__(226);
+	var dom = __webpack_require__(228);
+	var instances = __webpack_require__(229);
+	var updateGeometry = __webpack_require__(234);
+	var updateScroll = __webpack_require__(235);
+
+	module.exports = function (element) {
+	  var i = instances.get(element);
+
+	  if (!i) {
+	    return;
+	  }
+
+	  // Recalcuate negative scrollLeft adjustment
+	  i.negativeScrollAdjustment = i.isNegativeScroll ? element.scrollWidth - element.clientWidth : 0;
+
+	  // Recalculate rail margins
+	  dom.css(i.scrollbarXRail, 'display', 'block');
+	  dom.css(i.scrollbarYRail, 'display', 'block');
+	  i.railXMarginWidth = _.toInt(dom.css(i.scrollbarXRail, 'marginLeft')) + _.toInt(dom.css(i.scrollbarXRail, 'marginRight'));
+	  i.railYMarginHeight = _.toInt(dom.css(i.scrollbarYRail, 'marginTop')) + _.toInt(dom.css(i.scrollbarYRail, 'marginBottom'));
+
+	  // Hide scrollbars not to affect scrollWidth and scrollHeight
+	  dom.css(i.scrollbarXRail, 'display', 'none');
+	  dom.css(i.scrollbarYRail, 'display', 'none');
+
+	  updateGeometry(element);
+
+	  // Update top/left scroll to trigger events
+	  updateScroll(element, 'top', element.scrollTop);
+	  updateScroll(element, 'left', element.scrollLeft);
+
+	  dom.css(i.scrollbarXRail, 'display', '');
+	  dom.css(i.scrollbarYRail, 'display', '');
+	};
+
+
+/***/ },
+/* 244 */
+/***/ function(module, exports, __webpack_require__) {
+
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(239);
+	var content = __webpack_require__(245);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(241)(content, {});
+	var update = __webpack_require__(247)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./main.styl", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./main.styl");
+			module.hot.accept("!!./../../../css-loader/index.js!./perfect-scrollbar.min.css", function() {
+				var newContent = require("!!./../../../css-loader/index.js!./perfect-scrollbar.min.css");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -27815,21 +28433,21 @@
 	}
 
 /***/ },
-/* 239 */
+/* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(240)();
+	exports = module.exports = __webpack_require__(246)();
 	// imports
 
 
 	// module
-	exports.push([module.id, "body,\nhtml {\n  height: initial;\n}\n.max-width {\n  width: 100%;\n}\n.container {\n  margin: 10px;\n}\n.projects__item .projects__item__favorite--hidden {\n  visibility: hidden;\n}\n.projects__item:hover .projects__item__favorite--hidden {\n  visibility: visible;\n}\n.projects__item.favorite .projects__item__favorite--hidden {\n  visibility: visible;\n  color: #fca326;\n}\n.projects__item__action {\n  visibility: hidden;\n}\n.projects__item__favorite--hidden {\n  color: #808080;\n}\n.projects__item__favorite--hidden:hover {\n  color: #fca326;\n}\n.item:hover .projects__item__action {\n  visibility: visible;\n}\n.clipboard-input {\n  width: 100%;\n}\n.ui.dropdown.menu {\n  left: -75px;\n}\n.title {\n  margin-bottom: 10px !important;\n  color: rgba(45,45,45,0.87) !important;\n  text-align: center !important;\n}\ninput::selection {\n  background: #cce1fe;\n}\n", ""]);
+	exports.push([module.id, "/* perfect-scrollbar v0.6.12 */\n.ps-container{-ms-touch-action:none;touch-action:none;overflow:hidden !important;-ms-overflow-style:none}@supports (-ms-overflow-style: none){.ps-container{overflow:auto !important}}@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none){.ps-container{overflow:auto !important}}.ps-container.ps-active-x>.ps-scrollbar-x-rail,.ps-container.ps-active-y>.ps-scrollbar-y-rail{display:block;background-color:transparent}.ps-container.ps-in-scrolling{pointer-events:none}.ps-container.ps-in-scrolling.ps-x>.ps-scrollbar-x-rail{background-color:#eee;opacity:.9}.ps-container.ps-in-scrolling.ps-x>.ps-scrollbar-x-rail>.ps-scrollbar-x{background-color:#999}.ps-container.ps-in-scrolling.ps-y>.ps-scrollbar-y-rail{background-color:#eee;opacity:.9}.ps-container.ps-in-scrolling.ps-y>.ps-scrollbar-y-rail>.ps-scrollbar-y{background-color:#999}.ps-container>.ps-scrollbar-x-rail{display:none;position:absolute;opacity:0;-webkit-transition:background-color .2s linear, opacity .2s linear;-moz-transition:background-color .2s linear, opacity .2s linear;-o-transition:background-color .2s linear, opacity .2s linear;transition:background-color .2s linear, opacity .2s linear;bottom:0px;height:15px}.ps-container>.ps-scrollbar-x-rail>.ps-scrollbar-x{position:absolute;background-color:#aaa;-webkit-border-radius:6px;-moz-border-radius:6px;border-radius:6px;-webkit-transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, -webkit-border-radius .2s ease-in-out;transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, -webkit-border-radius .2s ease-in-out;-moz-transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out, -moz-border-radius .2s ease-in-out;-o-transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out;transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out;transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out, -webkit-border-radius .2s ease-in-out, -moz-border-radius .2s ease-in-out;bottom:2px;height:6px}.ps-container>.ps-scrollbar-x-rail:hover>.ps-scrollbar-x,.ps-container>.ps-scrollbar-x-rail:active>.ps-scrollbar-x{height:11px}.ps-container>.ps-scrollbar-y-rail{display:none;position:absolute;opacity:0;-webkit-transition:background-color .2s linear, opacity .2s linear;-moz-transition:background-color .2s linear, opacity .2s linear;-o-transition:background-color .2s linear, opacity .2s linear;transition:background-color .2s linear, opacity .2s linear;right:0;width:15px}.ps-container>.ps-scrollbar-y-rail>.ps-scrollbar-y{position:absolute;background-color:#aaa;-webkit-border-radius:6px;-moz-border-radius:6px;border-radius:6px;-webkit-transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, -webkit-border-radius .2s ease-in-out;transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, -webkit-border-radius .2s ease-in-out;-moz-transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out, -moz-border-radius .2s ease-in-out;-o-transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out;transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out;transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out, -webkit-border-radius .2s ease-in-out, -moz-border-radius .2s ease-in-out;right:2px;width:6px}.ps-container>.ps-scrollbar-y-rail:hover>.ps-scrollbar-y,.ps-container>.ps-scrollbar-y-rail:active>.ps-scrollbar-y{width:11px}.ps-container:hover.ps-in-scrolling{pointer-events:none}.ps-container:hover.ps-in-scrolling.ps-x>.ps-scrollbar-x-rail{background-color:#eee;opacity:.9}.ps-container:hover.ps-in-scrolling.ps-x>.ps-scrollbar-x-rail>.ps-scrollbar-x{background-color:#999}.ps-container:hover.ps-in-scrolling.ps-y>.ps-scrollbar-y-rail{background-color:#eee;opacity:.9}.ps-container:hover.ps-in-scrolling.ps-y>.ps-scrollbar-y-rail>.ps-scrollbar-y{background-color:#999}.ps-container:hover>.ps-scrollbar-x-rail,.ps-container:hover>.ps-scrollbar-y-rail{opacity:.6}.ps-container:hover>.ps-scrollbar-x-rail:hover{background-color:#eee;opacity:.9}.ps-container:hover>.ps-scrollbar-x-rail:hover>.ps-scrollbar-x{background-color:#999}.ps-container:hover>.ps-scrollbar-y-rail:hover{background-color:#eee;opacity:.9}.ps-container:hover>.ps-scrollbar-y-rail:hover>.ps-scrollbar-y{background-color:#999}\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 240 */
+/* 246 */
 /***/ function(module, exports) {
 
 	/*
@@ -27885,7 +28503,7 @@
 
 
 /***/ },
-/* 241 */
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -28137,7 +28755,7 @@
 
 
 /***/ },
-/* 242 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28146,584 +28764,195 @@
 	  value: true
 	});
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _list = __webpack_require__(249);
 
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _perfectScrollbar = __webpack_require__(243);
-
-	var _perfectScrollbar2 = _interopRequireDefault(_perfectScrollbar);
-
-	__webpack_require__(266);
+	var _list2 = _interopRequireDefault(_list);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var PerfectScrollBar = function (_React$Component) {
-	  _inherits(PerfectScrollBar, _React$Component);
-
-	  function PerfectScrollBar() {
-	    _classCallCheck(this, PerfectScrollBar);
-
-	    return _possibleConstructorReturn(this, (PerfectScrollBar.__proto__ || Object.getPrototypeOf(PerfectScrollBar)).apply(this, arguments));
-	  }
-
-	  _createClass(PerfectScrollBar, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      _perfectScrollbar2.default.initialize(this.el);
-	    }
-	  }, {
-	    key: 'componentDidUpdate',
-	    value: function componentDidUpdate() {
-	      _perfectScrollbar2.default.update(this.el);
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _this2 = this;
-
-	      return _react2.default.createElement(
-	        'div',
-	        {
-	          ref: function ref(el) {
-	            return _this2.el = el;
-	          },
-	          style: {
-	            maxHeight: 300,
-	            overflow: 'auto',
-	            position: 'relative'
-	          }
-	        },
-	        this.props.children
-	      );
-	    }
-	  }]);
-
-	  return PerfectScrollBar;
-	}(_react2.default.Component);
-
-	exports.default = PerfectScrollBar;
-
-/***/ },
-/* 243 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	module.exports = __webpack_require__(244);
-
-
-/***/ },
-/* 244 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var destroy = __webpack_require__(245);
-	var initialize = __webpack_require__(253);
-	var update = __webpack_require__(263);
-
-	module.exports = {
-	  initialize: initialize,
-	  update: update,
-	  destroy: destroy
-	};
-
-
-/***/ },
-/* 245 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _ = __webpack_require__(246);
-	var dom = __webpack_require__(248);
-	var instances = __webpack_require__(249);
-
-	module.exports = function (element) {
-	  var i = instances.get(element);
-
-	  if (!i) {
-	    return;
-	  }
-
-	  i.event.unbindAll();
-	  dom.remove(i.scrollbarX);
-	  dom.remove(i.scrollbarY);
-	  dom.remove(i.scrollbarXRail);
-	  dom.remove(i.scrollbarYRail);
-	  _.removePsClasses(element);
-
-	  instances.remove(element);
-	};
-
-
-/***/ },
-/* 246 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var cls = __webpack_require__(247);
-	var dom = __webpack_require__(248);
-
-	var toInt = exports.toInt = function (x) {
-	  return parseInt(x, 10) || 0;
-	};
-
-	var clone = exports.clone = function (obj) {
-	  if (obj === null) {
-	    return null;
-	  } else if (obj.constructor === Array) {
-	    return obj.map(clone);
-	  } else if (typeof obj === 'object') {
-	    var result = {};
-	    for (var key in obj) {
-	      result[key] = clone(obj[key]);
-	    }
-	    return result;
-	  } else {
-	    return obj;
-	  }
-	};
-
-	exports.extend = function (original, source) {
-	  var result = clone(original);
-	  for (var key in source) {
-	    result[key] = clone(source[key]);
-	  }
-	  return result;
-	};
-
-	exports.isEditable = function (el) {
-	  return dom.matches(el, "input,[contenteditable]") ||
-	         dom.matches(el, "select,[contenteditable]") ||
-	         dom.matches(el, "textarea,[contenteditable]") ||
-	         dom.matches(el, "button,[contenteditable]");
-	};
-
-	exports.removePsClasses = function (element) {
-	  var clsList = cls.list(element);
-	  for (var i = 0; i < clsList.length; i++) {
-	    var className = clsList[i];
-	    if (className.indexOf('ps-') === 0) {
-	      cls.remove(element, className);
-	    }
-	  }
-	};
-
-	exports.outerWidth = function (element) {
-	  return toInt(dom.css(element, 'width')) +
-	         toInt(dom.css(element, 'paddingLeft')) +
-	         toInt(dom.css(element, 'paddingRight')) +
-	         toInt(dom.css(element, 'borderLeftWidth')) +
-	         toInt(dom.css(element, 'borderRightWidth'));
-	};
-
-	exports.startScrolling = function (element, axis) {
-	  cls.add(element, 'ps-in-scrolling');
-	  if (typeof axis !== 'undefined') {
-	    cls.add(element, 'ps-' + axis);
-	  } else {
-	    cls.add(element, 'ps-x');
-	    cls.add(element, 'ps-y');
-	  }
-	};
-
-	exports.stopScrolling = function (element, axis) {
-	  cls.remove(element, 'ps-in-scrolling');
-	  if (typeof axis !== 'undefined') {
-	    cls.remove(element, 'ps-' + axis);
-	  } else {
-	    cls.remove(element, 'ps-x');
-	    cls.remove(element, 'ps-y');
-	  }
-	};
-
-	exports.env = {
-	  isWebKit: 'WebkitAppearance' in document.documentElement.style,
-	  supportsTouch: (('ontouchstart' in window) || window.DocumentTouch && document instanceof window.DocumentTouch),
-	  supportsIePointer: window.navigator.msMaxTouchPoints !== null
-	};
-
-
-/***/ },
-/* 247 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	function oldAdd(element, className) {
-	  var classes = element.className.split(' ');
-	  if (classes.indexOf(className) < 0) {
-	    classes.push(className);
-	  }
-	  element.className = classes.join(' ');
-	}
-
-	function oldRemove(element, className) {
-	  var classes = element.className.split(' ');
-	  var idx = classes.indexOf(className);
-	  if (idx >= 0) {
-	    classes.splice(idx, 1);
-	  }
-	  element.className = classes.join(' ');
-	}
-
-	exports.add = function (element, className) {
-	  if (element.classList) {
-	    element.classList.add(className);
-	  } else {
-	    oldAdd(element, className);
-	  }
-	};
-
-	exports.remove = function (element, className) {
-	  if (element.classList) {
-	    element.classList.remove(className);
-	  } else {
-	    oldRemove(element, className);
-	  }
-	};
-
-	exports.list = function (element) {
-	  if (element.classList) {
-	    return Array.prototype.slice.apply(element.classList);
-	  } else {
-	    return element.className.split(' ');
-	  }
-	};
-
-
-/***/ },
-/* 248 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	var DOM = {};
-
-	DOM.e = function (tagName, className) {
-	  var element = document.createElement(tagName);
-	  element.className = className;
-	  return element;
-	};
-
-	DOM.appendTo = function (child, parent) {
-	  parent.appendChild(child);
-	  return child;
-	};
-
-	function cssGet(element, styleName) {
-	  return window.getComputedStyle(element)[styleName];
-	}
-
-	function cssSet(element, styleName, styleValue) {
-	  if (typeof styleValue === 'number') {
-	    styleValue = styleValue.toString() + 'px';
-	  }
-	  element.style[styleName] = styleValue;
-	  return element;
-	}
-
-	function cssMultiSet(element, obj) {
-	  for (var key in obj) {
-	    var val = obj[key];
-	    if (typeof val === 'number') {
-	      val = val.toString() + 'px';
-	    }
-	    element.style[key] = val;
-	  }
-	  return element;
-	}
-
-	DOM.css = function (element, styleNameOrObject, styleValue) {
-	  if (typeof styleNameOrObject === 'object') {
-	    // multiple set with object
-	    return cssMultiSet(element, styleNameOrObject);
-	  } else {
-	    if (typeof styleValue === 'undefined') {
-	      return cssGet(element, styleNameOrObject);
-	    } else {
-	      return cssSet(element, styleNameOrObject, styleValue);
-	    }
-	  }
-	};
-
-	DOM.matches = function (element, query) {
-	  if (typeof element.matches !== 'undefined') {
-	    return element.matches(query);
-	  } else {
-	    if (typeof element.matchesSelector !== 'undefined') {
-	      return element.matchesSelector(query);
-	    } else if (typeof element.webkitMatchesSelector !== 'undefined') {
-	      return element.webkitMatchesSelector(query);
-	    } else if (typeof element.mozMatchesSelector !== 'undefined') {
-	      return element.mozMatchesSelector(query);
-	    } else if (typeof element.msMatchesSelector !== 'undefined') {
-	      return element.msMatchesSelector(query);
-	    }
-	  }
-	};
-
-	DOM.remove = function (element) {
-	  if (typeof element.remove !== 'undefined') {
-	    element.remove();
-	  } else {
-	    if (element.parentNode) {
-	      element.parentNode.removeChild(element);
-	    }
-	  }
-	};
-
-	DOM.queryChildren = function (element, selector) {
-	  return Array.prototype.filter.call(element.childNodes, function (child) {
-	    return DOM.matches(child, selector);
-	  });
-	};
-
-	module.exports = DOM;
-
+	exports.default = _list2.default;
 
 /***/ },
 /* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
-	var _ = __webpack_require__(246);
-	var cls = __webpack_require__(247);
-	var defaultSettings = __webpack_require__(250);
-	var dom = __webpack_require__(248);
-	var EventManager = __webpack_require__(251);
-	var guid = __webpack_require__(252);
+	var _react = __webpack_require__(1);
 
-	var instances = {};
+	var _react2 = _interopRequireDefault(_react);
 
-	function Instance(element) {
-	  var i = this;
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	  i.settings = _.clone(defaultSettings);
-	  i.containerWidth = null;
-	  i.containerHeight = null;
-	  i.contentWidth = null;
-	  i.contentHeight = null;
-
-	  i.isRtl = dom.css(element, 'direction') === "rtl";
-	  i.isNegativeScroll = (function () {
-	    var originalScrollLeft = element.scrollLeft;
-	    var result = null;
-	    element.scrollLeft = -1;
-	    result = element.scrollLeft < 0;
-	    element.scrollLeft = originalScrollLeft;
-	    return result;
-	  })();
-	  i.negativeScrollAdjustment = i.isNegativeScroll ? element.scrollWidth - element.clientWidth : 0;
-	  i.event = new EventManager();
-	  i.ownerDocument = element.ownerDocument || document;
-
-	  function focus() {
-	    cls.add(element, 'ps-focus');
-	  }
-
-	  function blur() {
-	    cls.remove(element, 'ps-focus');
-	  }
-
-	  i.scrollbarXRail = dom.appendTo(dom.e('div', 'ps-scrollbar-x-rail'), element);
-	  i.scrollbarX = dom.appendTo(dom.e('div', 'ps-scrollbar-x'), i.scrollbarXRail);
-	  i.scrollbarX.setAttribute('tabindex', 0);
-	  i.event.bind(i.scrollbarX, 'focus', focus);
-	  i.event.bind(i.scrollbarX, 'blur', blur);
-	  i.scrollbarXActive = null;
-	  i.scrollbarXWidth = null;
-	  i.scrollbarXLeft = null;
-	  i.scrollbarXBottom = _.toInt(dom.css(i.scrollbarXRail, 'bottom'));
-	  i.isScrollbarXUsingBottom = i.scrollbarXBottom === i.scrollbarXBottom; // !isNaN
-	  i.scrollbarXTop = i.isScrollbarXUsingBottom ? null : _.toInt(dom.css(i.scrollbarXRail, 'top'));
-	  i.railBorderXWidth = _.toInt(dom.css(i.scrollbarXRail, 'borderLeftWidth')) + _.toInt(dom.css(i.scrollbarXRail, 'borderRightWidth'));
-	  // Set rail to display:block to calculate margins
-	  dom.css(i.scrollbarXRail, 'display', 'block');
-	  i.railXMarginWidth = _.toInt(dom.css(i.scrollbarXRail, 'marginLeft')) + _.toInt(dom.css(i.scrollbarXRail, 'marginRight'));
-	  dom.css(i.scrollbarXRail, 'display', '');
-	  i.railXWidth = null;
-	  i.railXRatio = null;
-
-	  i.scrollbarYRail = dom.appendTo(dom.e('div', 'ps-scrollbar-y-rail'), element);
-	  i.scrollbarY = dom.appendTo(dom.e('div', 'ps-scrollbar-y'), i.scrollbarYRail);
-	  i.scrollbarY.setAttribute('tabindex', 0);
-	  i.event.bind(i.scrollbarY, 'focus', focus);
-	  i.event.bind(i.scrollbarY, 'blur', blur);
-	  i.scrollbarYActive = null;
-	  i.scrollbarYHeight = null;
-	  i.scrollbarYTop = null;
-	  i.scrollbarYRight = _.toInt(dom.css(i.scrollbarYRail, 'right'));
-	  i.isScrollbarYUsingRight = i.scrollbarYRight === i.scrollbarYRight; // !isNaN
-	  i.scrollbarYLeft = i.isScrollbarYUsingRight ? null : _.toInt(dom.css(i.scrollbarYRail, 'left'));
-	  i.scrollbarYOuterWidth = i.isRtl ? _.outerWidth(i.scrollbarY) : null;
-	  i.railBorderYWidth = _.toInt(dom.css(i.scrollbarYRail, 'borderTopWidth')) + _.toInt(dom.css(i.scrollbarYRail, 'borderBottomWidth'));
-	  dom.css(i.scrollbarYRail, 'display', 'block');
-	  i.railYMarginHeight = _.toInt(dom.css(i.scrollbarYRail, 'marginTop')) + _.toInt(dom.css(i.scrollbarYRail, 'marginBottom'));
-	  dom.css(i.scrollbarYRail, 'display', '');
-	  i.railYHeight = null;
-	  i.railYRatio = null;
-	}
-
-	function getId(element) {
-	  return element.getAttribute('data-ps-id');
-	}
-
-	function setId(element, id) {
-	  element.setAttribute('data-ps-id', id);
-	}
-
-	function removeId(element) {
-	  element.removeAttribute('data-ps-id');
-	}
-
-	exports.add = function (element) {
-	  var newId = guid();
-	  setId(element, newId);
-	  instances[newId] = new Instance(element);
-	  return instances[newId];
+	var List = function List(props) {
+	  return _react2.default.createElement(
+	    "div",
+	    { style: { marginTop: 10, marginBottom: 0 }, className: "ui divided selection list" },
+	    props.children
+	  );
 	};
 
-	exports.remove = function (element) {
-	  delete instances[getId(element)];
-	  removeId(element);
+	List.propTypes = {
+	  children: _react2.default.PropTypes.array
 	};
 
-	exports.get = function (element) {
-	  return instances[getId(element)];
-	};
-
+	module.exports = List;
 
 /***/ },
 /* 250 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = {
-	  handlers: ['click-rail', 'drag-scrollbar', 'keyboard', 'wheel', 'touch'],
-	  maxScrollbarLength: null,
-	  minScrollbarLength: null,
-	  scrollXMarginOffset: 0,
-	  scrollYMarginOffset: 0,
-	  stopPropagationOnClick: true,
-	  suppressScrollX: false,
-	  suppressScrollY: false,
-	  swipePropagation: true,
-	  useBothWheelAxes: false,
-	  wheelPropagation: false,
-	  wheelSpeed: 1,
-	  theme: 'default'
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _item = __webpack_require__(251);
+
+	var _item2 = _interopRequireDefault(_item);
+
+	var _icon = __webpack_require__(252);
+
+	var _icon2 = _interopRequireDefault(_icon);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var ProjectItem = function ProjectItem(props) {
+	  return _react2.default.createElement(
+	    _item2.default,
+	    { className: props.className, onClick: props.onClick },
+	    _react2.default.createElement(
+	      'div',
+	      { className: 'projects__item__action right floated content' },
+	      _react2.default.createElement(
+	        'div',
+	        {
+	          className: 'ui button positive',
+	          style: { fontSize: '0.8rem' },
+	          title: props.url + '/issues/new?issue',
+	          onClick: props.onClickIssue
+	        },
+	        _react2.default.createElement(_icon2.default, { name: 'plus' }),
+	        'Issue'
+	      )
+	    ),
+	    _react2.default.createElement(
+	      'div',
+	      { className: 'header' },
+	      props.name + ' ',
+	      _react2.default.createElement(_icon2.default, {
+	        className: 'projects__item__favorite--hidden',
+	        name: props.favorite ? 'star' : 'empty star',
+	        onClick: props.onClickFavorite
+	      })
+	    ),
+	    _react2.default.createElement(
+	      'div',
+	      { className: 'description' },
+	      props.nameSpace
+	    )
+	  );
 	};
 
+	ProjectItem.propTypes = {
+	  name: _react2.default.PropTypes.string,
+	  nameSpace: _react2.default.PropTypes.string,
+	  favorite: _react2.default.PropTypes.bool,
+	  onClick: _react2.default.PropTypes.func,
+	  onClickIssue: _react2.default.PropTypes.func
+	};
+
+	ProjectItem.defaultProps = {
+	  onClick: function onClick() {
+	    return 1;
+	  },
+	  onClickIssue: function onClickIssue() {
+	    return 1;
+	  }
+	};
+
+	module.exports = ProjectItem;
 
 /***/ },
 /* 251 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var EventElement = function (element) {
-	  this.element = element;
-	  this.events = {};
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Item = function Item(props) {
+	  return _react2.default.createElement(
+	    'div',
+	    {
+	      style: { padding: 10 },
+	      className: props.className + ' item',
+	      onClick: props.onClick
+	    },
+	    _react2.default.createElement(
+	      'div',
+	      { className: 'content' },
+	      props.children
+	    )
+	  );
 	};
 
-	EventElement.prototype.bind = function (eventName, handler) {
-	  if (typeof this.events[eventName] === 'undefined') {
-	    this.events[eventName] = [];
-	  }
-	  this.events[eventName].push(handler);
-	  this.element.addEventListener(eventName, handler, false);
+	Item.propTypes = {
+	  children: _react2.default.PropTypes.array,
+	  className: _react2.default.PropTypes.string,
+	  onClick: _react2.default.PropTypes.func
 	};
 
-	EventElement.prototype.unbind = function (eventName, handler) {
-	  var isHandlerProvided = (typeof handler !== 'undefined');
-	  this.events[eventName] = this.events[eventName].filter(function (hdlr) {
-	    if (isHandlerProvided && hdlr !== handler) {
-	      return true;
-	    }
-	    this.element.removeEventListener(eventName, hdlr, false);
-	    return false;
-	  }, this);
-	};
-
-	EventElement.prototype.unbindAll = function () {
-	  for (var name in this.events) {
-	    this.unbind(name);
-	  }
-	};
-
-	var EventManager = function () {
-	  this.eventElements = [];
-	};
-
-	EventManager.prototype.eventElement = function (element) {
-	  var ee = this.eventElements.filter(function (eventElement) {
-	    return eventElement.element === element;
-	  })[0];
-	  if (typeof ee === 'undefined') {
-	    ee = new EventElement(element);
-	    this.eventElements.push(ee);
-	  }
-	  return ee;
-	};
-
-	EventManager.prototype.bind = function (element, eventName, handler) {
-	  this.eventElement(element).bind(eventName, handler);
-	};
-
-	EventManager.prototype.unbind = function (element, eventName, handler) {
-	  this.eventElement(element).unbind(eventName, handler);
-	};
-
-	EventManager.prototype.unbindAll = function () {
-	  for (var i = 0; i < this.eventElements.length; i++) {
-	    this.eventElements[i].unbindAll();
+	Item.defaultProps = {
+	  className: '',
+	  onClick: function onClick() {
+	    return 1;
 	  }
 	};
 
-	EventManager.prototype.once = function (element, eventName, handler) {
-	  var ee = this.eventElement(element);
-	  var onceHandler = function (e) {
-	    ee.unbind(eventName, onceHandler);
-	    handler(e);
-	  };
-	  ee.bind(eventName, onceHandler);
-	};
-
-	module.exports = EventManager;
-
+	module.exports = Item;
 
 /***/ },
 /* 252 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = (function () {
-	  function s4() {
-	    return Math.floor((1 + Math.random()) * 0x10000)
-	               .toString(16)
-	               .substring(1);
-	  }
-	  return function () {
-	    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-	           s4() + '-' + s4() + s4() + s4();
-	  };
-	})();
+	var _react = __webpack_require__(1);
 
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Icon = function Icon(props) {
+	  return _react2.default.createElement('i', {
+	    style: props.color ? { color: props.color } : {},
+	    className: props.className + ' ' + props.name + ' icon',
+	    onClick: props.onClick
+	  });
+	};
+
+	Icon.propTypes = {
+	  className: _react2.default.PropTypes.string,
+	  color: _react2.default.PropTypes.string,
+	  name: _react2.default.PropTypes.string,
+	  onClick: _react2.default.PropTypes.func
+	};
+
+	Icon.defaultProps = {
+	  className: '',
+	  name: 'gitlab',
+	  onClick: function onClick() {
+	    return 1;
+	  }
+	};
+
+	module.exports = Icon;
 
 /***/ },
 /* 253 */
@@ -28731,1151 +28960,24 @@
 
 	'use strict';
 
-	var _ = __webpack_require__(246);
-	var cls = __webpack_require__(247);
-	var instances = __webpack_require__(249);
-	var updateGeometry = __webpack_require__(254);
+	var _react = __webpack_require__(1);
 
-	// Handlers
-	var handlers = {
-	  'click-rail': __webpack_require__(256),
-	  'drag-scrollbar': __webpack_require__(257),
-	  'keyboard': __webpack_require__(258),
-	  'wheel': __webpack_require__(259),
-	  'touch': __webpack_require__(260),
-	  'selection': __webpack_require__(261)
-	};
-	var nativeScrollHandler = __webpack_require__(262);
+	var _react2 = _interopRequireDefault(_react);
 
-	module.exports = function (element, userSettings) {
-	  userSettings = typeof userSettings === 'object' ? userSettings : {};
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	  cls.add(element, 'ps-container');
-
-	  // Create a plugin instance.
-	  var i = instances.add(element);
-
-	  i.settings = _.extend(i.settings, userSettings);
-	  cls.add(element, 'ps-theme-' + i.settings.theme);
-
-	  i.settings.handlers.forEach(function (handlerName) {
-	    handlers[handlerName](element);
-	  });
-
-	  nativeScrollHandler(element);
-
-	  updateGeometry(element);
+	var Loader = function Loader() {
+	  return _react2.default.createElement(
+	    'div',
+	    { className: 'item' },
+	    _react2.default.createElement('div', { className: 'ui active centered inline loader small' })
+	  );
 	};
 
+	module.exports = Loader;
 
 /***/ },
 /* 254 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _ = __webpack_require__(246);
-	var cls = __webpack_require__(247);
-	var dom = __webpack_require__(248);
-	var instances = __webpack_require__(249);
-	var updateScroll = __webpack_require__(255);
-
-	function getThumbSize(i, thumbSize) {
-	  if (i.settings.minScrollbarLength) {
-	    thumbSize = Math.max(thumbSize, i.settings.minScrollbarLength);
-	  }
-	  if (i.settings.maxScrollbarLength) {
-	    thumbSize = Math.min(thumbSize, i.settings.maxScrollbarLength);
-	  }
-	  return thumbSize;
-	}
-
-	function updateCss(element, i) {
-	  var xRailOffset = {width: i.railXWidth};
-	  if (i.isRtl) {
-	    xRailOffset.left = i.negativeScrollAdjustment + element.scrollLeft + i.containerWidth - i.contentWidth;
-	  } else {
-	    xRailOffset.left = element.scrollLeft;
-	  }
-	  if (i.isScrollbarXUsingBottom) {
-	    xRailOffset.bottom = i.scrollbarXBottom - element.scrollTop;
-	  } else {
-	    xRailOffset.top = i.scrollbarXTop + element.scrollTop;
-	  }
-	  dom.css(i.scrollbarXRail, xRailOffset);
-
-	  var yRailOffset = {top: element.scrollTop, height: i.railYHeight};
-	  if (i.isScrollbarYUsingRight) {
-	    if (i.isRtl) {
-	      yRailOffset.right = i.contentWidth - (i.negativeScrollAdjustment + element.scrollLeft) - i.scrollbarYRight - i.scrollbarYOuterWidth;
-	    } else {
-	      yRailOffset.right = i.scrollbarYRight - element.scrollLeft;
-	    }
-	  } else {
-	    if (i.isRtl) {
-	      yRailOffset.left = i.negativeScrollAdjustment + element.scrollLeft + i.containerWidth * 2 - i.contentWidth - i.scrollbarYLeft - i.scrollbarYOuterWidth;
-	    } else {
-	      yRailOffset.left = i.scrollbarYLeft + element.scrollLeft;
-	    }
-	  }
-	  dom.css(i.scrollbarYRail, yRailOffset);
-
-	  dom.css(i.scrollbarX, {left: i.scrollbarXLeft, width: i.scrollbarXWidth - i.railBorderXWidth});
-	  dom.css(i.scrollbarY, {top: i.scrollbarYTop, height: i.scrollbarYHeight - i.railBorderYWidth});
-	}
-
-	module.exports = function (element) {
-	  var i = instances.get(element);
-
-	  i.containerWidth = element.clientWidth;
-	  i.containerHeight = element.clientHeight;
-	  i.contentWidth = element.scrollWidth;
-	  i.contentHeight = element.scrollHeight;
-
-	  var existingRails;
-	  if (!element.contains(i.scrollbarXRail)) {
-	    existingRails = dom.queryChildren(element, '.ps-scrollbar-x-rail');
-	    if (existingRails.length > 0) {
-	      existingRails.forEach(function (rail) {
-	        dom.remove(rail);
-	      });
-	    }
-	    dom.appendTo(i.scrollbarXRail, element);
-	  }
-	  if (!element.contains(i.scrollbarYRail)) {
-	    existingRails = dom.queryChildren(element, '.ps-scrollbar-y-rail');
-	    if (existingRails.length > 0) {
-	      existingRails.forEach(function (rail) {
-	        dom.remove(rail);
-	      });
-	    }
-	    dom.appendTo(i.scrollbarYRail, element);
-	  }
-
-	  if (!i.settings.suppressScrollX && i.containerWidth + i.settings.scrollXMarginOffset < i.contentWidth) {
-	    i.scrollbarXActive = true;
-	    i.railXWidth = i.containerWidth - i.railXMarginWidth;
-	    i.railXRatio = i.containerWidth / i.railXWidth;
-	    i.scrollbarXWidth = getThumbSize(i, _.toInt(i.railXWidth * i.containerWidth / i.contentWidth));
-	    i.scrollbarXLeft = _.toInt((i.negativeScrollAdjustment + element.scrollLeft) * (i.railXWidth - i.scrollbarXWidth) / (i.contentWidth - i.containerWidth));
-	  } else {
-	    i.scrollbarXActive = false;
-	  }
-
-	  if (!i.settings.suppressScrollY && i.containerHeight + i.settings.scrollYMarginOffset < i.contentHeight) {
-	    i.scrollbarYActive = true;
-	    i.railYHeight = i.containerHeight - i.railYMarginHeight;
-	    i.railYRatio = i.containerHeight / i.railYHeight;
-	    i.scrollbarYHeight = getThumbSize(i, _.toInt(i.railYHeight * i.containerHeight / i.contentHeight));
-	    i.scrollbarYTop = _.toInt(element.scrollTop * (i.railYHeight - i.scrollbarYHeight) / (i.contentHeight - i.containerHeight));
-	  } else {
-	    i.scrollbarYActive = false;
-	  }
-
-	  if (i.scrollbarXLeft >= i.railXWidth - i.scrollbarXWidth) {
-	    i.scrollbarXLeft = i.railXWidth - i.scrollbarXWidth;
-	  }
-	  if (i.scrollbarYTop >= i.railYHeight - i.scrollbarYHeight) {
-	    i.scrollbarYTop = i.railYHeight - i.scrollbarYHeight;
-	  }
-
-	  updateCss(element, i);
-
-	  if (i.scrollbarXActive) {
-	    cls.add(element, 'ps-active-x');
-	  } else {
-	    cls.remove(element, 'ps-active-x');
-	    i.scrollbarXWidth = 0;
-	    i.scrollbarXLeft = 0;
-	    updateScroll(element, 'left', 0);
-	  }
-	  if (i.scrollbarYActive) {
-	    cls.add(element, 'ps-active-y');
-	  } else {
-	    cls.remove(element, 'ps-active-y');
-	    i.scrollbarYHeight = 0;
-	    i.scrollbarYTop = 0;
-	    updateScroll(element, 'top', 0);
-	  }
-	};
-
-
-/***/ },
-/* 255 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var instances = __webpack_require__(249);
-
-	var upEvent = document.createEvent('Event');
-	var downEvent = document.createEvent('Event');
-	var leftEvent = document.createEvent('Event');
-	var rightEvent = document.createEvent('Event');
-	var yEvent = document.createEvent('Event');
-	var xEvent = document.createEvent('Event');
-	var xStartEvent = document.createEvent('Event');
-	var xEndEvent = document.createEvent('Event');
-	var yStartEvent = document.createEvent('Event');
-	var yEndEvent = document.createEvent('Event');
-	var lastTop;
-	var lastLeft;
-
-	upEvent.initEvent('ps-scroll-up', true, true);
-	downEvent.initEvent('ps-scroll-down', true, true);
-	leftEvent.initEvent('ps-scroll-left', true, true);
-	rightEvent.initEvent('ps-scroll-right', true, true);
-	yEvent.initEvent('ps-scroll-y', true, true);
-	xEvent.initEvent('ps-scroll-x', true, true);
-	xStartEvent.initEvent('ps-x-reach-start', true, true);
-	xEndEvent.initEvent('ps-x-reach-end', true, true);
-	yStartEvent.initEvent('ps-y-reach-start', true, true);
-	yEndEvent.initEvent('ps-y-reach-end', true, true);
-
-	module.exports = function (element, axis, value) {
-	  if (typeof element === 'undefined') {
-	    throw 'You must provide an element to the update-scroll function';
-	  }
-
-	  if (typeof axis === 'undefined') {
-	    throw 'You must provide an axis to the update-scroll function';
-	  }
-
-	  if (typeof value === 'undefined') {
-	    throw 'You must provide a value to the update-scroll function';
-	  }
-
-	  if (axis === 'top' && value <= 0) {
-	    element.scrollTop = value = 0; // don't allow negative scroll
-	    element.dispatchEvent(yStartEvent);
-	  }
-
-	  if (axis === 'left' && value <= 0) {
-	    element.scrollLeft = value = 0; // don't allow negative scroll
-	    element.dispatchEvent(xStartEvent);
-	  }
-
-	  var i = instances.get(element);
-
-	  if (axis === 'top' && value >= i.contentHeight - i.containerHeight) {
-	    // don't allow scroll past container
-	    value = i.contentHeight - i.containerHeight;
-	    if (value - element.scrollTop <= 1) {
-	      // mitigates rounding errors on non-subpixel scroll values
-	      value = element.scrollTop;
-	    } else {
-	      element.scrollTop = value;
-	    }
-	    element.dispatchEvent(yEndEvent);
-	  }
-
-	  if (axis === 'left' && value >= i.contentWidth - i.containerWidth) {
-	    // don't allow scroll past container
-	    value = i.contentWidth - i.containerWidth;
-	    if (value - element.scrollLeft <= 1) {
-	      // mitigates rounding errors on non-subpixel scroll values
-	      value = element.scrollLeft;
-	    } else {
-	      element.scrollLeft = value;
-	    }
-	    element.dispatchEvent(xEndEvent);
-	  }
-
-	  if (!lastTop) {
-	    lastTop = element.scrollTop;
-	  }
-
-	  if (!lastLeft) {
-	    lastLeft = element.scrollLeft;
-	  }
-
-	  if (axis === 'top' && value < lastTop) {
-	    element.dispatchEvent(upEvent);
-	  }
-
-	  if (axis === 'top' && value > lastTop) {
-	    element.dispatchEvent(downEvent);
-	  }
-
-	  if (axis === 'left' && value < lastLeft) {
-	    element.dispatchEvent(leftEvent);
-	  }
-
-	  if (axis === 'left' && value > lastLeft) {
-	    element.dispatchEvent(rightEvent);
-	  }
-
-	  if (axis === 'top') {
-	    element.scrollTop = lastTop = value;
-	    element.dispatchEvent(yEvent);
-	  }
-
-	  if (axis === 'left') {
-	    element.scrollLeft = lastLeft = value;
-	    element.dispatchEvent(xEvent);
-	  }
-
-	};
-
-
-/***/ },
-/* 256 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _ = __webpack_require__(246);
-	var instances = __webpack_require__(249);
-	var updateGeometry = __webpack_require__(254);
-	var updateScroll = __webpack_require__(255);
-
-	function bindClickRailHandler(element, i) {
-	  function pageOffset(el) {
-	    return el.getBoundingClientRect();
-	  }
-	  var stopPropagation = function (e) { e.stopPropagation(); };
-
-	  if (i.settings.stopPropagationOnClick) {
-	    i.event.bind(i.scrollbarY, 'click', stopPropagation);
-	  }
-	  i.event.bind(i.scrollbarYRail, 'click', function (e) {
-	    var halfOfScrollbarLength = _.toInt(i.scrollbarYHeight / 2);
-	    var positionTop = i.railYRatio * (e.pageY - window.pageYOffset - pageOffset(i.scrollbarYRail).top - halfOfScrollbarLength);
-	    var maxPositionTop = i.railYRatio * (i.railYHeight - i.scrollbarYHeight);
-	    var positionRatio = positionTop / maxPositionTop;
-
-	    if (positionRatio < 0) {
-	      positionRatio = 0;
-	    } else if (positionRatio > 1) {
-	      positionRatio = 1;
-	    }
-
-	    updateScroll(element, 'top', (i.contentHeight - i.containerHeight) * positionRatio);
-	    updateGeometry(element);
-
-	    e.stopPropagation();
-	  });
-
-	  if (i.settings.stopPropagationOnClick) {
-	    i.event.bind(i.scrollbarX, 'click', stopPropagation);
-	  }
-	  i.event.bind(i.scrollbarXRail, 'click', function (e) {
-	    var halfOfScrollbarLength = _.toInt(i.scrollbarXWidth / 2);
-	    var positionLeft = i.railXRatio * (e.pageX - window.pageXOffset - pageOffset(i.scrollbarXRail).left - halfOfScrollbarLength);
-	    var maxPositionLeft = i.railXRatio * (i.railXWidth - i.scrollbarXWidth);
-	    var positionRatio = positionLeft / maxPositionLeft;
-
-	    if (positionRatio < 0) {
-	      positionRatio = 0;
-	    } else if (positionRatio > 1) {
-	      positionRatio = 1;
-	    }
-
-	    updateScroll(element, 'left', ((i.contentWidth - i.containerWidth) * positionRatio) - i.negativeScrollAdjustment);
-	    updateGeometry(element);
-
-	    e.stopPropagation();
-	  });
-	}
-
-	module.exports = function (element) {
-	  var i = instances.get(element);
-	  bindClickRailHandler(element, i);
-	};
-
-
-/***/ },
-/* 257 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _ = __webpack_require__(246);
-	var dom = __webpack_require__(248);
-	var instances = __webpack_require__(249);
-	var updateGeometry = __webpack_require__(254);
-	var updateScroll = __webpack_require__(255);
-
-	function bindMouseScrollXHandler(element, i) {
-	  var currentLeft = null;
-	  var currentPageX = null;
-
-	  function updateScrollLeft(deltaX) {
-	    var newLeft = currentLeft + (deltaX * i.railXRatio);
-	    var maxLeft = Math.max(0, i.scrollbarXRail.getBoundingClientRect().left) + (i.railXRatio * (i.railXWidth - i.scrollbarXWidth));
-
-	    if (newLeft < 0) {
-	      i.scrollbarXLeft = 0;
-	    } else if (newLeft > maxLeft) {
-	      i.scrollbarXLeft = maxLeft;
-	    } else {
-	      i.scrollbarXLeft = newLeft;
-	    }
-
-	    var scrollLeft = _.toInt(i.scrollbarXLeft * (i.contentWidth - i.containerWidth) / (i.containerWidth - (i.railXRatio * i.scrollbarXWidth))) - i.negativeScrollAdjustment;
-	    updateScroll(element, 'left', scrollLeft);
-	  }
-
-	  var mouseMoveHandler = function (e) {
-	    updateScrollLeft(e.pageX - currentPageX);
-	    updateGeometry(element);
-	    e.stopPropagation();
-	    e.preventDefault();
-	  };
-
-	  var mouseUpHandler = function () {
-	    _.stopScrolling(element, 'x');
-	    i.event.unbind(i.ownerDocument, 'mousemove', mouseMoveHandler);
-	  };
-
-	  i.event.bind(i.scrollbarX, 'mousedown', function (e) {
-	    currentPageX = e.pageX;
-	    currentLeft = _.toInt(dom.css(i.scrollbarX, 'left')) * i.railXRatio;
-	    _.startScrolling(element, 'x');
-
-	    i.event.bind(i.ownerDocument, 'mousemove', mouseMoveHandler);
-	    i.event.once(i.ownerDocument, 'mouseup', mouseUpHandler);
-
-	    e.stopPropagation();
-	    e.preventDefault();
-	  });
-	}
-
-	function bindMouseScrollYHandler(element, i) {
-	  var currentTop = null;
-	  var currentPageY = null;
-
-	  function updateScrollTop(deltaY) {
-	    var newTop = currentTop + (deltaY * i.railYRatio);
-	    var maxTop = Math.max(0, i.scrollbarYRail.getBoundingClientRect().top) + (i.railYRatio * (i.railYHeight - i.scrollbarYHeight));
-
-	    if (newTop < 0) {
-	      i.scrollbarYTop = 0;
-	    } else if (newTop > maxTop) {
-	      i.scrollbarYTop = maxTop;
-	    } else {
-	      i.scrollbarYTop = newTop;
-	    }
-
-	    var scrollTop = _.toInt(i.scrollbarYTop * (i.contentHeight - i.containerHeight) / (i.containerHeight - (i.railYRatio * i.scrollbarYHeight)));
-	    updateScroll(element, 'top', scrollTop);
-	  }
-
-	  var mouseMoveHandler = function (e) {
-	    updateScrollTop(e.pageY - currentPageY);
-	    updateGeometry(element);
-	    e.stopPropagation();
-	    e.preventDefault();
-	  };
-
-	  var mouseUpHandler = function () {
-	    _.stopScrolling(element, 'y');
-	    i.event.unbind(i.ownerDocument, 'mousemove', mouseMoveHandler);
-	  };
-
-	  i.event.bind(i.scrollbarY, 'mousedown', function (e) {
-	    currentPageY = e.pageY;
-	    currentTop = _.toInt(dom.css(i.scrollbarY, 'top')) * i.railYRatio;
-	    _.startScrolling(element, 'y');
-
-	    i.event.bind(i.ownerDocument, 'mousemove', mouseMoveHandler);
-	    i.event.once(i.ownerDocument, 'mouseup', mouseUpHandler);
-
-	    e.stopPropagation();
-	    e.preventDefault();
-	  });
-	}
-
-	module.exports = function (element) {
-	  var i = instances.get(element);
-	  bindMouseScrollXHandler(element, i);
-	  bindMouseScrollYHandler(element, i);
-	};
-
-
-/***/ },
-/* 258 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _ = __webpack_require__(246);
-	var dom = __webpack_require__(248);
-	var instances = __webpack_require__(249);
-	var updateGeometry = __webpack_require__(254);
-	var updateScroll = __webpack_require__(255);
-
-	function bindKeyboardHandler(element, i) {
-	  var hovered = false;
-	  i.event.bind(element, 'mouseenter', function () {
-	    hovered = true;
-	  });
-	  i.event.bind(element, 'mouseleave', function () {
-	    hovered = false;
-	  });
-
-	  var shouldPrevent = false;
-	  function shouldPreventDefault(deltaX, deltaY) {
-	    var scrollTop = element.scrollTop;
-	    if (deltaX === 0) {
-	      if (!i.scrollbarYActive) {
-	        return false;
-	      }
-	      if ((scrollTop === 0 && deltaY > 0) || (scrollTop >= i.contentHeight - i.containerHeight && deltaY < 0)) {
-	        return !i.settings.wheelPropagation;
-	      }
-	    }
-
-	    var scrollLeft = element.scrollLeft;
-	    if (deltaY === 0) {
-	      if (!i.scrollbarXActive) {
-	        return false;
-	      }
-	      if ((scrollLeft === 0 && deltaX < 0) || (scrollLeft >= i.contentWidth - i.containerWidth && deltaX > 0)) {
-	        return !i.settings.wheelPropagation;
-	      }
-	    }
-	    return true;
-	  }
-
-	  i.event.bind(i.ownerDocument, 'keydown', function (e) {
-	    if ((e.isDefaultPrevented && e.isDefaultPrevented()) || e.defaultPrevented) {
-	      return;
-	    }
-
-	    var focused = dom.matches(i.scrollbarX, ':focus') ||
-	                  dom.matches(i.scrollbarY, ':focus');
-
-	    if (!hovered && !focused) {
-	      return;
-	    }
-
-	    var activeElement = document.activeElement ? document.activeElement : i.ownerDocument.activeElement;
-	    if (activeElement) {
-	      if (activeElement.tagName === 'IFRAME') {
-	        activeElement = activeElement.contentDocument.activeElement;
-	      } else {
-	        // go deeper if element is a webcomponent
-	        while (activeElement.shadowRoot) {
-	          activeElement = activeElement.shadowRoot.activeElement;
-	        }
-	      }
-	      if (_.isEditable(activeElement)) {
-	        return;
-	      }
-	    }
-
-	    var deltaX = 0;
-	    var deltaY = 0;
-
-	    switch (e.which) {
-	    case 37: // left
-	      deltaX = -30;
-	      break;
-	    case 38: // up
-	      deltaY = 30;
-	      break;
-	    case 39: // right
-	      deltaX = 30;
-	      break;
-	    case 40: // down
-	      deltaY = -30;
-	      break;
-	    case 33: // page up
-	      deltaY = 90;
-	      break;
-	    case 32: // space bar
-	      if (e.shiftKey) {
-	        deltaY = 90;
-	      } else {
-	        deltaY = -90;
-	      }
-	      break;
-	    case 34: // page down
-	      deltaY = -90;
-	      break;
-	    case 35: // end
-	      if (e.ctrlKey) {
-	        deltaY = -i.contentHeight;
-	      } else {
-	        deltaY = -i.containerHeight;
-	      }
-	      break;
-	    case 36: // home
-	      if (e.ctrlKey) {
-	        deltaY = element.scrollTop;
-	      } else {
-	        deltaY = i.containerHeight;
-	      }
-	      break;
-	    default:
-	      return;
-	    }
-
-	    updateScroll(element, 'top', element.scrollTop - deltaY);
-	    updateScroll(element, 'left', element.scrollLeft + deltaX);
-	    updateGeometry(element);
-
-	    shouldPrevent = shouldPreventDefault(deltaX, deltaY);
-	    if (shouldPrevent) {
-	      e.preventDefault();
-	    }
-	  });
-	}
-
-	module.exports = function (element) {
-	  var i = instances.get(element);
-	  bindKeyboardHandler(element, i);
-	};
-
-
-/***/ },
-/* 259 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var instances = __webpack_require__(249);
-	var updateGeometry = __webpack_require__(254);
-	var updateScroll = __webpack_require__(255);
-
-	function bindMouseWheelHandler(element, i) {
-	  var shouldPrevent = false;
-
-	  function shouldPreventDefault(deltaX, deltaY) {
-	    var scrollTop = element.scrollTop;
-	    if (deltaX === 0) {
-	      if (!i.scrollbarYActive) {
-	        return false;
-	      }
-	      if ((scrollTop === 0 && deltaY > 0) || (scrollTop >= i.contentHeight - i.containerHeight && deltaY < 0)) {
-	        return !i.settings.wheelPropagation;
-	      }
-	    }
-
-	    var scrollLeft = element.scrollLeft;
-	    if (deltaY === 0) {
-	      if (!i.scrollbarXActive) {
-	        return false;
-	      }
-	      if ((scrollLeft === 0 && deltaX < 0) || (scrollLeft >= i.contentWidth - i.containerWidth && deltaX > 0)) {
-	        return !i.settings.wheelPropagation;
-	      }
-	    }
-	    return true;
-	  }
-
-	  function getDeltaFromEvent(e) {
-	    var deltaX = e.deltaX;
-	    var deltaY = -1 * e.deltaY;
-
-	    if (typeof deltaX === "undefined" || typeof deltaY === "undefined") {
-	      // OS X Safari
-	      deltaX = -1 * e.wheelDeltaX / 6;
-	      deltaY = e.wheelDeltaY / 6;
-	    }
-
-	    if (e.deltaMode && e.deltaMode === 1) {
-	      // Firefox in deltaMode 1: Line scrolling
-	      deltaX *= 10;
-	      deltaY *= 10;
-	    }
-
-	    if (deltaX !== deltaX && deltaY !== deltaY/* NaN checks */) {
-	      // IE in some mouse drivers
-	      deltaX = 0;
-	      deltaY = e.wheelDelta;
-	    }
-
-	    return [deltaX, deltaY];
-	  }
-
-	  function shouldBeConsumedByChild(deltaX, deltaY) {
-	    var child = element.querySelector('textarea:hover, select[multiple]:hover, .ps-child:hover');
-	    if (child) {
-	      if (child.tagName !== 'TEXTAREA' && !window.getComputedStyle(child).overflow.match(/(scroll|auto)/)) {
-	        return false;
-	      }
-
-	      var maxScrollTop = child.scrollHeight - child.clientHeight;
-	      if (maxScrollTop > 0) {
-	        if (!(child.scrollTop === 0 && deltaY > 0) && !(child.scrollTop === maxScrollTop && deltaY < 0)) {
-	          return true;
-	        }
-	      }
-	      var maxScrollLeft = child.scrollLeft - child.clientWidth;
-	      if (maxScrollLeft > 0) {
-	        if (!(child.scrollLeft === 0 && deltaX < 0) && !(child.scrollLeft === maxScrollLeft && deltaX > 0)) {
-	          return true;
-	        }
-	      }
-	    }
-	    return false;
-	  }
-
-	  function mousewheelHandler(e) {
-	    var delta = getDeltaFromEvent(e);
-
-	    var deltaX = delta[0];
-	    var deltaY = delta[1];
-
-	    if (shouldBeConsumedByChild(deltaX, deltaY)) {
-	      return;
-	    }
-
-	    shouldPrevent = false;
-	    if (!i.settings.useBothWheelAxes) {
-	      // deltaX will only be used for horizontal scrolling and deltaY will
-	      // only be used for vertical scrolling - this is the default
-	      updateScroll(element, 'top', element.scrollTop - (deltaY * i.settings.wheelSpeed));
-	      updateScroll(element, 'left', element.scrollLeft + (deltaX * i.settings.wheelSpeed));
-	    } else if (i.scrollbarYActive && !i.scrollbarXActive) {
-	      // only vertical scrollbar is active and useBothWheelAxes option is
-	      // active, so let's scroll vertical bar using both mouse wheel axes
-	      if (deltaY) {
-	        updateScroll(element, 'top', element.scrollTop - (deltaY * i.settings.wheelSpeed));
-	      } else {
-	        updateScroll(element, 'top', element.scrollTop + (deltaX * i.settings.wheelSpeed));
-	      }
-	      shouldPrevent = true;
-	    } else if (i.scrollbarXActive && !i.scrollbarYActive) {
-	      // useBothWheelAxes and only horizontal bar is active, so use both
-	      // wheel axes for horizontal bar
-	      if (deltaX) {
-	        updateScroll(element, 'left', element.scrollLeft + (deltaX * i.settings.wheelSpeed));
-	      } else {
-	        updateScroll(element, 'left', element.scrollLeft - (deltaY * i.settings.wheelSpeed));
-	      }
-	      shouldPrevent = true;
-	    }
-
-	    updateGeometry(element);
-
-	    shouldPrevent = (shouldPrevent || shouldPreventDefault(deltaX, deltaY));
-	    if (shouldPrevent) {
-	      e.stopPropagation();
-	      e.preventDefault();
-	    }
-	  }
-
-	  if (typeof window.onwheel !== "undefined") {
-	    i.event.bind(element, 'wheel', mousewheelHandler);
-	  } else if (typeof window.onmousewheel !== "undefined") {
-	    i.event.bind(element, 'mousewheel', mousewheelHandler);
-	  }
-	}
-
-	module.exports = function (element) {
-	  var i = instances.get(element);
-	  bindMouseWheelHandler(element, i);
-	};
-
-
-/***/ },
-/* 260 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _ = __webpack_require__(246);
-	var instances = __webpack_require__(249);
-	var updateGeometry = __webpack_require__(254);
-	var updateScroll = __webpack_require__(255);
-
-	function bindTouchHandler(element, i, supportsTouch, supportsIePointer) {
-	  function shouldPreventDefault(deltaX, deltaY) {
-	    var scrollTop = element.scrollTop;
-	    var scrollLeft = element.scrollLeft;
-	    var magnitudeX = Math.abs(deltaX);
-	    var magnitudeY = Math.abs(deltaY);
-
-	    if (magnitudeY > magnitudeX) {
-	      // user is perhaps trying to swipe up/down the page
-
-	      if (((deltaY < 0) && (scrollTop === i.contentHeight - i.containerHeight)) ||
-	          ((deltaY > 0) && (scrollTop === 0))) {
-	        return !i.settings.swipePropagation;
-	      }
-	    } else if (magnitudeX > magnitudeY) {
-	      // user is perhaps trying to swipe left/right across the page
-
-	      if (((deltaX < 0) && (scrollLeft === i.contentWidth - i.containerWidth)) ||
-	          ((deltaX > 0) && (scrollLeft === 0))) {
-	        return !i.settings.swipePropagation;
-	      }
-	    }
-
-	    return true;
-	  }
-
-	  function applyTouchMove(differenceX, differenceY) {
-	    updateScroll(element, 'top', element.scrollTop - differenceY);
-	    updateScroll(element, 'left', element.scrollLeft - differenceX);
-
-	    updateGeometry(element);
-	  }
-
-	  var startOffset = {};
-	  var startTime = 0;
-	  var speed = {};
-	  var easingLoop = null;
-	  var inGlobalTouch = false;
-	  var inLocalTouch = false;
-
-	  function globalTouchStart() {
-	    inGlobalTouch = true;
-	  }
-	  function globalTouchEnd() {
-	    inGlobalTouch = false;
-	  }
-
-	  function getTouch(e) {
-	    if (e.targetTouches) {
-	      return e.targetTouches[0];
-	    } else {
-	      // Maybe IE pointer
-	      return e;
-	    }
-	  }
-	  function shouldHandle(e) {
-	    if (e.targetTouches && e.targetTouches.length === 1) {
-	      return true;
-	    }
-	    if (e.pointerType && e.pointerType !== 'mouse' && e.pointerType !== e.MSPOINTER_TYPE_MOUSE) {
-	      return true;
-	    }
-	    return false;
-	  }
-	  function touchStart(e) {
-	    if (shouldHandle(e)) {
-	      inLocalTouch = true;
-
-	      var touch = getTouch(e);
-
-	      startOffset.pageX = touch.pageX;
-	      startOffset.pageY = touch.pageY;
-
-	      startTime = (new Date()).getTime();
-
-	      if (easingLoop !== null) {
-	        clearInterval(easingLoop);
-	      }
-
-	      e.stopPropagation();
-	    }
-	  }
-	  function touchMove(e) {
-	    if (!inLocalTouch && i.settings.swipePropagation) {
-	      touchStart(e);
-	    }
-	    if (!inGlobalTouch && inLocalTouch && shouldHandle(e)) {
-	      var touch = getTouch(e);
-
-	      var currentOffset = {pageX: touch.pageX, pageY: touch.pageY};
-
-	      var differenceX = currentOffset.pageX - startOffset.pageX;
-	      var differenceY = currentOffset.pageY - startOffset.pageY;
-
-	      applyTouchMove(differenceX, differenceY);
-	      startOffset = currentOffset;
-
-	      var currentTime = (new Date()).getTime();
-
-	      var timeGap = currentTime - startTime;
-	      if (timeGap > 0) {
-	        speed.x = differenceX / timeGap;
-	        speed.y = differenceY / timeGap;
-	        startTime = currentTime;
-	      }
-
-	      if (shouldPreventDefault(differenceX, differenceY)) {
-	        e.stopPropagation();
-	        e.preventDefault();
-	      }
-	    }
-	  }
-	  function touchEnd() {
-	    if (!inGlobalTouch && inLocalTouch) {
-	      inLocalTouch = false;
-
-	      clearInterval(easingLoop);
-	      easingLoop = setInterval(function () {
-	        if (!instances.get(element)) {
-	          clearInterval(easingLoop);
-	          return;
-	        }
-
-	        if (Math.abs(speed.x) < 0.01 && Math.abs(speed.y) < 0.01) {
-	          clearInterval(easingLoop);
-	          return;
-	        }
-
-	        applyTouchMove(speed.x * 30, speed.y * 30);
-
-	        speed.x *= 0.8;
-	        speed.y *= 0.8;
-	      }, 10);
-	    }
-	  }
-
-	  if (supportsTouch) {
-	    i.event.bind(window, 'touchstart', globalTouchStart);
-	    i.event.bind(window, 'touchend', globalTouchEnd);
-	    i.event.bind(element, 'touchstart', touchStart);
-	    i.event.bind(element, 'touchmove', touchMove);
-	    i.event.bind(element, 'touchend', touchEnd);
-	  }
-
-	  if (supportsIePointer) {
-	    if (window.PointerEvent) {
-	      i.event.bind(window, 'pointerdown', globalTouchStart);
-	      i.event.bind(window, 'pointerup', globalTouchEnd);
-	      i.event.bind(element, 'pointerdown', touchStart);
-	      i.event.bind(element, 'pointermove', touchMove);
-	      i.event.bind(element, 'pointerup', touchEnd);
-	    } else if (window.MSPointerEvent) {
-	      i.event.bind(window, 'MSPointerDown', globalTouchStart);
-	      i.event.bind(window, 'MSPointerUp', globalTouchEnd);
-	      i.event.bind(element, 'MSPointerDown', touchStart);
-	      i.event.bind(element, 'MSPointerMove', touchMove);
-	      i.event.bind(element, 'MSPointerUp', touchEnd);
-	    }
-	  }
-	}
-
-	module.exports = function (element) {
-	  if (!_.env.supportsTouch && !_.env.supportsIePointer) {
-	    return;
-	  }
-
-	  var i = instances.get(element);
-	  bindTouchHandler(element, i, _.env.supportsTouch, _.env.supportsIePointer);
-	};
-
-
-/***/ },
-/* 261 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _ = __webpack_require__(246);
-	var instances = __webpack_require__(249);
-	var updateGeometry = __webpack_require__(254);
-	var updateScroll = __webpack_require__(255);
-
-	function bindSelectionHandler(element, i) {
-	  function getRangeNode() {
-	    var selection = window.getSelection ? window.getSelection() :
-	                    document.getSelection ? document.getSelection() : '';
-	    if (selection.toString().length === 0) {
-	      return null;
-	    } else {
-	      return selection.getRangeAt(0).commonAncestorContainer;
-	    }
-	  }
-
-	  var scrollingLoop = null;
-	  var scrollDiff = {top: 0, left: 0};
-	  function startScrolling() {
-	    if (!scrollingLoop) {
-	      scrollingLoop = setInterval(function () {
-	        if (!instances.get(element)) {
-	          clearInterval(scrollingLoop);
-	          return;
-	        }
-
-	        updateScroll(element, 'top', element.scrollTop + scrollDiff.top);
-	        updateScroll(element, 'left', element.scrollLeft + scrollDiff.left);
-	        updateGeometry(element);
-	      }, 50); // every .1 sec
-	    }
-	  }
-	  function stopScrolling() {
-	    if (scrollingLoop) {
-	      clearInterval(scrollingLoop);
-	      scrollingLoop = null;
-	    }
-	    _.stopScrolling(element);
-	  }
-
-	  var isSelected = false;
-	  i.event.bind(i.ownerDocument, 'selectionchange', function () {
-	    if (element.contains(getRangeNode())) {
-	      isSelected = true;
-	    } else {
-	      isSelected = false;
-	      stopScrolling();
-	    }
-	  });
-	  i.event.bind(window, 'mouseup', function () {
-	    if (isSelected) {
-	      isSelected = false;
-	      stopScrolling();
-	    }
-	  });
-
-	  i.event.bind(window, 'mousemove', function (e) {
-	    if (isSelected) {
-	      var mousePosition = {x: e.pageX, y: e.pageY};
-	      var containerGeometry = {
-	        left: element.offsetLeft,
-	        right: element.offsetLeft + element.offsetWidth,
-	        top: element.offsetTop,
-	        bottom: element.offsetTop + element.offsetHeight
-	      };
-
-	      if (mousePosition.x < containerGeometry.left + 3) {
-	        scrollDiff.left = -5;
-	        _.startScrolling(element, 'x');
-	      } else if (mousePosition.x > containerGeometry.right - 3) {
-	        scrollDiff.left = 5;
-	        _.startScrolling(element, 'x');
-	      } else {
-	        scrollDiff.left = 0;
-	      }
-
-	      if (mousePosition.y < containerGeometry.top + 3) {
-	        if (containerGeometry.top + 3 - mousePosition.y < 5) {
-	          scrollDiff.top = -5;
-	        } else {
-	          scrollDiff.top = -20;
-	        }
-	        _.startScrolling(element, 'y');
-	      } else if (mousePosition.y > containerGeometry.bottom - 3) {
-	        if (mousePosition.y - containerGeometry.bottom + 3 < 5) {
-	          scrollDiff.top = 5;
-	        } else {
-	          scrollDiff.top = 20;
-	        }
-	        _.startScrolling(element, 'y');
-	      } else {
-	        scrollDiff.top = 0;
-	      }
-
-	      if (scrollDiff.top === 0 && scrollDiff.left === 0) {
-	        stopScrolling();
-	      } else {
-	        startScrolling();
-	      }
-	    }
-	  });
-	}
-
-	module.exports = function (element) {
-	  var i = instances.get(element);
-	  bindSelectionHandler(element, i);
-	};
-
-
-/***/ },
-/* 262 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var instances = __webpack_require__(249);
-	var updateGeometry = __webpack_require__(254);
-
-	function bindNativeScrollHandler(element, i) {
-	  i.event.bind(element, 'scroll', function () {
-	    updateGeometry(element);
-	  });
-	}
-
-	module.exports = function (element) {
-	  var i = instances.get(element);
-	  bindNativeScrollHandler(element, i);
-	};
-
-
-/***/ },
-/* 263 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _ = __webpack_require__(246);
-	var dom = __webpack_require__(248);
-	var instances = __webpack_require__(249);
-	var updateGeometry = __webpack_require__(254);
-	var updateScroll = __webpack_require__(255);
-
-	module.exports = function (element) {
-	  var i = instances.get(element);
-
-	  if (!i) {
-	    return;
-	  }
-
-	  // Recalcuate negative scrollLeft adjustment
-	  i.negativeScrollAdjustment = i.isNegativeScroll ? element.scrollWidth - element.clientWidth : 0;
-
-	  // Recalculate rail margins
-	  dom.css(i.scrollbarXRail, 'display', 'block');
-	  dom.css(i.scrollbarYRail, 'display', 'block');
-	  i.railXMarginWidth = _.toInt(dom.css(i.scrollbarXRail, 'marginLeft')) + _.toInt(dom.css(i.scrollbarXRail, 'marginRight'));
-	  i.railYMarginHeight = _.toInt(dom.css(i.scrollbarYRail, 'marginTop')) + _.toInt(dom.css(i.scrollbarYRail, 'marginBottom'));
-
-	  // Hide scrollbars not to affect scrollWidth and scrollHeight
-	  dom.css(i.scrollbarXRail, 'display', 'none');
-	  dom.css(i.scrollbarYRail, 'display', 'none');
-
-	  updateGeometry(element);
-
-	  // Update top/left scroll to trigger events
-	  updateScroll(element, 'top', element.scrollTop);
-	  updateScroll(element, 'left', element.scrollLeft);
-
-	  dom.css(i.scrollbarXRail, 'display', '');
-	  dom.css(i.scrollbarYRail, 'display', '');
-	};
-
-
-/***/ },
-/* 264 */,
-/* 265 */,
-/* 266 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(267);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(241)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../../css-loader/index.js!./perfect-scrollbar.min.css", function() {
-				var newContent = require("!!./../../../css-loader/index.js!./perfect-scrollbar.min.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 267 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(240)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "/* perfect-scrollbar v0.6.12 */\n.ps-container{-ms-touch-action:none;touch-action:none;overflow:hidden !important;-ms-overflow-style:none}@supports (-ms-overflow-style: none){.ps-container{overflow:auto !important}}@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none){.ps-container{overflow:auto !important}}.ps-container.ps-active-x>.ps-scrollbar-x-rail,.ps-container.ps-active-y>.ps-scrollbar-y-rail{display:block;background-color:transparent}.ps-container.ps-in-scrolling{pointer-events:none}.ps-container.ps-in-scrolling.ps-x>.ps-scrollbar-x-rail{background-color:#eee;opacity:.9}.ps-container.ps-in-scrolling.ps-x>.ps-scrollbar-x-rail>.ps-scrollbar-x{background-color:#999}.ps-container.ps-in-scrolling.ps-y>.ps-scrollbar-y-rail{background-color:#eee;opacity:.9}.ps-container.ps-in-scrolling.ps-y>.ps-scrollbar-y-rail>.ps-scrollbar-y{background-color:#999}.ps-container>.ps-scrollbar-x-rail{display:none;position:absolute;opacity:0;-webkit-transition:background-color .2s linear, opacity .2s linear;-moz-transition:background-color .2s linear, opacity .2s linear;-o-transition:background-color .2s linear, opacity .2s linear;transition:background-color .2s linear, opacity .2s linear;bottom:0px;height:15px}.ps-container>.ps-scrollbar-x-rail>.ps-scrollbar-x{position:absolute;background-color:#aaa;-webkit-border-radius:6px;-moz-border-radius:6px;border-radius:6px;-webkit-transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, -webkit-border-radius .2s ease-in-out;transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, -webkit-border-radius .2s ease-in-out;-moz-transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out, -moz-border-radius .2s ease-in-out;-o-transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out;transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out;transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out, -webkit-border-radius .2s ease-in-out, -moz-border-radius .2s ease-in-out;bottom:2px;height:6px}.ps-container>.ps-scrollbar-x-rail:hover>.ps-scrollbar-x,.ps-container>.ps-scrollbar-x-rail:active>.ps-scrollbar-x{height:11px}.ps-container>.ps-scrollbar-y-rail{display:none;position:absolute;opacity:0;-webkit-transition:background-color .2s linear, opacity .2s linear;-moz-transition:background-color .2s linear, opacity .2s linear;-o-transition:background-color .2s linear, opacity .2s linear;transition:background-color .2s linear, opacity .2s linear;right:0;width:15px}.ps-container>.ps-scrollbar-y-rail>.ps-scrollbar-y{position:absolute;background-color:#aaa;-webkit-border-radius:6px;-moz-border-radius:6px;border-radius:6px;-webkit-transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, -webkit-border-radius .2s ease-in-out;transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, -webkit-border-radius .2s ease-in-out;-moz-transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out, -moz-border-radius .2s ease-in-out;-o-transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out;transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out;transition:background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out, -webkit-border-radius .2s ease-in-out, -moz-border-radius .2s ease-in-out;right:2px;width:6px}.ps-container>.ps-scrollbar-y-rail:hover>.ps-scrollbar-y,.ps-container>.ps-scrollbar-y-rail:active>.ps-scrollbar-y{width:11px}.ps-container:hover.ps-in-scrolling{pointer-events:none}.ps-container:hover.ps-in-scrolling.ps-x>.ps-scrollbar-x-rail{background-color:#eee;opacity:.9}.ps-container:hover.ps-in-scrolling.ps-x>.ps-scrollbar-x-rail>.ps-scrollbar-x{background-color:#999}.ps-container:hover.ps-in-scrolling.ps-y>.ps-scrollbar-y-rail{background-color:#eee;opacity:.9}.ps-container:hover.ps-in-scrolling.ps-y>.ps-scrollbar-y-rail>.ps-scrollbar-y{background-color:#999}.ps-container:hover>.ps-scrollbar-x-rail,.ps-container:hover>.ps-scrollbar-y-rail{opacity:.6}.ps-container:hover>.ps-scrollbar-x-rail:hover{background-color:#eee;opacity:.9}.ps-container:hover>.ps-scrollbar-x-rail:hover>.ps-scrollbar-x{background-color:#999}.ps-container:hover>.ps-scrollbar-y-rail:hover{background-color:#eee;opacity:.9}.ps-container:hover>.ps-scrollbar-y-rail:hover>.ps-scrollbar-y{background-color:#999}\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 268 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29902,7 +29004,7 @@
 	module.exports = NotFound;
 
 /***/ },
-/* 269 */
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29911,17 +29013,927 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _clipboardInput = __webpack_require__(256);
+
+	var _clipboardInput2 = _interopRequireDefault(_clipboardInput);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var Loader = function Loader() {
+	var IssueBranchName = function IssueBranchName(props) {
 	  return _react2.default.createElement(
 	    'div',
-	    { className: 'item' },
-	    _react2.default.createElement('div', { className: 'ui active centered inline loader small' })
+	    null,
+	    _react2.default.createElement(
+	      'h4',
+	      { className: 'ui header title' },
+	      'Copy branch name'
+	    ),
+	    _react2.default.createElement(_clipboardInput2.default, {
+	      value: 'git checkout -b ' + props.branchName
+	    })
 	  );
 	};
 
-	module.exports = Loader;
+	IssueBranchName.propTypes = {
+	  branchName: _react2.default.PropTypes.string
+	};
+
+	module.exports = IssueBranchName;
+
+/***/ },
+/* 256 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _clipboard = __webpack_require__(257);
+
+	var _clipboard2 = _interopRequireDefault(_clipboard);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ClipboardInput = function (_React$Component) {
+	  _inherits(ClipboardInput, _React$Component);
+
+	  function ClipboardInput() {
+	    var _ref;
+
+	    var _temp, _this, _ret;
+
+	    _classCallCheck(this, ClipboardInput);
+
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+
+	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ClipboardInput.__proto__ || Object.getPrototypeOf(ClipboardInput)).call.apply(_ref, [this].concat(args))), _this), _this.addClipboardListener = function () {
+	      new _clipboard2.default(_this.button);
+	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	  }
+
+	  _createClass(ClipboardInput, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.addClipboardListener();
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'clipboard-input ui action input' },
+	        _react2.default.createElement('input', {
+	          id: 'branch-name',
+	          type: 'text',
+	          readOnly: true,
+	          value: this.props.value
+	        }),
+	        _react2.default.createElement(
+	          'button',
+	          {
+	            ref: function ref(el) {
+	              return _this2.button = el;
+	            },
+	            className: 'ui icon primary button',
+	            'data-clipboard-target': '#branch-name',
+	            title: 'Copy to clipboard'
+	          },
+	          _react2.default.createElement('i', { className: 'copy icon' })
+	        )
+	      );
+	    }
+	  }]);
+
+	  return ClipboardInput;
+	}(_react2.default.Component);
+
+	exports.default = ClipboardInput;
+
+/***/ },
+/* 257 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (global, factory) {
+	    if (true) {
+	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [module, __webpack_require__(258), __webpack_require__(260), __webpack_require__(261)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	    } else if (typeof exports !== "undefined") {
+	        factory(module, require('./clipboard-action'), require('tiny-emitter'), require('good-listener'));
+	    } else {
+	        var mod = {
+	            exports: {}
+	        };
+	        factory(mod, global.clipboardAction, global.tinyEmitter, global.goodListener);
+	        global.clipboard = mod.exports;
+	    }
+	})(this, function (module, _clipboardAction, _tinyEmitter, _goodListener) {
+	    'use strict';
+
+	    var _clipboardAction2 = _interopRequireDefault(_clipboardAction);
+
+	    var _tinyEmitter2 = _interopRequireDefault(_tinyEmitter);
+
+	    var _goodListener2 = _interopRequireDefault(_goodListener);
+
+	    function _interopRequireDefault(obj) {
+	        return obj && obj.__esModule ? obj : {
+	            default: obj
+	        };
+	    }
+
+	    function _classCallCheck(instance, Constructor) {
+	        if (!(instance instanceof Constructor)) {
+	            throw new TypeError("Cannot call a class as a function");
+	        }
+	    }
+
+	    function _possibleConstructorReturn(self, call) {
+	        if (!self) {
+	            throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+	        }
+
+	        return call && (typeof call === "object" || typeof call === "function") ? call : self;
+	    }
+
+	    function _inherits(subClass, superClass) {
+	        if (typeof superClass !== "function" && superClass !== null) {
+	            throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+	        }
+
+	        subClass.prototype = Object.create(superClass && superClass.prototype, {
+	            constructor: {
+	                value: subClass,
+	                enumerable: false,
+	                writable: true,
+	                configurable: true
+	            }
+	        });
+	        if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+	    }
+
+	    var Clipboard = function (_Emitter) {
+	        _inherits(Clipboard, _Emitter);
+
+	        /**
+	         * @param {String|HTMLElement|HTMLCollection|NodeList} trigger
+	         * @param {Object} options
+	         */
+
+	        function Clipboard(trigger, options) {
+	            _classCallCheck(this, Clipboard);
+
+	            var _this = _possibleConstructorReturn(this, _Emitter.call(this));
+
+	            _this.resolveOptions(options);
+	            _this.listenClick(trigger);
+	            return _this;
+	        }
+
+	        /**
+	         * Defines if attributes would be resolved using internal setter functions
+	         * or custom functions that were passed in the constructor.
+	         * @param {Object} options
+	         */
+
+
+	        Clipboard.prototype.resolveOptions = function resolveOptions() {
+	            var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+	            this.action = typeof options.action === 'function' ? options.action : this.defaultAction;
+	            this.target = typeof options.target === 'function' ? options.target : this.defaultTarget;
+	            this.text = typeof options.text === 'function' ? options.text : this.defaultText;
+	        };
+
+	        Clipboard.prototype.listenClick = function listenClick(trigger) {
+	            var _this2 = this;
+
+	            this.listener = (0, _goodListener2.default)(trigger, 'click', function (e) {
+	                return _this2.onClick(e);
+	            });
+	        };
+
+	        Clipboard.prototype.onClick = function onClick(e) {
+	            var trigger = e.delegateTarget || e.currentTarget;
+
+	            if (this.clipboardAction) {
+	                this.clipboardAction = null;
+	            }
+
+	            this.clipboardAction = new _clipboardAction2.default({
+	                action: this.action(trigger),
+	                target: this.target(trigger),
+	                text: this.text(trigger),
+	                trigger: trigger,
+	                emitter: this
+	            });
+	        };
+
+	        Clipboard.prototype.defaultAction = function defaultAction(trigger) {
+	            return getAttributeValue('action', trigger);
+	        };
+
+	        Clipboard.prototype.defaultTarget = function defaultTarget(trigger) {
+	            var selector = getAttributeValue('target', trigger);
+
+	            if (selector) {
+	                return document.querySelector(selector);
+	            }
+	        };
+
+	        Clipboard.prototype.defaultText = function defaultText(trigger) {
+	            return getAttributeValue('text', trigger);
+	        };
+
+	        Clipboard.prototype.destroy = function destroy() {
+	            this.listener.destroy();
+
+	            if (this.clipboardAction) {
+	                this.clipboardAction.destroy();
+	                this.clipboardAction = null;
+	            }
+	        };
+
+	        return Clipboard;
+	    }(_tinyEmitter2.default);
+
+	    /**
+	     * Helper function to retrieve attribute value.
+	     * @param {String} suffix
+	     * @param {Element} element
+	     */
+	    function getAttributeValue(suffix, element) {
+	        var attribute = 'data-clipboard-' + suffix;
+
+	        if (!element.hasAttribute(attribute)) {
+	            return;
+	        }
+
+	        return element.getAttribute(attribute);
+	    }
+
+	    module.exports = Clipboard;
+	});
+
+/***/ },
+/* 258 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (global, factory) {
+	    if (true) {
+	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [module, __webpack_require__(259)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	    } else if (typeof exports !== "undefined") {
+	        factory(module, require('select'));
+	    } else {
+	        var mod = {
+	            exports: {}
+	        };
+	        factory(mod, global.select);
+	        global.clipboardAction = mod.exports;
+	    }
+	})(this, function (module, _select) {
+	    'use strict';
+
+	    var _select2 = _interopRequireDefault(_select);
+
+	    function _interopRequireDefault(obj) {
+	        return obj && obj.__esModule ? obj : {
+	            default: obj
+	        };
+	    }
+
+	    var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+	        return typeof obj;
+	    } : function (obj) {
+	        return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
+	    };
+
+	    function _classCallCheck(instance, Constructor) {
+	        if (!(instance instanceof Constructor)) {
+	            throw new TypeError("Cannot call a class as a function");
+	        }
+	    }
+
+	    var _createClass = function () {
+	        function defineProperties(target, props) {
+	            for (var i = 0; i < props.length; i++) {
+	                var descriptor = props[i];
+	                descriptor.enumerable = descriptor.enumerable || false;
+	                descriptor.configurable = true;
+	                if ("value" in descriptor) descriptor.writable = true;
+	                Object.defineProperty(target, descriptor.key, descriptor);
+	            }
+	        }
+
+	        return function (Constructor, protoProps, staticProps) {
+	            if (protoProps) defineProperties(Constructor.prototype, protoProps);
+	            if (staticProps) defineProperties(Constructor, staticProps);
+	            return Constructor;
+	        };
+	    }();
+
+	    var ClipboardAction = function () {
+	        /**
+	         * @param {Object} options
+	         */
+
+	        function ClipboardAction(options) {
+	            _classCallCheck(this, ClipboardAction);
+
+	            this.resolveOptions(options);
+	            this.initSelection();
+	        }
+
+	        /**
+	         * Defines base properties passed from constructor.
+	         * @param {Object} options
+	         */
+
+
+	        ClipboardAction.prototype.resolveOptions = function resolveOptions() {
+	            var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+	            this.action = options.action;
+	            this.emitter = options.emitter;
+	            this.target = options.target;
+	            this.text = options.text;
+	            this.trigger = options.trigger;
+
+	            this.selectedText = '';
+	        };
+
+	        ClipboardAction.prototype.initSelection = function initSelection() {
+	            if (this.text) {
+	                this.selectFake();
+	            } else if (this.target) {
+	                this.selectTarget();
+	            }
+	        };
+
+	        ClipboardAction.prototype.selectFake = function selectFake() {
+	            var _this = this;
+
+	            var isRTL = document.documentElement.getAttribute('dir') == 'rtl';
+
+	            this.removeFake();
+
+	            this.fakeHandlerCallback = function () {
+	                return _this.removeFake();
+	            };
+	            this.fakeHandler = document.body.addEventListener('click', this.fakeHandlerCallback) || true;
+
+	            this.fakeElem = document.createElement('textarea');
+	            // Prevent zooming on iOS
+	            this.fakeElem.style.fontSize = '12pt';
+	            // Reset box model
+	            this.fakeElem.style.border = '0';
+	            this.fakeElem.style.padding = '0';
+	            this.fakeElem.style.margin = '0';
+	            // Move element out of screen horizontally
+	            this.fakeElem.style.position = 'absolute';
+	            this.fakeElem.style[isRTL ? 'right' : 'left'] = '-9999px';
+	            // Move element to the same position vertically
+	            this.fakeElem.style.top = (window.pageYOffset || document.documentElement.scrollTop) + 'px';
+	            this.fakeElem.setAttribute('readonly', '');
+	            this.fakeElem.value = this.text;
+
+	            document.body.appendChild(this.fakeElem);
+
+	            this.selectedText = (0, _select2.default)(this.fakeElem);
+	            this.copyText();
+	        };
+
+	        ClipboardAction.prototype.removeFake = function removeFake() {
+	            if (this.fakeHandler) {
+	                document.body.removeEventListener('click', this.fakeHandlerCallback);
+	                this.fakeHandler = null;
+	                this.fakeHandlerCallback = null;
+	            }
+
+	            if (this.fakeElem) {
+	                document.body.removeChild(this.fakeElem);
+	                this.fakeElem = null;
+	            }
+	        };
+
+	        ClipboardAction.prototype.selectTarget = function selectTarget() {
+	            this.selectedText = (0, _select2.default)(this.target);
+	            this.copyText();
+	        };
+
+	        ClipboardAction.prototype.copyText = function copyText() {
+	            var succeeded = undefined;
+
+	            try {
+	                succeeded = document.execCommand(this.action);
+	            } catch (err) {
+	                succeeded = false;
+	            }
+
+	            this.handleResult(succeeded);
+	        };
+
+	        ClipboardAction.prototype.handleResult = function handleResult(succeeded) {
+	            if (succeeded) {
+	                this.emitter.emit('success', {
+	                    action: this.action,
+	                    text: this.selectedText,
+	                    trigger: this.trigger,
+	                    clearSelection: this.clearSelection.bind(this)
+	                });
+	            } else {
+	                this.emitter.emit('error', {
+	                    action: this.action,
+	                    trigger: this.trigger,
+	                    clearSelection: this.clearSelection.bind(this)
+	                });
+	            }
+	        };
+
+	        ClipboardAction.prototype.clearSelection = function clearSelection() {
+	            if (this.target) {
+	                this.target.blur();
+	            }
+
+	            window.getSelection().removeAllRanges();
+	        };
+
+	        ClipboardAction.prototype.destroy = function destroy() {
+	            this.removeFake();
+	        };
+
+	        _createClass(ClipboardAction, [{
+	            key: 'action',
+	            set: function set() {
+	                var action = arguments.length <= 0 || arguments[0] === undefined ? 'copy' : arguments[0];
+
+	                this._action = action;
+
+	                if (this._action !== 'copy' && this._action !== 'cut') {
+	                    throw new Error('Invalid "action" value, use either "copy" or "cut"');
+	                }
+	            },
+	            get: function get() {
+	                return this._action;
+	            }
+	        }, {
+	            key: 'target',
+	            set: function set(target) {
+	                if (target !== undefined) {
+	                    if (target && (typeof target === 'undefined' ? 'undefined' : _typeof(target)) === 'object' && target.nodeType === 1) {
+	                        if (this.action === 'copy' && target.hasAttribute('disabled')) {
+	                            throw new Error('Invalid "target" attribute. Please use "readonly" instead of "disabled" attribute');
+	                        }
+
+	                        if (this.action === 'cut' && (target.hasAttribute('readonly') || target.hasAttribute('disabled'))) {
+	                            throw new Error('Invalid "target" attribute. You can\'t cut text from elements with "readonly" or "disabled" attributes');
+	                        }
+
+	                        this._target = target;
+	                    } else {
+	                        throw new Error('Invalid "target" value, use a valid Element');
+	                    }
+	                }
+	            },
+	            get: function get() {
+	                return this._target;
+	            }
+	        }]);
+
+	        return ClipboardAction;
+	    }();
+
+	    module.exports = ClipboardAction;
+	});
+
+/***/ },
+/* 259 */
+/***/ function(module, exports) {
+
+	function select(element) {
+	    var selectedText;
+
+	    if (element.nodeName === 'INPUT' || element.nodeName === 'TEXTAREA') {
+	        element.focus();
+	        element.setSelectionRange(0, element.value.length);
+
+	        selectedText = element.value;
+	    }
+	    else {
+	        if (element.hasAttribute('contenteditable')) {
+	            element.focus();
+	        }
+
+	        var selection = window.getSelection();
+	        var range = document.createRange();
+
+	        range.selectNodeContents(element);
+	        selection.removeAllRanges();
+	        selection.addRange(range);
+
+	        selectedText = selection.toString();
+	    }
+
+	    return selectedText;
+	}
+
+	module.exports = select;
+
+
+/***/ },
+/* 260 */
+/***/ function(module, exports) {
+
+	function E () {
+	  // Keep this empty so it's easier to inherit from
+	  // (via https://github.com/lipsmack from https://github.com/scottcorgan/tiny-emitter/issues/3)
+	}
+
+	E.prototype = {
+	  on: function (name, callback, ctx) {
+	    var e = this.e || (this.e = {});
+
+	    (e[name] || (e[name] = [])).push({
+	      fn: callback,
+	      ctx: ctx
+	    });
+
+	    return this;
+	  },
+
+	  once: function (name, callback, ctx) {
+	    var self = this;
+	    function listener () {
+	      self.off(name, listener);
+	      callback.apply(ctx, arguments);
+	    };
+
+	    listener._ = callback
+	    return this.on(name, listener, ctx);
+	  },
+
+	  emit: function (name) {
+	    var data = [].slice.call(arguments, 1);
+	    var evtArr = ((this.e || (this.e = {}))[name] || []).slice();
+	    var i = 0;
+	    var len = evtArr.length;
+
+	    for (i; i < len; i++) {
+	      evtArr[i].fn.apply(evtArr[i].ctx, data);
+	    }
+
+	    return this;
+	  },
+
+	  off: function (name, callback) {
+	    var e = this.e || (this.e = {});
+	    var evts = e[name];
+	    var liveEvents = [];
+
+	    if (evts && callback) {
+	      for (var i = 0, len = evts.length; i < len; i++) {
+	        if (evts[i].fn !== callback && evts[i].fn._ !== callback)
+	          liveEvents.push(evts[i]);
+	      }
+	    }
+
+	    // Remove event from queue to prevent memory leak
+	    // Suggested by https://github.com/lazd
+	    // Ref: https://github.com/scottcorgan/tiny-emitter/commit/c6ebfaa9bc973b33d110a84a307742b7cf94c953#commitcomment-5024910
+
+	    (liveEvents.length)
+	      ? e[name] = liveEvents
+	      : delete e[name];
+
+	    return this;
+	  }
+	};
+
+	module.exports = E;
+
+
+/***/ },
+/* 261 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var is = __webpack_require__(262);
+	var delegate = __webpack_require__(263);
+
+	/**
+	 * Validates all params and calls the right
+	 * listener function based on its target type.
+	 *
+	 * @param {String|HTMLElement|HTMLCollection|NodeList} target
+	 * @param {String} type
+	 * @param {Function} callback
+	 * @return {Object}
+	 */
+	function listen(target, type, callback) {
+	    if (!target && !type && !callback) {
+	        throw new Error('Missing required arguments');
+	    }
+
+	    if (!is.string(type)) {
+	        throw new TypeError('Second argument must be a String');
+	    }
+
+	    if (!is.fn(callback)) {
+	        throw new TypeError('Third argument must be a Function');
+	    }
+
+	    if (is.node(target)) {
+	        return listenNode(target, type, callback);
+	    }
+	    else if (is.nodeList(target)) {
+	        return listenNodeList(target, type, callback);
+	    }
+	    else if (is.string(target)) {
+	        return listenSelector(target, type, callback);
+	    }
+	    else {
+	        throw new TypeError('First argument must be a String, HTMLElement, HTMLCollection, or NodeList');
+	    }
+	}
+
+	/**
+	 * Adds an event listener to a HTML element
+	 * and returns a remove listener function.
+	 *
+	 * @param {HTMLElement} node
+	 * @param {String} type
+	 * @param {Function} callback
+	 * @return {Object}
+	 */
+	function listenNode(node, type, callback) {
+	    node.addEventListener(type, callback);
+
+	    return {
+	        destroy: function() {
+	            node.removeEventListener(type, callback);
+	        }
+	    }
+	}
+
+	/**
+	 * Add an event listener to a list of HTML elements
+	 * and returns a remove listener function.
+	 *
+	 * @param {NodeList|HTMLCollection} nodeList
+	 * @param {String} type
+	 * @param {Function} callback
+	 * @return {Object}
+	 */
+	function listenNodeList(nodeList, type, callback) {
+	    Array.prototype.forEach.call(nodeList, function(node) {
+	        node.addEventListener(type, callback);
+	    });
+
+	    return {
+	        destroy: function() {
+	            Array.prototype.forEach.call(nodeList, function(node) {
+	                node.removeEventListener(type, callback);
+	            });
+	        }
+	    }
+	}
+
+	/**
+	 * Add an event listener to a selector
+	 * and returns a remove listener function.
+	 *
+	 * @param {String} selector
+	 * @param {String} type
+	 * @param {Function} callback
+	 * @return {Object}
+	 */
+	function listenSelector(selector, type, callback) {
+	    return delegate(document.body, selector, type, callback);
+	}
+
+	module.exports = listen;
+
+
+/***/ },
+/* 262 */
+/***/ function(module, exports) {
+
+	/**
+	 * Check if argument is a HTML element.
+	 *
+	 * @param {Object} value
+	 * @return {Boolean}
+	 */
+	exports.node = function(value) {
+	    return value !== undefined
+	        && value instanceof HTMLElement
+	        && value.nodeType === 1;
+	};
+
+	/**
+	 * Check if argument is a list of HTML elements.
+	 *
+	 * @param {Object} value
+	 * @return {Boolean}
+	 */
+	exports.nodeList = function(value) {
+	    var type = Object.prototype.toString.call(value);
+
+	    return value !== undefined
+	        && (type === '[object NodeList]' || type === '[object HTMLCollection]')
+	        && ('length' in value)
+	        && (value.length === 0 || exports.node(value[0]));
+	};
+
+	/**
+	 * Check if argument is a string.
+	 *
+	 * @param {Object} value
+	 * @return {Boolean}
+	 */
+	exports.string = function(value) {
+	    return typeof value === 'string'
+	        || value instanceof String;
+	};
+
+	/**
+	 * Check if argument is a function.
+	 *
+	 * @param {Object} value
+	 * @return {Boolean}
+	 */
+	exports.fn = function(value) {
+	    var type = Object.prototype.toString.call(value);
+
+	    return type === '[object Function]';
+	};
+
+
+/***/ },
+/* 263 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var closest = __webpack_require__(264);
+
+	/**
+	 * Delegates event to a selector.
+	 *
+	 * @param {Element} element
+	 * @param {String} selector
+	 * @param {String} type
+	 * @param {Function} callback
+	 * @param {Boolean} useCapture
+	 * @return {Object}
+	 */
+	function delegate(element, selector, type, callback, useCapture) {
+	    var listenerFn = listener.apply(this, arguments);
+
+	    element.addEventListener(type, listenerFn, useCapture);
+
+	    return {
+	        destroy: function() {
+	            element.removeEventListener(type, listenerFn, useCapture);
+	        }
+	    }
+	}
+
+	/**
+	 * Finds closest match and invokes callback.
+	 *
+	 * @param {Element} element
+	 * @param {String} selector
+	 * @param {String} type
+	 * @param {Function} callback
+	 * @return {Function}
+	 */
+	function listener(element, selector, type, callback) {
+	    return function(e) {
+	        e.delegateTarget = closest(e.target, selector, true);
+
+	        if (e.delegateTarget) {
+	            callback.call(element, e);
+	        }
+	    }
+	}
+
+	module.exports = delegate;
+
+
+/***/ },
+/* 264 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var matches = __webpack_require__(265)
+
+	module.exports = function (element, selector, checkYoSelf) {
+	  var parent = checkYoSelf ? element : element.parentNode
+
+	  while (parent && parent !== document) {
+	    if (matches(parent, selector)) return parent;
+	    parent = parent.parentNode
+	  }
+	}
+
+
+/***/ },
+/* 265 */
+/***/ function(module, exports) {
+
+	
+	/**
+	 * Element prototype.
+	 */
+
+	var proto = Element.prototype;
+
+	/**
+	 * Vendor function.
+	 */
+
+	var vendor = proto.matchesSelector
+	  || proto.webkitMatchesSelector
+	  || proto.mozMatchesSelector
+	  || proto.msMatchesSelector
+	  || proto.oMatchesSelector;
+
+	/**
+	 * Expose `match()`.
+	 */
+
+	module.exports = match;
+
+	/**
+	 * Match `el` to `selector`.
+	 *
+	 * @param {Element} el
+	 * @param {String} selector
+	 * @return {Boolean}
+	 * @api public
+	 */
+
+	function match(el, selector) {
+	  if (vendor) return vendor.call(el, selector);
+	  var nodes = el.parentNode.querySelectorAll(selector);
+	  for (var i = 0; i < nodes.length; ++i) {
+	    if (nodes[i] == el) return true;
+	  }
+	  return false;
+	}
+
+/***/ },
+/* 266 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(267);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(247)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./main.styl", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./main.styl");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 267 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(246)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "body,\nhtml {\n  height: initial;\n}\n.max-width {\n  width: 100%;\n}\n.container {\n  margin: 10px;\n}\n.projects__item .projects__item__favorite--hidden {\n  visibility: hidden;\n}\n.projects__item:hover .projects__item__favorite--hidden {\n  visibility: visible;\n}\n.projects__item.favorite .projects__item__favorite--hidden {\n  visibility: visible;\n  color: #fca326;\n}\n.projects__item__action {\n  visibility: hidden;\n}\n.projects__item__favorite--hidden {\n  color: #808080;\n}\n.projects__item__favorite--hidden:hover {\n  color: #fca326;\n}\n.item:hover .projects__item__action {\n  visibility: visible;\n}\n.clipboard-input {\n  width: 100%;\n}\n.ui.dropdown.menu {\n  left: -75px;\n}\n.title {\n  margin-bottom: 10px !important;\n  color: rgba(45,45,45,0.87) !important;\n  text-align: center !important;\n}\ninput::selection {\n  background: #cce1fe;\n}\n", ""]);
+
+	// exports
+
 
 /***/ }
 /******/ ]);

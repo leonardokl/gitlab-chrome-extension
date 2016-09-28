@@ -73,7 +73,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(actions.fetchProjects())
   },
   onToggleProjectFavorite: (projectId) => {
-      dispatch(actions.toggleProjectFavorite(projectId))
+    dispatch(actions.toggleProjectFavorite(projectId))
   },
   onSearchProjects: (value) => {
     dispatch(actions.searchProjects(value))
