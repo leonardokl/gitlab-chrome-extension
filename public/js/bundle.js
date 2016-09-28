@@ -25012,6 +25012,7 @@
 	    },
 	    _react2.default.createElement('i', { className: 'search icon' }),
 	    _react2.default.createElement('input', {
+	      autoFocus: true,
 	      type: 'text',
 	      placeholder: props.placeholder,
 	      onKeyPress: handleOnKeyPress,

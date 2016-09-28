@@ -30,6 +30,7 @@ const SearchInput = (props) => {
     >
       <i className='search icon'></i>
       <input
+        autoFocus
         type='text'
         placeholder={props.placeholder}
         onKeyPress={handleOnKeyPress}
