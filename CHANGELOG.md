@@ -1,3 +1,15 @@
+<a name="0.5.0"></a>
+# [0.5.0](https://github.com/leonardokl/gitlab-chrome-extension/compare/v0.4.0...v0.5.0) (2016-09-28)
+
+
+### Features
+
+* Automaticaly search projects when search input has changed ([cd2cc19](https://github.com/leonardokl/gitlab-chrome-extension/commit/cd2cc19))
+* Increase the amount of projects being listed and add perfect-scrollbar ([e22e84b](https://github.com/leonardokl/gitlab-chrome-extension/commit/e22e84b))
+* **search:** Init search on state projects ([f2dd301](https://github.com/leonardokl/gitlab-chrome-extension/commit/f2dd301))
+
+
+
 <a name="0.4.0"></a>
 # [0.4.0](https://github.com/leonardokl/gitlab-chrome-extension/compare/v0.3.1...v0.4.0) (2016-09-24)
 
