@@ -23111,6 +23111,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.getVisibleProjects = undefined;
 
 	var _app = __webpack_require__(199);
 
@@ -23122,19 +23123,24 @@
 
 	var _projects = __webpack_require__(202);
 
-	var _projects2 = _interopRequireDefault(_projects);
+	var fromProjects = _interopRequireWildcard(_projects);
 
 	var _favoriteProjects = __webpack_require__(203);
 
 	var _favoriteProjects2 = _interopRequireDefault(_favoriteProjects);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = {
 	  app: _app2.default,
 	  user: _user2.default,
-	  projects: _projects2.default,
+	  projects: fromProjects.default,
 	  favoriteProjects: _favoriteProjects2.default
+	};
+	var getVisibleProjects = exports.getVisibleProjects = function getVisibleProjects(state, projectName) {
+	  return fromProjects.getVisibleProjects(state.projects, projectName);
 	};
 
 /***/ },
@@ -23186,6 +23192,7 @@
 	var REMOVE_ACCESS_TOKEN = exports.REMOVE_ACCESS_TOKEN = 'REMOVE_ACCESS_TOKEN';
 	var FETCH_GITLAB_PROJECTS = exports.FETCH_GITLAB_PROJECTS = 'FETCH_GITLAB_PROJECTS';
 	var FETCH_GITLAB_PROJECTS_REQUEST = exports.FETCH_GITLAB_PROJECTS_REQUEST = 'FETCH_GITLAB_PROJECTS_REQUEST';
+	var FILTER_PROJECTS = exports.FILTER_PROJECTS = 'FILTER_PROJECTS';
 	var SEARCH_GITLAB_PROJECTS = exports.SEARCH_GITLAB_PROJECTS = 'SEARCH_GITLAB_PROJECTS';
 	var SEARCH_GITLAB_PROJECTS_REQUEST = exports.SEARCH_GITLAB_PROJECTS_REQUEST = 'SEARCH_GITLAB_PROJECTS_REQUEST';
 	var FETCH_FAVORITE_PROJECTS = exports.FETCH_FAVORITE_PROJECTS = 'FETCH_FAVORITE_PROJECTS';
@@ -23246,12 +23253,14 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.getVisibleProjects = undefined;
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	var _actionTypes = __webpack_require__(200);
 
 	var initialState = {
+	  filter: '',
 	  list: [],
 	  fetching: false,
 	  searching: false
@@ -23266,6 +23275,8 @@
 	      return _extends({}, state, { list: action.denormalizedFavoriteProjects });
 	    case _actionTypes.FETCH_GITLAB_PROJECTS_REQUEST:
 	      return _extends({}, state, { fetching: true });
+	    case _actionTypes.FILTER_PROJECTS:
+	      return _extends({}, state, { filter: action.data.name });
 	    case _actionTypes.SEARCH_GITLAB_PROJECTS:
 	    case _actionTypes.FETCH_GITLAB_PROJECTS:
 	      return _extends({}, state, { list: action.data, searching: false, fetching: false });
@@ -23277,6 +23288,33 @@
 	};
 
 	exports.default = projects;
+
+
+	var projectHasName = function projectHasName(project, name) {
+	  return project.name.search(name) !== -1;
+	};
+
+	var projectHasNameSpace = function projectHasNameSpace(project, name) {
+	  return project.nameSpace.search(name) !== -1;
+	};
+
+	var filterProjects = function filterProjects(projects, filter) {
+	  return projects.filter(function (project) {
+	    return projectHasName(project, filter) || projectHasNameSpace(project, filter);
+	  });
+	};
+
+	var getVisibleProjects = exports.getVisibleProjects = function getVisibleProjects(state) {
+	  var filter = state.filter;
+
+	  var projects = state.list;
+
+	  if (state.filter === '') return state;
+
+	  return _extends({}, state, {
+	    list: filterProjects(projects, filter)
+	  });
+	};
 
 /***/ },
 /* 203 */
@@ -23336,9 +23374,7 @@
 
 	var actions = _interopRequireWildcard(_actions);
 
-	var _projects = __webpack_require__(212);
-
-	var _projects2 = _interopRequireDefault(_projects);
+	var _reducers = __webpack_require__(198);
 
 	var _accessToken = __webpack_require__(213);
 
@@ -23411,7 +23447,8 @@
 	          onRemoveAccessToken: this.props.onRemoveAccessToken,
 	          onChangeFilter: this.props.onSearchProjects,
 	          onCreateNewChromeTab: this.props.onCreateNewChromeTab,
-	          onAddProjectToFavorites: this.props.onToggleProjectFavorite
+	          onAddProjectToFavorites: this.props.onToggleProjectFavorite,
+	          onFilterProjects: this.props.onFilterProjects
 	        })
 	      );
 	    }
@@ -23433,7 +23470,7 @@
 	  return {
 	    app: state.app,
 	    user: state.user,
-	    projects: state.projects,
+	    projects: (0, _reducers.getVisibleProjects)(state),
 	    favoriteProjects: state.favoriteProjects
 	  };
 	};
@@ -23449,6 +23486,9 @@
 	    },
 	    onToggleProjectFavorite: function onToggleProjectFavorite(projectId) {
 	      dispatch(actions.toggleProjectFavorite(projectId));
+	    },
+	    onFilterProjects: function onFilterProjects(projectName) {
+	      dispatch(actions.filterProjects(projectName));
 	    },
 	    onSearchProjects: function onSearchProjects(value) {
 	      dispatch(actions.searchProjects(value));
@@ -23476,7 +23516,7 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.fetchIssueBranchName = exports.createChromeNewTab = exports.searchProjects = exports.toggleProjectFavorite = exports.fetchFavoriteProjects = exports.fetchProjects = exports.removeUserAccessToken = exports.saveUserAccessToken = exports.fetchUserAccessToken = undefined;
+	exports.fetchIssueBranchName = exports.createChromeNewTab = exports.searchProjects = exports.filterProjects = exports.toggleProjectFavorite = exports.fetchFavoriteProjects = exports.fetchProjects = exports.removeUserAccessToken = exports.saveUserAccessToken = exports.fetchUserAccessToken = undefined;
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -23732,6 +23772,15 @@
 					project: project,
 					index: projectIndex
 				}
+			});
+		};
+	};
+
+	var filterProjects = exports.filterProjects = function filterProjects(projectName) {
+		return function (dispatch) {
+			dispatch({
+				type: action.FILTER_PROJECTS,
+				data: { name: projectName }
 			});
 		};
 	};
@@ -24544,23 +24593,7 @@
 	exports.default = FavoritesAPI;
 
 /***/ },
-/* 212 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var projectsSelector = exports.projectsSelector = function projectsSelector(state) {
-	  return state.projects.list.map(function (project) {
-	    project.favorite = project.id === state.favoriteProjects.projects[project.id];
-
-	    return project;
-	  });
-	};
-
-/***/ },
+/* 212 */,
 /* 213 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -24792,14 +24825,14 @@
 	      var projects = _props.projects;
 	      var favoriteProjects = _props.favoriteProjects;
 
-	      console.log('main.PROJECTS', projects);
-	      console.log('main.FAVORITES', favoriteProjects);
+
 	      return _react2.default.createElement(
 	        'div',
 	        null,
 	        _react2.default.createElement(_appBar2.default, {
 	          avatarUrl: this.props.user.avatarUrl,
 	          onChangeFilter: this.props.onChangeFilter,
+	          onFilterProjects: this.props.onFilterProjects,
 	          onClickRemoveToken: this.props.onRemoveAccessToken,
 	          searching: projects.searching
 	        }),
@@ -24866,6 +24899,8 @@
 	  dropdownMenu: { top: 35, left: -75 }
 	};
 
+	var timeToSubmit = void 0;
+
 	var AppBar = function (_React$Component) {
 	  _inherits(AppBar, _React$Component);
 
@@ -24882,6 +24917,16 @@
 
 	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = AppBar.__proto__ || Object.getPrototypeOf(AppBar)).call.apply(_ref, [this].concat(args))), _this), _this.handleOnSubmitSearchInput = function (value) {
 	      _this.props.onChangeFilter(value);
+	    }, _this.handleOnChangeSearchInput = function (evt) {
+	      var value = evt.target.value;
+
+	      console.log('ON CHANGE');
+
+	      clearTimeout(timeToSubmit);
+	      _this.props.onFilterProjects(value);
+	      timeToSubmit = setTimeout(function () {
+	        _this.props.onChangeFilter(value);
+	      }, 900);
 	    }, _temp), _possibleConstructorReturn(_this, _ret);
 	  }
 
@@ -24905,7 +24950,8 @@
 	        _react2.default.createElement(_searchInput2.default, {
 	          placeholder: 'Filter by name...',
 	          loading: this.props.searching,
-	          onSubmit: this.handleOnSubmitSearchInput
+	          onSubmit: this.handleOnSubmitSearchInput,
+	          onChange: this.handleOnChangeSearchInput
 	        }),
 	        _react2.default.createElement(
 	          'div',
@@ -25016,16 +25062,20 @@
 	      type: 'text',
 	      placeholder: props.placeholder,
 	      onKeyPress: handleOnKeyPress,
-	      onChange: handleOnChange
+	      onChange: props.onChange
 	    })
 	  );
 	};
 
 	SearchInput.propTypes = {
+	  onChange: _react2.default.PropTypes.func,
 	  onSubmit: _react2.default.PropTypes.func
 	};
 
 	SearchInput.defaultProps = {
+	  onChange: function onChange() {
+	    return 1;
+	  },
 	  onSubmit: function onSubmit() {
 	    return 1;
 	  }

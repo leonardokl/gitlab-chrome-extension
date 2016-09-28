@@ -9,13 +9,13 @@ class Main extends React.Component {
 
   render() {
     const {projects, favoriteProjects} = this.props
-console.log('main.PROJECTS', projects)
-console.log('main.FAVORITES', favoriteProjects);
+
     return (
       <div>
         <AppBar
           avatarUrl={this.props.user.avatarUrl}
           onChangeFilter={this.props.onChangeFilter}
+          onFilterProjects={this.props.onFilterProjects}
           onClickRemoveToken={this.props.onRemoveAccessToken}
           searching={projects.searching}
         />

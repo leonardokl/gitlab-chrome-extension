@@ -19,6 +19,8 @@ const styles = {
   dropdownMenu: {top: 35, left: -75}
 }
 
+let timeToSubmit
+
 class AppBar extends React.Component {
   componentDidMount() {
     const onClickRemoveToken = this.props.onClickRemoveToken
@@ -32,6 +34,16 @@ class AppBar extends React.Component {
     this.props.onChangeFilter(value)
   }
 
+  handleOnChangeSearchInput = (evt) => {
+    const {value} = evt.target
+
+    clearTimeout(timeToSubmit)
+    this.props.onFilterProjects(value)
+    timeToSubmit = setTimeout(() => {
+      this.props.onChangeFilter(value)
+    }, 900)
+  }
+
   render() {
     return (
       <div style={styles.container}>
@@ -39,6 +51,7 @@ class AppBar extends React.Component {
           placeholder='Filter by name...'
           loading={this.props.searching}
           onSubmit={this.handleOnSubmitSearchInput}
+          onChange={this.handleOnChangeSearchInput}
         />
         <div
           style={styles.dropdown}

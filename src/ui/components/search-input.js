@@ -34,17 +34,19 @@ const SearchInput = (props) => {
         type='text'
         placeholder={props.placeholder}
         onKeyPress={handleOnKeyPress}
-        onChange={handleOnChange}
+        onChange={props.onChange}
       />
     </div>
   )
 }
 
 SearchInput.propTypes = {
-  onSubmit: React.PropTypes.func,
+  onChange: React.PropTypes.func,
+  onSubmit: React.PropTypes.func
 }
 
 SearchInput.defaultProps = {
+  onChange: () => 1,
   onSubmit: () => 1
 }
 

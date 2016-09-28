@@ -210,6 +210,13 @@ export const toggleProjectFavorite = (projectId) => (dispatch, getState) => {
 	})
 }
 
+export const filterProjects = (projectName) => (dispatch) => {
+	dispatch({
+		type: action.FILTER_PROJECTS,
+		data: {name: projectName}
+	})
+}
+
 const searchProjectsRequest = () => (dispatch) => {
 	dispatch({
 		type: action.SEARCH_GITLAB_PROJECTS_REQUEST

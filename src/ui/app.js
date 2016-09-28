@@ -1,8 +1,8 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import * as actions from 'actions'
+import {getVisibleProjects} from 'reducers'
 
-import projectsSelector from 'selectors/projects'
 import AccessToken from 'ui/containers/access-token'
 import Main from 'ui/containers/main'
 import IssueBranchName from 'ui/containers/issue-branch-name'
@@ -44,6 +44,7 @@ class App extends React.Component {
         onChangeFilter={this.props.onSearchProjects}
         onCreateNewChromeTab={this.props.onCreateNewChromeTab}
         onAddProjectToFavorites={this.props.onToggleProjectFavorite}
+        onFilterProjects={this.props.onFilterProjects}
       />
     )
   }
@@ -60,7 +61,7 @@ class App extends React.Component {
 const mapStateToProps = (state) => ({
   app: state.app,
   user: state.user,
-  projects: state.projects,
+  projects: getVisibleProjects(state),
   favoriteProjects: state.favoriteProjects,
 })
 
@@ -74,6 +75,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   onToggleProjectFavorite: (projectId) => {
     dispatch(actions.toggleProjectFavorite(projectId))
+  },
+  onFilterProjects: (projectName) => {
+    dispatch(actions.filterProjects(projectName))
   },
   onSearchProjects: (value) => {
     dispatch(actions.searchProjects(value))
