@@ -23190,6 +23190,7 @@
 	var SAVE_ACCESS_TOKEN = exports.SAVE_ACCESS_TOKEN = 'SAVE_ACCESS_TOKEN';
 	var FETCH_ACCESS_TOKEN = exports.FETCH_ACCESS_TOKEN = 'FETCH_ACCESS_TOKEN';
 	var REMOVE_ACCESS_TOKEN = exports.REMOVE_ACCESS_TOKEN = 'REMOVE_ACCESS_TOKEN';
+	var ADD_PROJECTS_LOADER = exports.ADD_PROJECTS_LOADER = 'ADD_PROJECTS_LOADER';
 	var FETCH_GITLAB_PROJECTS = exports.FETCH_GITLAB_PROJECTS = 'FETCH_GITLAB_PROJECTS';
 	var FETCH_GITLAB_PROJECTS_REQUEST = exports.FETCH_GITLAB_PROJECTS_REQUEST = 'FETCH_GITLAB_PROJECTS_REQUEST';
 	var FILTER_PROJECTS = exports.FILTER_PROJECTS = 'FILTER_PROJECTS';
@@ -23274,6 +23275,7 @@
 	    case _actionTypes.FETCH_FAVORITE_PROJECTS:
 	      return _extends({}, state, { list: action.denormalizedFavoriteProjects });
 	    case _actionTypes.FETCH_GITLAB_PROJECTS_REQUEST:
+	    case _actionTypes.ADD_PROJECTS_LOADER:
 	      return _extends({}, state, { fetching: true });
 	    case _actionTypes.FILTER_PROJECTS:
 	      return _extends({}, state, { filter: action.data.name });
@@ -23448,7 +23450,8 @@
 	          onChangeFilter: this.props.onSearchProjects,
 	          onCreateNewChromeTab: this.props.onCreateNewChromeTab,
 	          onAddProjectToFavorites: this.props.onToggleProjectFavorite,
-	          onFilterProjects: this.props.onFilterProjects
+	          onFilterProjects: this.props.onFilterProjects,
+	          onStartProjectsSearch: this.props.onStartProjectsSearch
 	        })
 	      );
 	    }
@@ -23493,6 +23496,9 @@
 	    onSearchProjects: function onSearchProjects(value) {
 	      dispatch(actions.searchProjects(value));
 	    },
+	    onStartProjectsSearch: function onStartProjectsSearch() {
+	      dispatch(actions.addProjectsLoader());
+	    },
 	    onSaveAccessToken: function onSaveAccessToken(accessToken) {
 	      dispatch(actions.saveUserAccessToken(accessToken));
 	    },
@@ -23516,7 +23522,7 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.fetchIssueBranchName = exports.createChromeNewTab = exports.searchProjects = exports.filterProjects = exports.toggleProjectFavorite = exports.fetchFavoriteProjects = exports.fetchProjects = exports.removeUserAccessToken = exports.saveUserAccessToken = exports.fetchUserAccessToken = undefined;
+	exports.fetchIssueBranchName = exports.createChromeNewTab = exports.searchProjects = exports.filterProjects = exports.toggleProjectFavorite = exports.fetchFavoriteProjects = exports.fetchProjects = exports.addProjectsLoader = exports.removeUserAccessToken = exports.saveUserAccessToken = exports.fetchUserAccessToken = undefined;
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -23639,6 +23645,12 @@
 			nameSpace: project.namespace.name,
 			webUrl: project.web_url,
 			sshUrl: project.ssh_url_to_repo
+		};
+	};
+
+	var addProjectsLoader = exports.addProjectsLoader = function addProjectsLoader() {
+		return function (dispatch) {
+			dispatch({ type: action.ADD_PROJECTS_LOADER });
 		};
 	};
 
@@ -24830,17 +24842,18 @@
 	        null,
 	        _react2.default.createElement(_appBar2.default, {
 	          avatarUrl: this.props.user.avatarUrl,
+	          searching: projects.searching,
 	          onChangeFilter: this.props.onChangeFilter,
-	          onFilterProjects: this.props.onFilterProjects,
 	          onClickRemoveToken: this.props.onRemoveAccessToken,
-	          searching: projects.searching
+	          onFilterProjects: this.props.onFilterProjects,
+	          onStartProjectsSearch: this.props.onStartProjectsSearch
 	        }),
 	        _react2.default.createElement(_projects2.default, {
 	          list: projects.list,
 	          fetching: projects.fetching,
 	          favoriteProjects: favoriteProjects,
-	          onCreateNewChromeTab: this.props.onCreateNewChromeTab,
-	          onAddProjectToFavorites: this.props.onAddProjectToFavorites
+	          onAddProjectToFavorites: this.props.onAddProjectToFavorites,
+	          onCreateNewChromeTab: this.props.onCreateNewChromeTab
 	        })
 	      );
 	    }
@@ -24920,6 +24933,7 @@
 	      var value = evt.target.value;
 
 
+	      _this.props.onStartProjectsSearch();
 	      clearTimeout(timeToSubmit);
 	      _this.props.onFilterProjects(value);
 	      timeToSubmit = setTimeout(function () {
