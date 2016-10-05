@@ -18,7 +18,11 @@ class PerfectScrollBar extends React.Component {
         style={{
           maxHeight: 300,
           overflow: 'auto',
-          position: 'relative'
+          position: 'relative',
+          marginRight: '-10px',
+          marginLeft: '-10px',
+          paddingRight: 10,
+          paddingLeft: 10
         }}
       >
         {this.props.children}
