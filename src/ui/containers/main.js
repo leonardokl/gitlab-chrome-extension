@@ -14,17 +14,18 @@ class Main extends React.Component {
       <div>
         <AppBar
           avatarUrl={this.props.user.avatarUrl}
-          onChangeFilter={this.props.onChangeFilter}
-          onFilterProjects={this.props.onFilterProjects}
-          onClickRemoveToken={this.props.onRemoveAccessToken}
           searching={projects.searching}
+          onChangeFilter={this.props.onChangeFilter}
+          onClickRemoveToken={this.props.onRemoveAccessToken}
+          onFilterProjects={this.props.onFilterProjects}
+          onStartProjectsSearch={this.props.onStartProjectsSearch}
         />
         <Projects
           list={projects.list}
           fetching={projects.fetching}
           favoriteProjects={favoriteProjects}
-          onCreateNewChromeTab={this.props.onCreateNewChromeTab}
           onAddProjectToFavorites={this.props.onAddProjectToFavorites}
+          onCreateNewChromeTab={this.props.onCreateNewChromeTab}
         />
       </div>
     )

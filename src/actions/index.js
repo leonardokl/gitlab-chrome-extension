@@ -98,6 +98,10 @@ const getProjectSchema = (project) => ({
 	sshUrl: project.ssh_url_to_repo
 })
 
+export const addProjectsLoader = () => (dispatch) => {
+	dispatch({type: action.ADD_PROJECTS_LOADER})
+}
+
 const fetchProjectsRequest = () => (dispatch) => {
 	dispatch({type: action.FETCH_GITLAB_PROJECTS_REQUEST})
 }

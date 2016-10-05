@@ -2,6 +2,7 @@ import {
   FETCH_FAVORITE_PROJECTS,
   FETCH_GITLAB_PROJECTS,
   FETCH_GITLAB_PROJECTS_REQUEST,
+  ADD_PROJECTS_LOADER,
   FILTER_PROJECTS,
   SEARCH_GITLAB_PROJECTS,
   SEARCH_GITLAB_PROJECTS_REQUEST
@@ -19,6 +20,7 @@ const projects = (state = initialState, action) => {
   case FETCH_FAVORITE_PROJECTS:
     return {...state, list: action.denormalizedFavoriteProjects}
   case FETCH_GITLAB_PROJECTS_REQUEST:
+  case ADD_PROJECTS_LOADER:
     return {...state, fetching: true}
   case FILTER_PROJECTS:
     return {...state, filter: action.data.name}
