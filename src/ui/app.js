@@ -45,6 +45,7 @@ class App extends React.Component {
         onCreateNewChromeTab={this.props.onCreateNewChromeTab}
         onAddProjectToFavorites={this.props.onToggleProjectFavorite}
         onFilterProjects={this.props.onFilterProjects}
+        onStartProjectsSearch={this.props.onStartProjectsSearch}
       />
     )
   }
@@ -81,6 +82,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   onSearchProjects: (value) => {
     dispatch(actions.searchProjects(value))
+  },
+  onStartProjectsSearch: () => {
+    dispatch(actions.addProjectsLoader())
   },
   onSaveAccessToken: (accessToken) => {
     dispatch(actions.saveUserAccessToken(accessToken))

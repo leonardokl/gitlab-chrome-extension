@@ -37,6 +37,7 @@ class AppBar extends React.Component {
   handleOnChangeSearchInput = (evt) => {
     const {value} = evt.target
 
+    this.props.onStartProjectsSearch()
     clearTimeout(timeToSubmit)
     this.props.onFilterProjects(value)
     timeToSubmit = setTimeout(() => {
