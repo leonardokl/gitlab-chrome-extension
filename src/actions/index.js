@@ -131,11 +131,11 @@ export const fetchProjects = () => (dispatch) => {
 		.then(() => dispatch(fetchGitlabProjects()))
 }
 
-export const fetchFavoriteProjects = () => (dispatch) => {
+export const fetchFavoriteProjects = () => (dispatch) => (
 	dispatch({
 		type: action.FETCH_FAVORITE_PROJECTS,
 	})
-}
+)
 
 const updateFavoritesStorage = (favorites) => {
 	return API.chrome.setStorage({favorites})
