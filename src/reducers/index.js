@@ -1,10 +1,10 @@
-import app from './app'
+import issue from './issue'
 import user from './user'
 import projects, * as fromProjects from './projects'
 import favoriteProjects from './favorite-projects'
 
 export default {
-  app,
+  issue,
   user,
   projects,
   favoriteProjects

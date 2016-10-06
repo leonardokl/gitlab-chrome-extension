@@ -14,12 +14,12 @@ class App extends React.Component {
   }
 
   renderContent() {
-    const {app, user, projects, favoriteProjects} = this.props
+    const {issue, user, projects, favoriteProjects} = this.props
 
-    if (app.issueBranchName)
+    if (issue.branch)
       return (
         <IssueBranchName
-          branchName={this.props.app.issueBranchName}
+          branchName={this.props.issue.branch}
         />
       )
 
@@ -60,7 +60,7 @@ class App extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  app: state.app,
+  issue: state.issue,
   user: state.user,
   projects: getVisibleProjects(state),
   favoriteProjects: state.favoriteProjects,
