@@ -25,5 +25,25 @@ describe('reducers', () => {
         })
       ).toEqual({...initialState, ...mockFavoriteProjects})
     })
+
+    it('should handle ADD_PROJECT_TO_FAVORITES', () => {
+
+      expect(
+        reducer(initialState, {
+          data: {favoriteProjects: mockFavoriteProjects},
+          type: ADD_PROJECT_TO_FAVORITES,
+        })
+      ).toEqual({...initialState, ...mockFavoriteProjects})
+    })
+
+    it('should handle REMOVE_PROJECT_FROM_FAVORITES', () => {
+
+      expect(
+        reducer(initialState, {
+          data: {favoriteProjects: mockFavoriteProjects},
+          type: REMOVE_PROJECT_FROM_FAVORITES,
+        })
+      ).toEqual({...initialState, ...mockFavoriteProjects})
+    })
   })
 })
