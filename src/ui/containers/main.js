@@ -27,7 +27,7 @@ class Main extends React.Component {
           list={projects.list}
           fetching={projects.fetching}
           favoriteProjects={favoriteProjects}
-          onAddProjectToFavorites={this.props.onAddProjectToFavorites}
+          onAddProjectToFavorites={this.props.onToggleProjectFavorite}
           onCreateNewChromeTab={this.props.onCreateNewChromeTab}
         />
       </div>
