@@ -28,17 +28,17 @@ export const fetchUserAccessToken = () => (dispatch) => {
 		.catch(error => console.warn('error', error))
 }
 
-const saveUserAccessTokenRequest = () => (dispatch) => {
+export const saveUserAccessTokenRequest = () => (dispatch) => (
 	dispatch({
 		type: action.SAVE_ACCESS_TOKEN_REQUEST
 	})
-}
+)
 
-const saveUserAccessTokenError = () => (dispatch) => {
+export const saveUserAccessTokenError = () => (dispatch) => (
 	dispatch({
 		type: action.SAVE_ACCESS_TOKEN_ERROR
 	})
-}
+)
 
 export const saveUserAccessToken = (accessToken) => (dispatch) => {
 	dispatch(saveUserAccessTokenRequest())
@@ -98,13 +98,13 @@ const getProjectSchema = (project) => ({
 	sshUrl: project.ssh_url_to_repo
 })
 
-export const addProjectsLoader = () => (dispatch) => {
+export const addProjectsLoader = () => (dispatch) => (
 	dispatch({type: action.ADD_PROJECTS_LOADER})
-}
+)
 
-const fetchProjectsRequest = () => (dispatch) => {
+export const fetchProjectsRequest = () => (dispatch) => (
 	dispatch({type: action.FETCH_GITLAB_PROJECTS_REQUEST})
-}
+)
 
 const fetchGitlabProjects = () => (dispatch, getState) => {
 	const {accessToken} = getState().user
@@ -214,18 +214,18 @@ export const toggleProjectFavorite = (projectId) => (dispatch, getState) => {
 	})
 }
 
-export const filterProjects = (projectName) => (dispatch) => {
+export const filterProjects = (projectName) => (dispatch) => (
 	dispatch({
 		type: action.FILTER_PROJECTS,
 		data: {name: projectName}
 	})
-}
+)
 
-const searchProjectsRequest = () => (dispatch) => {
+export const searchProjectsRequest = () => (dispatch) => (
 	dispatch({
 		type: action.SEARCH_GITLAB_PROJECTS_REQUEST
 	})
-}
+)
 
 export const searchProjects = (value) => (dispatch, getState) => {
 	const state = getState()
