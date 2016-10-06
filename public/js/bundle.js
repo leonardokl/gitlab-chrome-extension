@@ -23161,7 +23161,7 @@
 	  branch: ''
 	};
 
-	var app = function app() {
+	var issue = function issue() {
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? initialState : arguments[0];
 	  var action = arguments[1];
 
@@ -23173,7 +23173,7 @@
 	  return state;
 	};
 
-	exports.default = app;
+	exports.default = issue;
 
 /***/ },
 /* 200 */
@@ -23376,8 +23376,6 @@
 
 	var actions = _interopRequireWildcard(_actions);
 
-	var _reducers = __webpack_require__(198);
-
 	var _accessToken = __webpack_require__(212);
 
 	var _accessToken2 = _interopRequireDefault(_accessToken);
@@ -23422,8 +23420,6 @@
 	      var _props = this.props;
 	      var issue = _props.issue;
 	      var user = _props.user;
-	      var projects = _props.projects;
-	      var favoriteProjects = _props.favoriteProjects;
 
 
 	      if (issue.branch) return _react2.default.createElement(_issueBranchName2.default, {
@@ -23439,21 +23435,7 @@
 	        })
 	      );
 
-	      return (
-	        // TODO: connect to state inside of container
-	        _react2.default.createElement(_main2.default, {
-	          user: user,
-	          projects: projects,
-	          favoriteProjects: favoriteProjects,
-	          onDidMount: this.props.onMainDidMount,
-	          onRemoveAccessToken: this.props.onRemoveAccessToken,
-	          onChangeFilter: this.props.onSearchProjects,
-	          onCreateNewChromeTab: this.props.onCreateNewChromeTab,
-	          onAddProjectToFavorites: this.props.onToggleProjectFavorite,
-	          onFilterProjects: this.props.onFilterProjects,
-	          onStartProjectsSearch: this.props.onStartProjectsSearch
-	        })
-	      );
+	      return _react2.default.createElement(_main2.default, null);
 	    }
 	  }, {
 	    key: 'render',
@@ -23472,9 +23454,7 @@
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
 	    issue: state.issue,
-	    user: state.user,
-	    projects: (0, _reducers.getVisibleProjects)(state),
-	    favoriteProjects: state.favoriteProjects
+	    user: state.user
 	  };
 	};
 
@@ -23483,21 +23463,6 @@
 	    onDidMount: function onDidMount() {
 	      dispatch(actions.fetchIssueBranchName());
 	      dispatch(actions.fetchUserAccessToken());
-	    },
-	    onMainDidMount: function onMainDidMount() {
-	      dispatch(actions.fetchProjects());
-	    },
-	    onToggleProjectFavorite: function onToggleProjectFavorite(projectId) {
-	      dispatch(actions.toggleProjectFavorite(projectId));
-	    },
-	    onFilterProjects: function onFilterProjects(projectName) {
-	      dispatch(actions.filterProjects(projectName));
-	    },
-	    onSearchProjects: function onSearchProjects(value) {
-	      dispatch(actions.searchProjects(value));
-	    },
-	    onStartProjectsSearch: function onStartProjectsSearch() {
-	      dispatch(actions.addProjectsLoader());
 	    },
 	    onSaveAccessToken: function onSaveAccessToken(accessToken) {
 	      dispatch(actions.saveUserAccessToken(accessToken));
@@ -24799,6 +24764,14 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRedux = __webpack_require__(172);
+
+	var _actions = __webpack_require__(205);
+
+	var actions = _interopRequireWildcard(_actions);
+
+	var _reducers = __webpack_require__(198);
+
 	var _appBar = __webpack_require__(215);
 
 	var _appBar2 = _interopRequireDefault(_appBar);
@@ -24806,6 +24779,8 @@
 	var _projects = __webpack_require__(218);
 
 	var _projects2 = _interopRequireDefault(_projects);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -24843,7 +24818,7 @@
 	        _react2.default.createElement(_appBar2.default, {
 	          avatarUrl: this.props.user.avatarUrl,
 	          searching: projects.searching,
-	          onChangeFilter: this.props.onChangeFilter,
+	          onChangeFilter: this.props.onSearchProjects,
 	          onClickRemoveToken: this.props.onRemoveAccessToken,
 	          onFilterProjects: this.props.onFilterProjects,
 	          onStartProjectsSearch: this.props.onStartProjectsSearch
@@ -24862,7 +24837,38 @@
 	  return Main;
 	}(_react2.default.Component);
 
-	exports.default = Main;
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    user: state.user,
+	    projects: (0, _reducers.getVisibleProjects)(state),
+	    favoriteProjects: state.favoriteProjects
+	  };
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    onDidMount: function onDidMount() {
+	      dispatch(actions.fetchProjects());
+	    },
+	    onToggleProjectFavorite: function onToggleProjectFavorite(projectId) {
+	      dispatch(actions.toggleProjectFavorite(projectId));
+	    },
+	    onFilterProjects: function onFilterProjects(projectName) {
+	      dispatch(actions.filterProjects(projectName));
+	    },
+	    onSearchProjects: function onSearchProjects(value) {
+	      dispatch(actions.searchProjects(value));
+	    },
+	    onStartProjectsSearch: function onStartProjectsSearch() {
+	      dispatch(actions.addProjectsLoader());
+	    },
+	    onCreateNewChromeTab: function onCreateNewChromeTab(url) {
+	      dispatch(actions.createChromeNewTab(url));
+	    }
+	  };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Main);
 
 /***/ },
 /* 215 */

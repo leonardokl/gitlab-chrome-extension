@@ -1,7 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import * as actions from 'actions'
-import {getVisibleProjects} from 'reducers'
 
 import AccessToken from 'ui/containers/access-token'
 import Main from 'ui/containers/main'
@@ -14,7 +13,7 @@ class App extends React.Component {
   }
 
   renderContent() {
-    const {issue, user, projects, favoriteProjects} = this.props
+    const {issue, user} = this.props
 
     if (issue.branch)
       return (
@@ -34,19 +33,7 @@ class App extends React.Component {
       )
 
     return (
-      // TODO: connect to state inside of container
-      <Main
-        user={user}
-        projects={projects}
-        favoriteProjects={favoriteProjects}
-        onDidMount={this.props.onMainDidMount}
-        onRemoveAccessToken={this.props.onRemoveAccessToken}
-        onChangeFilter={this.props.onSearchProjects}
-        onCreateNewChromeTab={this.props.onCreateNewChromeTab}
-        onAddProjectToFavorites={this.props.onToggleProjectFavorite}
-        onFilterProjects={this.props.onFilterProjects}
-        onStartProjectsSearch={this.props.onStartProjectsSearch}
-      />
+      <Main />
     )
   }
 
@@ -62,29 +49,12 @@ class App extends React.Component {
 const mapStateToProps = (state) => ({
   issue: state.issue,
   user: state.user,
-  projects: getVisibleProjects(state),
-  favoriteProjects: state.favoriteProjects,
 })
 
 const mapDispatchToProps = (dispatch) => ({
   onDidMount: () => {
     dispatch(actions.fetchIssueBranchName())
     dispatch(actions.fetchUserAccessToken())
-  },
-  onMainDidMount: () => {
-    dispatch(actions.fetchProjects())
-  },
-  onToggleProjectFavorite: (projectId) => {
-    dispatch(actions.toggleProjectFavorite(projectId))
-  },
-  onFilterProjects: (projectName) => {
-    dispatch(actions.filterProjects(projectName))
-  },
-  onSearchProjects: (value) => {
-    dispatch(actions.searchProjects(value))
-  },
-  onStartProjectsSearch: () => {
-    dispatch(actions.addProjectsLoader())
   },
   onSaveAccessToken: (accessToken) => {
     dispatch(actions.saveUserAccessToken(accessToken))

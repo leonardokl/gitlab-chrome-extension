@@ -4,7 +4,7 @@ const initialState = {
   branch: ''
 }
 
-const app = (state = initialState, action) => {
+const issue = (state = initialState, action) => {
   switch (action.type) {
   case FETCH_ISSUE_BRANCH_NAME:
     return {...state, branch: action.data}
@@ -13,4 +13,4 @@ const app = (state = initialState, action) => {
   return state
 }
 
-export default app
+export default issue
