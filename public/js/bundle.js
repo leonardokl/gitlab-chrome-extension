@@ -23152,12 +23152,13 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.initialState = undefined;
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	var _actionTypes = __webpack_require__(200);
 
-	var initialState = {
+	var initialState = exports.initialState = {
 	  branch: ''
 	};
 
@@ -23327,12 +23328,13 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.initialState = undefined;
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	var _actionTypes = __webpack_require__(200);
 
-	var initialState = {
+	var initialState = exports.initialState = {
 	  result: [],
 	  projects: {}
 	};
@@ -23487,7 +23489,7 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.fetchIssueBranchName = exports.createChromeNewTab = exports.searchProjects = exports.filterProjects = exports.toggleProjectFavorite = exports.fetchFavoriteProjects = exports.fetchProjects = exports.addProjectsLoader = exports.removeUserAccessToken = exports.saveUserAccessToken = exports.fetchUserAccessToken = undefined;
+	exports.fetchIssueBranchName = exports.createChromeNewTab = exports.searchProjects = exports.searchProjectsRequest = exports.filterProjects = exports.toggleProjectFavorite = exports.fetchFavoriteProjects = exports.fetchProjects = exports.fetchProjectsRequest = exports.addProjectsLoader = exports.removeUserAccessToken = exports.saveUserAccessToken = exports.saveUserAccessTokenError = exports.saveUserAccessTokenRequest = exports.fetchUserAccessToken = undefined;
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -23530,17 +23532,17 @@
 		};
 	};
 
-	var saveUserAccessTokenRequest = function saveUserAccessTokenRequest() {
+	var saveUserAccessTokenRequest = exports.saveUserAccessTokenRequest = function saveUserAccessTokenRequest() {
 		return function (dispatch) {
-			dispatch({
+			return dispatch({
 				type: action.SAVE_ACCESS_TOKEN_REQUEST
 			});
 		};
 	};
 
-	var saveUserAccessTokenError = function saveUserAccessTokenError() {
+	var saveUserAccessTokenError = exports.saveUserAccessTokenError = function saveUserAccessTokenError() {
 		return function (dispatch) {
-			dispatch({
+			return dispatch({
 				type: action.SAVE_ACCESS_TOKEN_ERROR
 			});
 		};
@@ -23615,13 +23617,13 @@
 
 	var addProjectsLoader = exports.addProjectsLoader = function addProjectsLoader() {
 		return function (dispatch) {
-			dispatch({ type: action.ADD_PROJECTS_LOADER });
+			return dispatch({ type: action.ADD_PROJECTS_LOADER });
 		};
 	};
 
-	var fetchProjectsRequest = function fetchProjectsRequest() {
+	var fetchProjectsRequest = exports.fetchProjectsRequest = function fetchProjectsRequest() {
 		return function (dispatch) {
-			dispatch({ type: action.FETCH_GITLAB_PROJECTS_REQUEST });
+			return dispatch({ type: action.FETCH_GITLAB_PROJECTS_REQUEST });
 		};
 	};
 
@@ -23658,7 +23660,7 @@
 
 	var fetchFavoriteProjects = exports.fetchFavoriteProjects = function fetchFavoriteProjects() {
 		return function (dispatch) {
-			dispatch({
+			return dispatch({
 				type: action.FETCH_FAVORITE_PROJECTS
 			});
 		};
@@ -23755,16 +23757,16 @@
 
 	var filterProjects = exports.filterProjects = function filterProjects(projectName) {
 		return function (dispatch) {
-			dispatch({
+			return dispatch({
 				type: action.FILTER_PROJECTS,
 				data: { name: projectName }
 			});
 		};
 	};
 
-	var searchProjectsRequest = function searchProjectsRequest() {
+	var searchProjectsRequest = exports.searchProjectsRequest = function searchProjectsRequest() {
 		return function (dispatch) {
-			dispatch({
+			return dispatch({
 				type: action.SEARCH_GITLAB_PROJECTS_REQUEST
 			});
 		};

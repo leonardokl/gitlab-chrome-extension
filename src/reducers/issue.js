@@ -1,6 +1,6 @@
 import {FETCH_ISSUE_BRANCH_NAME} from 'constants/action-types'
 
-const initialState = {
+export const initialState = {
   branch: ''
 }
 

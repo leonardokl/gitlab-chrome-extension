@@ -4,7 +4,7 @@ import {
   REMOVE_PROJECT_FROM_FAVORITES
 } from 'constants/action-types'
 
-const initialState = {
+export const initialState = {
   result: [],
   projects: {},
 }
