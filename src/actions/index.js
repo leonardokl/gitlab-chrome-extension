@@ -61,12 +61,12 @@ export const saveUserAccessToken = (accessToken) => (dispatch, getState, {api}) 
 		.catch(() => dispatch(saveUserAccessTokenError()))
 }
 
-export const removeUserAccessToken = () => (dispatch, getState, {api}) => {
+export const removeUserAccessToken = () => (dispatch, getState, {api}) => (
 	api.chrome.clearStorage()
 		.then(() => dispatch({
 			type: action.REMOVE_ACCESS_TOKEN,
 		}))
-}
+)
 
 const denormalizeFavoriteProjects = (favoriteProjects) => (
 	favoriteProjects.result.map(id => favoriteProjects.projects[id])

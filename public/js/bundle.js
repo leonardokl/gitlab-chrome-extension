@@ -23574,8 +23574,7 @@
 	var removeUserAccessToken = exports.removeUserAccessToken = function removeUserAccessToken() {
 		return function (dispatch, getState, _ref3) {
 			var api = _ref3.api;
-
-			api.chrome.clearStorage().then(function () {
+			return api.chrome.clearStorage().then(function () {
 				return dispatch({
 					type: action.REMOVE_ACCESS_TOKEN
 				});

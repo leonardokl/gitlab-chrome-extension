@@ -39,7 +39,6 @@
     "exports-loader": "^0.6.3",
     "imports-loader": "^0.6.5",
     "jest": "^16.0.1",
-    "nock": "^8.0.0",
     "perfect-scrollbar": "^0.6.12",
     "react": "^15.3.1",
     "react-dom": "^15.3.1",

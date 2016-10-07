@@ -2,18 +2,14 @@
 
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
-import nock from 'nock'
 import store from 'config/store'
 import * as ActionTypes from 'constants/action-types'
 import * as actions from 'actions'
 
 describe('actions', () => {
   describe('fetchUserAccessToken', () => {
-    const api = {
-      chrome: {
-        getStorage: () => Promise.resolve({data: {}})
-      }
-    }
+    const getStorage = () => Promise.resolve({data: {}})
+    const api = {chrome: {getStorage}}
     const middlewares = [thunk.withExtraArgument({api})]
     const mockStore = configureMockStore(middlewares)
 
@@ -51,6 +47,25 @@ describe('actions', () => {
       expect(
         store.dispatch(actions.saveUserAccessTokenError())
       ).toEqual(expectedAction)
+    })
+  })
+
+  describe('removeUserAccessToken', () => {
+    const clearStorage = () => Promise.resolve()
+    const api = {chrome: {clearStorage}}
+    const middlewares = [thunk.withExtraArgument({api})]
+    const mockStore = configureMockStore(middlewares)
+
+    it('should create the action REMOVE_ACCESS_TOKEN', () => {
+      const store = mockStore({})
+      const expectedActions = [
+        {type: ActionTypes.REMOVE_ACCESS_TOKEN}
+      ]
+
+      return store.dispatch(actions.removeUserAccessToken())
+        .then(() => {
+          expect(store.getActions()).toEqual(expectedActions)
+        })
     })
   })
 
