@@ -17,13 +17,15 @@ describe('favorite-projects reducer', () => {
 
   describe('should handle the action types', () => {
     it('FETCH_FAVORITE_PROJECTS', () => {
-
       expect(
         reducer(initialState, {
           favoriteProjects: mockFavoriteProjects,
           type: FETCH_FAVORITE_PROJECTS,
         })
-      ).toEqual({...initialState, ...mockFavoriteProjects})
+      ).toEqual({
+        result: mockFavoriteProjects.result,
+        projects: mockFavoriteProjects.projects
+      })
     })
 
     it('ADD_PROJECT_TO_FAVORITES', () => {
@@ -32,7 +34,10 @@ describe('favorite-projects reducer', () => {
           data: {favoriteProjects: mockFavoriteProjects},
           type: ADD_PROJECT_TO_FAVORITES,
         })
-      ).toEqual({...initialState, ...mockFavoriteProjects})
+      ).toEqual({
+        result: mockFavoriteProjects.result,
+        projects: mockFavoriteProjects.projects
+      })
     })
 
     it('REMOVE_PROJECT_FROM_FAVORITES', () => {
@@ -41,7 +46,10 @@ describe('favorite-projects reducer', () => {
           data: {favoriteProjects: mockFavoriteProjects},
           type: REMOVE_PROJECT_FROM_FAVORITES,
         })
-      ).toEqual({...initialState, ...mockFavoriteProjects})
+      ).toEqual({
+        result: mockFavoriteProjects.result,
+        projects: mockFavoriteProjects.projects
+      })
     })
   })
 })
