@@ -6,7 +6,7 @@ import {
   REMOVE_ACCESS_TOKEN
 } from 'constants/action-types'
 
-const initialState = {
+export const initialState = {
   accessToken: null,
   avatarUrl: null,
   name: null,

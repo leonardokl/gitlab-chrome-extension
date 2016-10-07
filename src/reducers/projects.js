@@ -8,7 +8,7 @@ import {
   SEARCH_GITLAB_PROJECTS_REQUEST
 } from 'constants/action-types'
 
-const initialState = {
+export const initialState = {
   filter: '',
   list: [],
   fetching: false,

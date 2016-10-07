@@ -1,22 +1,21 @@
 /* global chrome */
 
-import API from 'api'
 import * as action from 'constants/action-types'
 
-const fetchBranchNameAttribute = (tabId) => {
+const fetchBranchNameAttribute = (tabId, api) => {
 	return new Promise((resolve, reject) => {
-		API.chrome.getNewBranchButtonAttribute(tabId, 'title')
+		api.chrome.getNewBranchButtonAttribute(tabId, 'title')
 			.then(resolve)
 			.catch(() => {
-				API.chrome.getNewBranchButtonAttribute(tabId, 'data-original-title')
+				api.chrome.getNewBranchButtonAttribute(tabId, 'data-original-title')
 					.then(resolve)
 					.catch(reject)
 			})
 	})
 }
 
-export const fetchUserAccessToken = () => (dispatch) => {
-	API.chrome.getStorage('user')
+export const fetchUserAccessToken = () => (dispatch, getState, {api}) => (
+	api.chrome.getStorage('user')
 		.then(response => {
 			const user = response.data
 
@@ -26,23 +25,23 @@ export const fetchUserAccessToken = () => (dispatch) => {
 			})
 		})
 		.catch(error => console.warn('error', error))
-}
+)
 
-const saveUserAccessTokenRequest = () => (dispatch) => {
+export const saveUserAccessTokenRequest = () => (dispatch) => (
 	dispatch({
 		type: action.SAVE_ACCESS_TOKEN_REQUEST
 	})
-}
+)
 
-const saveUserAccessTokenError = () => (dispatch) => {
+export const saveUserAccessTokenError = () => (dispatch) => (
 	dispatch({
 		type: action.SAVE_ACCESS_TOKEN_ERROR
 	})
-}
+)
 
-export const saveUserAccessToken = (accessToken) => (dispatch) => {
+export const saveUserAccessToken = (accessToken) => (dispatch, getState, {api}) => {
 	dispatch(saveUserAccessTokenRequest())
-	API.gitlab.getUser({accessToken})
+	api.gitlab.getUser({accessToken})
 		.then(response => {
 			const user = {
 				accessToken,
@@ -62,20 +61,20 @@ export const saveUserAccessToken = (accessToken) => (dispatch) => {
 		.catch(() => dispatch(saveUserAccessTokenError()))
 }
 
-export const removeUserAccessToken = () => (dispatch) => {
-	API.chrome.clearStorage()
+export const removeUserAccessToken = () => (dispatch, getState, {api}) => (
+	api.chrome.clearStorage()
 		.then(() => dispatch({
 			type: action.REMOVE_ACCESS_TOKEN,
 		}))
-}
+)
 
 const denormalizeFavoriteProjects = (favoriteProjects) => (
 	favoriteProjects.result.map(id => favoriteProjects.projects[id])
 )
 
-const fetchStorageFavorites = () => (dispatch) => {
+const fetchStorageFavorites = () => (dispatch, getState, {api}) => {
 	return new Promise(resolve => {
-		API.chrome.getStorage('favorites')
+		api.chrome.getStorage('favorites')
 		.then(response => {
 			const favoriteProjects = response.data
 
@@ -98,19 +97,19 @@ const getProjectSchema = (project) => ({
 	sshUrl: project.ssh_url_to_repo
 })
 
-export const addProjectsLoader = () => (dispatch) => {
+export const addProjectsLoader = () => (dispatch) => (
 	dispatch({type: action.ADD_PROJECTS_LOADER})
-}
+)
 
-const fetchProjectsRequest = () => (dispatch) => {
+export const fetchProjectsRequest = () => (dispatch) => (
 	dispatch({type: action.FETCH_GITLAB_PROJECTS_REQUEST})
-}
+)
 
-const fetchGitlabProjects = () => (dispatch, getState) => {
+const fetchGitlabProjects = () => (dispatch, getState, {api}) => {
 	const {accessToken} = getState().user
 	const favoriteProjects = denormalizeFavoriteProjects(getState().favoriteProjects)
 
-	API.gitlab.fetchProjects({accessToken})
+	api.gitlab.fetchProjects({accessToken})
 		.then((response) => {
 			const projects = response.map(getProjectSchema)
 
@@ -131,24 +130,24 @@ export const fetchProjects = () => (dispatch) => {
 		.then(() => dispatch(fetchGitlabProjects()))
 }
 
-export const fetchFavoriteProjects = () => (dispatch) => {
+export const fetchFavoriteProjects = () => (dispatch) => (
 	dispatch({
 		type: action.FETCH_FAVORITE_PROJECTS,
 	})
+)
+
+const updateFavoritesStorage = (favorites, api) => {
+	return api.chrome.setStorage({favorites})
 }
 
-const updateFavoritesStorage = (favorites) => {
-	return API.chrome.setStorage({favorites})
-}
-
-const addProjectToFavorites = (project) => (dispatch, getState) => {
+const addProjectToFavorites = (project) => (dispatch, getState, {api}) => {
 	const {favoriteProjects} = getState()
 	const favoriteProjectsUpdate = {
 		result: [project.id, ...favoriteProjects.result],
 		projects: {...favoriteProjects.projects, [project.id]: project}
 	}
 
-	updateFavoritesStorage(favoriteProjectsUpdate)
+	updateFavoritesStorage(favoriteProjectsUpdate, api)
 		.then(() => (
 			dispatch({
 				type: action.ADD_PROJECT_TO_FAVORITES,
@@ -160,7 +159,7 @@ const addProjectToFavorites = (project) => (dispatch, getState) => {
 		.catch(error => console.warn(error))
 }
 
-const removeProjectFromFavorites = (projectId) => (dispatch, getState) => {
+const removeProjectFromFavorites = (projectId) => (dispatch, getState, {api}) => {
 	const {favoriteProjects} = getState()
 	const projectIndex = favoriteProjects.result.findIndex(id => id === projectId)
 	const favoriteProjectsUpdate = {
@@ -176,7 +175,7 @@ const removeProjectFromFavorites = (projectId) => (dispatch, getState) => {
 
 	delete favoriteProjectsUpdate.projects[projectId]
 
-	updateFavoritesStorage(favoriteProjectsUpdate)
+	updateFavoritesStorage(favoriteProjectsUpdate, api)
 		.then(() =>
 			dispatch({
 				type: action.REMOVE_PROJECT_FROM_FAVORITES,
@@ -214,20 +213,20 @@ export const toggleProjectFavorite = (projectId) => (dispatch, getState) => {
 	})
 }
 
-export const filterProjects = (projectName) => (dispatch) => {
+export const filterProjects = (projectName) => (dispatch) => (
 	dispatch({
 		type: action.FILTER_PROJECTS,
 		data: {name: projectName}
 	})
-}
+)
 
-const searchProjectsRequest = () => (dispatch) => {
+export const searchProjectsRequest = () => (dispatch) => (
 	dispatch({
 		type: action.SEARCH_GITLAB_PROJECTS_REQUEST
 	})
-}
+)
 
-export const searchProjects = (value) => (dispatch, getState) => {
+export const searchProjects = (value) => (dispatch, getState, {api}) => {
 	const state = getState()
 	const {accessToken} = state.user
 
@@ -235,7 +234,7 @@ export const searchProjects = (value) => (dispatch, getState) => {
 		return dispatch(fetchProjects())
 
 	dispatch(searchProjectsRequest())
-	API.gitlab.searchProjects({accessToken, value})
+	api.gitlab.searchProjects({accessToken, value})
 		.then(response => {
 			const projects = response.map(project => ({
 				id: project.id,
@@ -260,10 +259,10 @@ export const createChromeNewTab = (url) => () => {
 	chrome.tabs.create({url})
 }
 
-export const fetchIssueBranchName = () => (dispatch) => {
-  API.chrome.getCurrentTab()
+export const fetchIssueBranchName = () => (dispatch, getState, {api}) => {
+  api.chrome.getCurrentTab()
     .then(tab => {
-      fetchBranchNameAttribute(tab.id)
+      fetchBranchNameAttribute(tab.id, api)
         .then((response) => dispatch({
           type: action.FETCH_ISSUE_BRANCH_NAME,
           data: response
