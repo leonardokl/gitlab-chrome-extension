@@ -8,15 +8,15 @@ import {
   REMOVE_PROJECT_FROM_FAVORITES
 } from 'constants/action-types'
 
-describe('reducers', () => {
-  describe('favorite-projects', () => {
-    it('should return the initial state', () => {
-      expect(
-        reducer(undefined, {})
-      ).toEqual(initialState)
-    })
+describe('favorite-projects reducer', () => {
+  it('should return the initial state', () => {
+    expect(
+      reducer(undefined, {})
+    ).toEqual(initialState)
+  })
 
-    it('should handle FETCH_FAVORITE_PROJECTS', () => {
+  describe('should handle the action types', () => {
+    it('FETCH_FAVORITE_PROJECTS', () => {
 
       expect(
         reducer(initialState, {
@@ -26,8 +26,7 @@ describe('reducers', () => {
       ).toEqual({...initialState, ...mockFavoriteProjects})
     })
 
-    it('should handle ADD_PROJECT_TO_FAVORITES', () => {
-
+    it('ADD_PROJECT_TO_FAVORITES', () => {
       expect(
         reducer(initialState, {
           data: {favoriteProjects: mockFavoriteProjects},
@@ -36,8 +35,7 @@ describe('reducers', () => {
       ).toEqual({...initialState, ...mockFavoriteProjects})
     })
 
-    it('should handle REMOVE_PROJECT_FROM_FAVORITES', () => {
-
+    it('REMOVE_PROJECT_FROM_FAVORITES', () => {
       expect(
         reducer(initialState, {
           data: {favoriteProjects: mockFavoriteProjects},
