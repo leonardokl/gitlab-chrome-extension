@@ -1,12 +1,35 @@
-/* global describe, it, expect*/
+/* global afterEach, describe, it, expect*/
 
+import configureMockStore from 'redux-mock-store'
+import thunk from 'redux-thunk'
 import nock from 'nock'
 import store from 'config/store'
-import issueReducer from 'reducers/issue'
 import * as ActionTypes from 'constants/action-types'
 import * as actions from 'actions'
 
 describe('actions', () => {
+  describe('fetchUserAccessToken', () => {
+    const api = {
+      chrome: {
+        getStorage: () => Promise.resolve({data: {}})
+      }
+    }
+    const middlewares = [thunk.withExtraArgument({api})]
+    const mockStore = configureMockStore(middlewares)
+
+    it('should create the action FETCH_ACCESS_TOKEN', () => {
+      const store = mockStore({})
+      const expectedActions = [
+        {type: ActionTypes.FETCH_ACCESS_TOKEN, data: {}}
+      ]
+
+      return store.dispatch(actions.fetchUserAccessToken())
+        .then(() => {
+          expect(store.getActions()).toEqual(expectedActions)
+        })
+    })
+  })
+
   describe('saveUserAccessTokenRequest', () => {
     it('should create the action SAVE_ACCESS_TOKEN_REQUEST', () => {
       const expectedAction = {

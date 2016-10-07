@@ -23066,10 +23066,14 @@
 
 	var _redux = __webpack_require__(179);
 
+	var _api = __webpack_require__(206);
+
+	var _api2 = _interopRequireDefault(_api);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var configureStore = function configureStore() {
-	  return (0, _redux.createStore)((0, _redux.combineReducers)(_reducers2.default), (0, _redux.applyMiddleware)(_reduxThunk2.default));
+	  return (0, _redux.createStore)((0, _redux.combineReducers)(_reducers2.default), (0, _redux.applyMiddleware)(_reduxThunk2.default.withExtraArgument({ api: _api2.default })));
 	};
 
 	exports.default = configureStore();
@@ -23470,9 +23474,6 @@
 	    onSaveAccessToken: function onSaveAccessToken(accessToken) {
 	      dispatch(actions.saveUserAccessToken(accessToken));
 	    },
-	    onRemoveAccessToken: function onRemoveAccessToken() {
-	      dispatch(actions.removeUserAccessToken());
-	    },
 	    onCreateNewChromeTab: function onCreateNewChromeTab(url) {
 	      dispatch(actions.createChromeNewTab(url));
 	    }
@@ -23494,33 +23495,28 @@
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var _api = __webpack_require__(206);
-
-	var _api2 = _interopRequireDefault(_api);
-
 	var _actionTypes = __webpack_require__(200);
 
 	var action = _interopRequireWildcard(_actionTypes);
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } } /* global chrome */
 
-	var fetchBranchNameAttribute = function fetchBranchNameAttribute(tabId) {
+	var fetchBranchNameAttribute = function fetchBranchNameAttribute(tabId, api) {
 		return new Promise(function (resolve, reject) {
-			_api2.default.chrome.getNewBranchButtonAttribute(tabId, 'title').then(resolve).catch(function () {
-				_api2.default.chrome.getNewBranchButtonAttribute(tabId, 'data-original-title').then(resolve).catch(reject);
+			api.chrome.getNewBranchButtonAttribute(tabId, 'title').then(resolve).catch(function () {
+				api.chrome.getNewBranchButtonAttribute(tabId, 'data-original-title').then(resolve).catch(reject);
 			});
 		});
 	};
 
 	var fetchUserAccessToken = exports.fetchUserAccessToken = function fetchUserAccessToken() {
-		return function (dispatch) {
-			_api2.default.chrome.getStorage('user').then(function (response) {
+		return function (dispatch, getState, _ref) {
+			var api = _ref.api;
+			return api.chrome.getStorage('user').then(function (response) {
 				var user = response.data;
 
 				dispatch({
@@ -23550,9 +23546,11 @@
 	};
 
 	var saveUserAccessToken = exports.saveUserAccessToken = function saveUserAccessToken(accessToken) {
-		return function (dispatch) {
+		return function (dispatch, getState, _ref2) {
+			var api = _ref2.api;
+
 			dispatch(saveUserAccessTokenRequest());
-			_api2.default.gitlab.getUser({ accessToken: accessToken }).then(function (response) {
+			api.gitlab.getUser({ accessToken: accessToken }).then(function (response) {
 				var user = {
 					accessToken: accessToken,
 					avatarUrl: response.avatar_url,
@@ -23574,8 +23572,10 @@
 	};
 
 	var removeUserAccessToken = exports.removeUserAccessToken = function removeUserAccessToken() {
-		return function (dispatch) {
-			_api2.default.chrome.clearStorage().then(function () {
+		return function (dispatch, getState, _ref3) {
+			var api = _ref3.api;
+
+			api.chrome.clearStorage().then(function () {
 				return dispatch({
 					type: action.REMOVE_ACCESS_TOKEN
 				});
@@ -23590,9 +23590,11 @@
 	};
 
 	var fetchStorageFavorites = function fetchStorageFavorites() {
-		return function (dispatch) {
+		return function (dispatch, getState, _ref4) {
+			var api = _ref4.api;
+
 			return new Promise(function (resolve) {
-				_api2.default.chrome.getStorage('favorites').then(function (response) {
+				api.chrome.getStorage('favorites').then(function (response) {
 					var favoriteProjects = response.data;
 
 					dispatch({
@@ -23629,12 +23631,13 @@
 	};
 
 	var fetchGitlabProjects = function fetchGitlabProjects() {
-		return function (dispatch, getState) {
+		return function (dispatch, getState, _ref5) {
+			var api = _ref5.api;
 			var accessToken = getState().user.accessToken;
 
 			var favoriteProjects = denormalizeFavoriteProjects(getState().favoriteProjects);
 
-			_api2.default.gitlab.fetchProjects({ accessToken: accessToken }).then(function (response) {
+			api.gitlab.fetchProjects({ accessToken: accessToken }).then(function (response) {
 				var projects = response.map(getProjectSchema);
 
 				dispatch({
@@ -23667,12 +23670,14 @@
 		};
 	};
 
-	var updateFavoritesStorage = function updateFavoritesStorage(favorites) {
-		return _api2.default.chrome.setStorage({ favorites: favorites });
+	var updateFavoritesStorage = function updateFavoritesStorage(favorites, api) {
+		return api.chrome.setStorage({ favorites: favorites });
 	};
 
 	var addProjectToFavorites = function addProjectToFavorites(project) {
-		return function (dispatch, getState) {
+		return function (dispatch, getState, _ref6) {
+			var api = _ref6.api;
+
 			var _getState = getState();
 
 			var favoriteProjects = _getState.favoriteProjects;
@@ -23682,7 +23687,7 @@
 				projects: _extends({}, favoriteProjects.projects, _defineProperty({}, project.id, project))
 			};
 
-			updateFavoritesStorage(favoriteProjectsUpdate).then(function () {
+			updateFavoritesStorage(favoriteProjectsUpdate, api).then(function () {
 				return dispatch({
 					type: action.ADD_PROJECT_TO_FAVORITES,
 					data: {
@@ -23696,7 +23701,9 @@
 	};
 
 	var removeProjectFromFavorites = function removeProjectFromFavorites(projectId) {
-		return function (dispatch, getState) {
+		return function (dispatch, getState, _ref7) {
+			var api = _ref7.api;
+
 			var _getState2 = getState();
 
 			var favoriteProjects = _getState2.favoriteProjects;
@@ -23711,7 +23718,7 @@
 
 			delete favoriteProjectsUpdate.projects[projectId];
 
-			updateFavoritesStorage(favoriteProjectsUpdate).then(function () {
+			updateFavoritesStorage(favoriteProjectsUpdate, api).then(function () {
 				return dispatch({
 					type: action.REMOVE_PROJECT_FROM_FAVORITES,
 					data: {
@@ -23774,7 +23781,9 @@
 	};
 
 	var searchProjects = exports.searchProjects = function searchProjects(value) {
-		return function (dispatch, getState) {
+		return function (dispatch, getState, _ref8) {
+			var api = _ref8.api;
+
 			var state = getState();
 			var accessToken = state.user.accessToken;
 
@@ -23782,7 +23791,7 @@
 			if (!value) return dispatch(fetchProjects());
 
 			dispatch(searchProjectsRequest());
-			_api2.default.gitlab.searchProjects({ accessToken: accessToken, value: value }).then(function (response) {
+			api.gitlab.searchProjects({ accessToken: accessToken, value: value }).then(function (response) {
 				var projects = response.map(function (project) {
 					return {
 						id: project.id,
@@ -23813,9 +23822,11 @@
 	};
 
 	var fetchIssueBranchName = exports.fetchIssueBranchName = function fetchIssueBranchName() {
-		return function (dispatch) {
-			_api2.default.chrome.getCurrentTab().then(function (tab) {
-				fetchBranchNameAttribute(tab.id).then(function (response) {
+		return function (dispatch, getState, _ref9) {
+			var api = _ref9.api;
+
+			api.chrome.getCurrentTab().then(function (tab) {
+				fetchBranchNameAttribute(tab.id, api).then(function (response) {
 					return dispatch({
 						type: action.FETCH_ISSUE_BRANCH_NAME,
 						data: response
@@ -24858,6 +24869,9 @@
 	    },
 	    onFilterProjects: function onFilterProjects(projectName) {
 	      dispatch(actions.filterProjects(projectName));
+	    },
+	    onRemoveAccessToken: function onRemoveAccessToken() {
+	      dispatch(actions.removeUserAccessToken());
 	    },
 	    onSearchProjects: function onSearchProjects(value) {
 	      dispatch(actions.searchProjects(value));

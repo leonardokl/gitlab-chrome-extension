@@ -51,6 +51,9 @@ const mapDispatchToProps = (dispatch) => ({
   onFilterProjects: (projectName) => {
     dispatch(actions.filterProjects(projectName))
   },
+  onRemoveAccessToken: () => {
+    dispatch(actions.removeUserAccessToken())
+  },
   onSearchProjects: (value) => {
     dispatch(actions.searchProjects(value))
   },

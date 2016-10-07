@@ -59,9 +59,6 @@ const mapDispatchToProps = (dispatch) => ({
   onSaveAccessToken: (accessToken) => {
     dispatch(actions.saveUserAccessToken(accessToken))
   },
-  onRemoveAccessToken: () => {
-    dispatch(actions.removeUserAccessToken())
-  },
   onCreateNewChromeTab: (url) => {
     dispatch(actions.createChromeNewTab(url))
   }
