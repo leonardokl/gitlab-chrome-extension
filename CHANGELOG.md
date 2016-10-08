@@ -1,3 +1,18 @@
+<a name="0.8.0"></a>
+# [0.8.0](https://github.com/leonardokl/gitlab-chrome-extension/compare/v0.7.0...v0.8.0) (2016-10-08)
+
+
+### Bug Fixes
+
+* Toggle projects to favorite ([15c3a41](https://github.com/leonardokl/gitlab-chrome-extension/commit/15c3a41))
+
+
+### Features
+
+* Use api as a store middleware ([3891f38](https://github.com/leonardokl/gitlab-chrome-extension/commit/3891f38))
+
+
+
 <a name="0.7.0"></a>
 # [0.7.0](https://github.com/leonardokl/gitlab-chrome-extension/compare/v0.6.0...v0.7.0) (2016-10-05)
 
