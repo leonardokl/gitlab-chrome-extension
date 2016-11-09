@@ -15,6 +15,7 @@ class ButtonWithDropdown extends React.Component {
         <div
           className='ui button positive'
           style={{fontSize: '0.8rem', padding: '.78571429em 1em'}}
+          title='Create issue'
           onClick={this.props.onButtonClick}
         >
           <Icon name='plus' />{this.props.buttonText}
@@ -32,6 +33,7 @@ class ButtonWithDropdown extends React.Component {
                 className='item'
                 onClick={() => this.props.onDropdownClick(item)}
               >
+                <Icon name={item.icon} />
                 {item.text}
               </div>
             )}

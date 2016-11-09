@@ -30154,6 +30154,7 @@
 	          {
 	            className: 'ui button positive',
 	            style: { fontSize: '0.8rem', padding: '.78571429em 1em' },
+	            title: 'Create issue',
 	            onClick: this.props.onButtonClick
 	          },
 	          _react2.default.createElement(_icon2.default, { name: 'plus' }),
@@ -30184,6 +30185,7 @@
 	                    return _this2.props.onDropdownClick(item);
 	                  }
 	                },
+	                _react2.default.createElement(_icon2.default, { name: item.icon }),
 	                item.text
 	              );
 	            })
@@ -30207,7 +30209,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	var dropdownActions = exports.dropdownActions = [{ id: 'branches', text: 'Branches' }, { id: 'issues', text: 'Issues' }, { id: 'tags', text: 'Tags' }];
+	var dropdownActions = exports.dropdownActions = [{ id: 'branches', text: 'Branches', icon: 'fork' }, { id: 'issues', text: 'Issues', icon: 'warning circle' }, { id: 'tags', text: 'Tags', icon: 'tag' }];
 
 /***/ },
 /* 269 */
