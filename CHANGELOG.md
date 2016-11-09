@@ -1,3 +1,16 @@
+<a name="0.9.0"></a>
+# [0.9.0](https://github.com/leonardokl/gitlab-chrome-extension/compare/v0.8.0...v0.9.0) (2016-11-09)
+
+
+### Features
+
+* Add a fixed height to project list ([628c6c7](https://github.com/leonardokl/gitlab-chrome-extension/commit/628c6c7))
+* Add actions profile and profile settings to AppBar ([706924d](https://github.com/leonardokl/gitlab-chrome-extension/commit/706924d))
+* Add dropdown actions to ProjectItem (branches, issues, tags) ([4a7b580](https://github.com/leonardokl/gitlab-chrome-extension/commit/4a7b580))
+* Add icons to ProjectItem actions ([e43b1a0](https://github.com/leonardokl/gitlab-chrome-extension/commit/e43b1a0))
+
+
+
 <a name="0.8.0"></a>
 # [0.8.0](https://github.com/leonardokl/gitlab-chrome-extension/compare/v0.7.0...v0.8.0) (2016-10-08)
 
