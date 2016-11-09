@@ -25026,25 +25026,23 @@
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var Avatar = function Avatar(props) {
-	  return _react2.default.createElement('img', { className: 'ui avatar image', src: props.url });
+	var Avatar = function Avatar(_ref) {
+	  var _ref$url = _ref.url;
+	  var url = _ref$url === undefined ? '' : _ref$url;
+	  return _react2.default.createElement('img', { className: 'ui avatar image', src: url });
 	};
 
-	Avatar.propTypes = {
-	  url: _react2.default.PropTypes.string
-	};
-
-	Avatar.defaultProps = {
-	  url: ''
-	};
-
-	module.exports = Avatar;
+	exports.default = Avatar;
 
 /***/ },
 /* 217 */
@@ -25153,6 +25151,10 @@
 
 	var _underscore2 = _interopRequireDefault(_underscore);
 
+	var _project = __webpack_require__(268);
+
+	var ProjectConstants = _interopRequireWildcard(_project);
+
 	var _perfectScrollbar = __webpack_require__(221);
 
 	var _perfectScrollbar2 = _interopRequireDefault(_perfectScrollbar);
@@ -25173,6 +25175,8 @@
 
 	var _notFound2 = _interopRequireDefault(_notFound);
 
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var Projects = function Projects(props) {
@@ -25184,6 +25188,10 @@
 	  var handleOnClickProjectIssue = function handleOnClickProjectIssue(evt, url) {
 	    evt.stopPropagation();
 	    props.onCreateNewChromeTab(url + '/issues/new?issue');
+	  };
+
+	  var handleActionClick = function handleActionClick(item, url) {
+	    return props.onCreateNewChromeTab(url + '/' + item.id);
 	  };
 
 	  var handleOnClickFavorite = function handleOnClickFavorite(evt, projectId) {
@@ -25215,6 +25223,9 @@
 	          url: project.webUrl,
 	          onClick: function onClick(evt) {
 	            return handleOnClickProject(evt, project.webUrl);
+	          },
+	          onActionClick: function onActionClick(item) {
+	            return handleActionClick(item, project.webUrl);
 	          },
 	          onClickIssue: function onClickIssue(evt) {
 	            return handleOnClickProjectIssue(evt, project.webUrl);
@@ -28899,6 +28910,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _project = __webpack_require__(268);
+
+	var ProjectConstants = _interopRequireWildcard(_project);
+
 	var _item = __webpack_require__(250);
 
 	var _item2 = _interopRequireDefault(_item);
@@ -28906,6 +28921,12 @@
 	var _icon = __webpack_require__(251);
 
 	var _icon2 = _interopRequireDefault(_icon);
+
+	var _buttonWithDropdown = __webpack_require__(267);
+
+	var _buttonWithDropdown2 = _interopRequireDefault(_buttonWithDropdown);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -28916,17 +28937,12 @@
 	    _react2.default.createElement(
 	      'div',
 	      { className: 'projects__item__action right floated content' },
-	      _react2.default.createElement(
-	        'div',
-	        {
-	          className: 'ui button positive',
-	          style: { fontSize: '0.8rem' },
-	          title: props.url + '/issues/new?issue',
-	          onClick: props.onClickIssue
-	        },
-	        _react2.default.createElement(_icon2.default, { name: 'plus' }),
-	        'Issue'
-	      )
+	      _react2.default.createElement(_buttonWithDropdown2.default, {
+	        buttonText: 'Issue',
+	        dropdownItems: ProjectConstants.dropdownActions,
+	        onButtonClick: props.onClickIssue,
+	        onDropdownClick: props.onActionClick
+	      })
 	    ),
 	    _react2.default.createElement(
 	      'div',
@@ -28950,11 +28966,15 @@
 	  name: _react2.default.PropTypes.string,
 	  nameSpace: _react2.default.PropTypes.string,
 	  favorite: _react2.default.PropTypes.bool,
+	  onActionClick: _react2.default.PropTypes.func,
 	  onClick: _react2.default.PropTypes.func,
 	  onClickIssue: _react2.default.PropTypes.func
 	};
 
 	ProjectItem.defaultProps = {
+	  onActionClick: function onActionClick() {
+	    return 1;
+	  },
 	  onClick: function onClick() {
 	    return 1;
 	  },
@@ -29045,6 +29065,7 @@
 	    onClick: onClick
 	  });
 	};
+
 	exports.default = Icon;
 
 /***/ },
@@ -30045,6 +30066,119 @@
 
 	// exports
 
+
+/***/ },
+/* 267 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _icon = __webpack_require__(251);
+
+	var _icon2 = _interopRequireDefault(_icon);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ButtonWithDropdown = function (_React$Component) {
+	  _inherits(ButtonWithDropdown, _React$Component);
+
+	  function ButtonWithDropdown() {
+	    _classCallCheck(this, ButtonWithDropdown);
+
+	    return _possibleConstructorReturn(this, (ButtonWithDropdown.__proto__ || Object.getPrototypeOf(ButtonWithDropdown)).apply(this, arguments));
+	  }
+
+	  _createClass(ButtonWithDropdown, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      $(this.dropdown).dropdown();
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      return _react2.default.createElement(
+	        'div',
+	        {
+	          className: 'ui teal buttons positive',
+	          style: { height: 28 }
+	        },
+	        _react2.default.createElement(
+	          'div',
+	          {
+	            className: 'ui button positive',
+	            style: { fontSize: '0.8rem', padding: '.78571429em 1em' },
+	            onClick: this.props.onButtonClick
+	          },
+	          _react2.default.createElement(_icon2.default, { name: 'plus' }),
+	          this.props.buttonText
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          {
+	            ref: function ref(el) {
+	              return _this2.dropdown = el;
+	            },
+	            className: 'ui floating dropdown icon button',
+	            onClick: function onClick(evt) {
+	              evt.stopPropagation();
+	            }
+	          },
+	          _react2.default.createElement(_icon2.default, { name: 'dropdown', style: { fontSize: '0.8em' } }),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'menu' },
+	            this.props.dropdownItems.map(function (item, index) {
+	              return _react2.default.createElement(
+	                'div',
+	                {
+	                  key: index,
+	                  className: 'item',
+	                  onClick: function onClick() {
+	                    return _this2.props.onDropdownClick(item);
+	                  }
+	                },
+	                item.text
+	              );
+	            })
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return ButtonWithDropdown;
+	}(_react2.default.Component);
+
+	exports.default = ButtonWithDropdown;
+
+/***/ },
+/* 268 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var dropdownActions = exports.dropdownActions = [{ id: 'branches', text: 'Branches' }, { id: 'issues', text: 'Issues' }, { id: 'tags', text: 'Tags' }];
 
 /***/ }
 /******/ ]);

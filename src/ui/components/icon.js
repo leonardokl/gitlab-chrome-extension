@@ -13,4 +13,5 @@ const Icon = ({
     onClick={onClick}
   />
 )
+
 export default Icon
