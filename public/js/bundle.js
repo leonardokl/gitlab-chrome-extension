@@ -24823,14 +24823,17 @@
 	      var _props = this.props;
 	      var projects = _props.projects;
 	      var favoriteProjects = _props.favoriteProjects;
+	      var user = _props.user;
 
 
 	      return _react2.default.createElement(
 	        'div',
 	        null,
 	        _react2.default.createElement(_appBar2.default, {
-	          avatarUrl: this.props.user.avatarUrl,
+	          user: user,
+	          avatarUrl: user.avatarUrl,
 	          searching: projects.searching,
+	          onCreateNewChromeTab: this.props.onCreateNewChromeTab,
 	          onChangeFilter: this.props.onSearchProjects,
 	          onClickRemoveToken: this.props.onRemoveAccessToken,
 	          onFilterProjects: this.props.onFilterProjects,
@@ -24902,6 +24905,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _gitlab = __webpack_require__(269);
+
+	var GitlabConstants = _interopRequireWildcard(_gitlab);
+
 	var _avatar = __webpack_require__(216);
 
 	var _avatar2 = _interopRequireDefault(_avatar);
@@ -24909,6 +24916,12 @@
 	var _searchInput = __webpack_require__(217);
 
 	var _searchInput2 = _interopRequireDefault(_searchInput);
+
+	var _icon = __webpack_require__(251);
+
+	var _icon2 = _interopRequireDefault(_icon);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -24930,7 +24943,7 @@
 	  input: { flexGrow: 1 },
 	  dropdown: { marginLeft: 10 },
 	  dropdownIcon: { margin: 0 },
-	  dropdownMenu: { top: 35, left: -75 }
+	  dropdownMenu: { top: 35, left: -90, padding: 3 }
 	};
 
 	var timeToSubmit = void 0;
@@ -24951,6 +24964,15 @@
 
 	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = AppBar.__proto__ || Object.getPrototypeOf(AppBar)).call.apply(_ref, [this].concat(args))), _this), _this.handleOnSubmitSearchInput = function (value) {
 	      _this.props.onChangeFilter(value);
+	    }, _this.handleProfileClick = function () {
+	      var user = _this.props.user;
+
+
+	      _this.props.onCreateNewChromeTab(GitlabConstants.URL + '/' + user.username);
+	    }, _this.handleProfileSettingsClick = function () {
+	      _this.props.onCreateNewChromeTab(GitlabConstants.URL + '/profile');
+	    }, _this.handleRemoveTokenClick = function () {
+	      _this.props.onClickRemoveToken();
 	    }, _this.handleOnChangeSearchInput = function (evt) {
 	      var value = evt.target.value;
 
@@ -24969,9 +24991,7 @@
 	    value: function componentDidMount() {
 	      var onClickRemoveToken = this.props.onClickRemoveToken;
 
-	      $(this.dropdown).dropdown({
-	        onChange: onClickRemoveToken
-	      });
+	      $(this.dropdown).dropdown();
 	    }
 	  }, {
 	    key: 'render',
@@ -24998,15 +25018,24 @@
 	          },
 	          _react2.default.createElement(_avatar2.default, { url: this.props.avatarUrl }),
 	          ' ',
-	          _react2.default.createElement('i', { style: styles.dropdownIcon, className: 'dropdown icon' }),
+	          _react2.default.createElement(_icon2.default, { name: 'dropdown', style: styles.dropdownIcon }),
 	          _react2.default.createElement(
 	            'div',
 	            { style: styles.dropdownMenu, className: 'menu' },
 	            _react2.default.createElement(
 	              'div',
-	              {
-	                className: 'item'
-	              },
+	              { className: 'item', onClick: this.handleProfileClick },
+	              'Profile'
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'item', onClick: this.handleProfileSettingsClick },
+	              'Profile Settings'
+	            ),
+	            _react2.default.createElement('div', { className: 'divider' }),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'item', onClick: this.handleRemoveTokenClick },
 	              'Remove Token'
 	            )
 	          )
@@ -30179,6 +30208,17 @@
 	  value: true
 	});
 	var dropdownActions = exports.dropdownActions = [{ id: 'branches', text: 'Branches' }, { id: 'issues', text: 'Issues' }, { id: 'tags', text: 'Tags' }];
+
+/***/ },
+/* 269 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var URL = exports.URL = 'https://gitlab.com';
 
 /***/ }
 /******/ ]);
