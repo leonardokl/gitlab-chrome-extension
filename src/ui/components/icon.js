@@ -1,24 +1,17 @@
 import React from 'react'
 
-const Icon = (props) => (
+const Icon = ({
+  className = '',
+  color = '',
+  style = {},
+  name = 'gitlab',
+  onClick = () => 1
+}) => (
   <i
-    style={props.color ? {color: props.color} : {}}
-    className={`${props.className} ${props.name} icon`}
-    onClick={props.onClick}
+    style={{...style, color: color}}
+    className={`${className} ${name} icon`}
+    onClick={onClick}
   />
 )
 
-Icon.propTypes = {
-  className: React.PropTypes.string,
-  color: React.PropTypes.string,
-  name: React.PropTypes.string,
-  onClick: React.PropTypes.func
-}
-
-Icon.defaultProps = {
-  className: '',
-  name: 'gitlab',
-  onClick: () => 1
-}
-
-module.exports = Icon
+export default Icon

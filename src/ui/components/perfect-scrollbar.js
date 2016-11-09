@@ -16,7 +16,9 @@ class PerfectScrollBar extends React.Component {
       <div
         ref={(el) => (this.el = el)}
         style={{
-          maxHeight: 300,
+          display: 'flex',
+          flexDirection: 'column',
+          height: 300,
           overflow: 'auto',
           position: 'relative',
           marginRight: '-10px',

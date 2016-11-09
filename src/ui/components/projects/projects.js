@@ -1,6 +1,7 @@
 import React from 'react'
 import cn from 'classnames'
 import _ from 'underscore'
+import * as ProjectConstants from 'constants/project';
 import PerfectScrollBar from 'ui/components/perfect-scrollbar'
 import List from 'ui/components/list'
 import ProjectItem from './project-item'
@@ -16,6 +17,10 @@ const Projects = (props) => {
   const handleOnClickProjectIssue = (evt, url) => {
     evt.stopPropagation()
     props.onCreateNewChromeTab(`${url}/issues/new?issue`)
+  }
+
+  const handleActionClick = (item, url) => {
+    return props.onCreateNewChromeTab(`${url}/${item.id}`)
   }
 
   const handleOnClickFavorite = (evt, projectId) => {
@@ -44,9 +49,10 @@ const Projects = (props) => {
             nameSpace={project.nameSpace}
             url={project.webUrl}
             onClick={(evt) => handleOnClickProject(evt, project.webUrl)}
+            onActionClick={(item) => handleActionClick(item, project.webUrl)}
             onClickIssue={(evt) => handleOnClickProjectIssue(evt, project.webUrl)}
             onClickFavorite={(evt) => handleOnClickFavorite(evt, project.id)}
-            />
+          />
         )}
         {props.fetching && <Loader />}
       </List>

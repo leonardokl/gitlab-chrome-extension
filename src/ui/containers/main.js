@@ -11,13 +11,15 @@ class Main extends React.Component {
   }
 
   render() {
-    const {projects, favoriteProjects} = this.props
+    const {projects, favoriteProjects, user} = this.props
 
     return (
       <div>
         <AppBar
-          avatarUrl={this.props.user.avatarUrl}
+          user={user}
+          avatarUrl={user.avatarUrl}
           searching={projects.searching}
+          onCreateNewChromeTab={this.props.onCreateNewChromeTab}
           onChangeFilter={this.props.onSearchProjects}
           onClickRemoveToken={this.props.onRemoveAccessToken}
           onFilterProjects={this.props.onFilterProjects}
