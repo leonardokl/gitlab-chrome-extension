@@ -1,3 +1,14 @@
+<a name="0.9.1"></a>
+## [0.9.1](https://github.com/leonardokl/gitlab-chrome-extension/compare/v0.9.0...v0.9.1) (2017-02-17)
+
+
+### Bug Fixes
+
+* add margin-bottom to containers issue-branch-name and access-token ([73c5511](https://github.com/leonardokl/gitlab-chrome-extension/commit/73c5511))
+* Update chrome selector of branch name ([d62d433](https://github.com/leonardokl/gitlab-chrome-extension/commit/d62d433))
+
+
+
 <a name="0.9.0"></a>
 # [0.9.0](https://github.com/leonardokl/gitlab-chrome-extension/compare/v0.8.0...v0.9.0) (2016-11-09)
 
