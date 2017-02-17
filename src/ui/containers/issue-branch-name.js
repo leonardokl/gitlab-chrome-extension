@@ -2,7 +2,7 @@ import React from 'react'
 import ClipboardInput from 'ui/components/clipboard-input'
 
 const IssueBranchName = (props) => (
-  <div>
+  <div className="issue-branch-name">
     <h4 className='ui header title'>Copy branch name</h4>
     <ClipboardInput
       value={`git checkout -b ${props.branchName}`}

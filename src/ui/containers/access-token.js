@@ -23,7 +23,7 @@ class AccessToken extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="access-token">
         <h4 style={styles.header} className='ui header'>Add your Gitlab Personal Access Token</h4>
         <div className='ui input max-width'>
           <input
