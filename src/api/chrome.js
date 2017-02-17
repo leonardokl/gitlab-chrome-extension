@@ -9,8 +9,7 @@ class ChromeAPI {
 
 	static getNewBranchButtonAttribute(tabId, attribute) {
 		return Chrome.executeScript(tabId, {
-			code: `document.getElementById("new-branch")
-						.getElementsByTagName("a")[1]
+			code: `document.querySelector("#new-branch a")
 						.getAttribute("${attribute}")`
 		})
 	}
