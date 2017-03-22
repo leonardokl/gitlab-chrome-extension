@@ -5,7 +5,7 @@ export const initialState = {
   projects: {},
 }
 
-const projects = handleActions({
+export default  handleActions({
   FETCH_FAVORITE_PROJECTS: (state, { favoriteProjects }) => ({ ...state, ...favoriteProjects }),
   REMOVE_PROJECT_FROM_FAVORITES: (state, { data: { favoriteProjects } }) => ({
     ...state,
@@ -16,5 +16,3 @@ const projects = handleActions({
     ...favoriteProjects
   })
 }, initialState)
-
-export default projects

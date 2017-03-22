@@ -13,8 +13,7 @@ class AccessToken extends React.Component {
   handleOnClickSave = () => {
     const accessToken = this.input.value;
 
-    if (accessToken)
-      this.props.onSave(accessToken)
+    if (accessToken) this.props.onSave(accessToken)
   }
 
   handleOnClickGetAPersonalToken = () => {

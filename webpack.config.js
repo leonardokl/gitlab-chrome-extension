@@ -4,7 +4,10 @@ const webpack = require('webpack')
 const path = require('path')
 
 module.exports = {
-  entry: './src/index.js',
+  entry: [
+    'babel-polyfill',
+    './src/index.jsx'
+  ],
   output: {
     path: __dirname,
     filename: 'public/js/bundle.js'
@@ -14,6 +17,11 @@ module.exports = {
     loaders: [
       {
         test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader'
+      },
+      {
+        test: /\.jsx$/,
         exclude: /node_modules/,
         loader: 'babel-loader'
       },
@@ -28,6 +36,6 @@ module.exports = {
   ],
   resolve: {
     root: path.resolve('./src'),
-    extensions: ['', '.js'],
+    extensions: ['', '.js', '.jsx'],
   },
 }
