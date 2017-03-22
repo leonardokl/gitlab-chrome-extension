@@ -1,27 +1,20 @@
-import {
-  FETCH_FAVORITE_PROJECTS,
-  ADD_PROJECT_TO_FAVORITES,
-  REMOVE_PROJECT_FROM_FAVORITES
-} from 'constants/action-types'
+import { handleActions } from 'redux-actions'
 
 export const initialState = {
   result: [],
   projects: {},
 }
 
-const projects = (state = initialState, action) => {
-  switch (action.type) {
-  case FETCH_FAVORITE_PROJECTS:
-    return {...state, ...action.favoriteProjects}
-  case REMOVE_PROJECT_FROM_FAVORITES:
-  case ADD_PROJECT_TO_FAVORITES:
-    return {
-      ...state,
-      ...action.data.favoriteProjects
-    }
-  }
-
-  return state
-}
+const projects = handleActions({
+  FETCH_FAVORITE_PROJECTS: (state, { favoriteProjects }) => ({ ...state, ...favoriteProjects }),
+  REMOVE_PROJECT_FROM_FAVORITES: (state, { data: { favoriteProjects } }) => ({
+    ...state,
+    ...favoriteProjects
+  }),
+  ADD_PROJECT_TO_FAVORITES: (state, { data: { favoriteProjects } }) => ({
+    ...state,
+    ...favoriteProjects
+  })
+}, initialState)
 
 export default projects

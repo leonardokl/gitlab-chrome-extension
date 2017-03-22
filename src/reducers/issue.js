@@ -1,16 +1,9 @@
-import {FETCH_ISSUE_BRANCH_NAME} from 'constants/action-types'
+import { handleAction } from 'redux-actions'
 
 export const initialState = {
   branch: ''
 }
 
-const issue = (state = initialState, action) => {
-  switch (action.type) {
-  case FETCH_ISSUE_BRANCH_NAME:
-    return {...state, branch: action.data}
-  }
-
-  return state
-}
-
-export default issue
+export default handleAction('FETCH_ISSUE_BRANCH_NAME', (state, { data }) => ({
+  branch: data
+}), initialState)

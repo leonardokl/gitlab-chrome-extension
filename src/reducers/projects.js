@@ -1,12 +1,7 @@
-import {
-  FETCH_FAVORITE_PROJECTS,
-  FETCH_GITLAB_PROJECTS,
-  FETCH_GITLAB_PROJECTS_REQUEST,
-  ADD_PROJECTS_LOADER,
-  FILTER_PROJECTS,
-  SEARCH_GITLAB_PROJECTS,
-  SEARCH_GITLAB_PROJECTS_REQUEST
-} from 'constants/action-types'
+import { combineReducers } from 'redux'
+import { handleAction, handleActions } from 'redux-actions'
+import T from 'lodash/fp/T'
+import F from 'lodash/fp/F'
 
 export const initialState = {
   filter: '',
@@ -15,26 +10,28 @@ export const initialState = {
   searching: false
 }
 
-const projects = (state = initialState, action) => {
-  switch (action.type) {
-  case FETCH_FAVORITE_PROJECTS:
-    return {...state, list: action.denormalizedFavoriteProjects}
-  case FETCH_GITLAB_PROJECTS_REQUEST:
-  case ADD_PROJECTS_LOADER:
-    return {...state, fetching: true}
-  case FILTER_PROJECTS:
-    return {...state, filter: action.data.name}
-  case SEARCH_GITLAB_PROJECTS:
-  case FETCH_GITLAB_PROJECTS:
-    return {...state, list: action.data, searching: false, fetching: false}
-  case SEARCH_GITLAB_PROJECTS_REQUEST:
-    return {...state, searching: true}
-  }
+export default combineReducers({
+  filter: handleAction('FILTER_PROJECTS', (state, { data: { name }}) => name, ''),
 
-  return state
-}
+  list: handleActions({
+    SEARCH_GITLAB_PROJECTS: (state, { data }) => data,
+    FETCH_FAVORITE_PROJECTS: (state, action) => action.denormalizedFavoriteProjects,
+    FETCH_GITLAB_PROJECTS: (state, { data }) => data,
+  }, []),
 
-export default projects
+  searching: handleActions({
+    SEARCH_GITLAB_PROJECTS: F,
+    FETCH_GITLAB_PROJECTS: F,
+    SEARCH_GITLAB_PROJECTS_REQUEST: T
+  }, false),
+
+  fetching: handleActions({
+    FETCH_GITLAB_PROJECTS_REQUEST: T,
+    ADD_PROJECTS_LOADER: T,
+    FETCH_GITLAB_PROJECTS: F,
+    SEARCH_GITLAB_PROJECTS: F
+  }, false)
+})
 
 const projectHasName = (project, name) =>
   project.name.search(name) !== -1
@@ -48,11 +45,10 @@ const filterProjects = (projects, filter) =>
   ))
 
 export const getVisibleProjects = (state) => {
-  const {filter} = state
+  const { filter } = state
   const projects = state.list
 
-  if (state.filter === '')
-    return state
+  if (state.filter === '') return state
 
   return {
     ...state,

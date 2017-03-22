@@ -1,10 +1,4 @@
-import {
-  FETCH_ACCESS_TOKEN,
-  SAVE_ACCESS_TOKEN_REQUEST,
-  SAVE_ACCESS_TOKEN_ERROR,
-  SAVE_ACCESS_TOKEN,
-  REMOVE_ACCESS_TOKEN
-} from 'constants/action-types'
+import { handleActions } from 'redux-actions'
 
 export const initialState = {
   accessToken: null,
@@ -15,20 +9,11 @@ export const initialState = {
   loading: false
 }
 
-const user = (state = initialState, action) => {
-  switch (action.type) {
-  case FETCH_ACCESS_TOKEN:
-  case SAVE_ACCESS_TOKEN:
-    return {...action.data, loading: false}
-  case SAVE_ACCESS_TOKEN_REQUEST:
-    return {...state, loading: true}
-  case SAVE_ACCESS_TOKEN_ERROR:
-    return {...state, loading: false}
-  case REMOVE_ACCESS_TOKEN:
-    return initialState
-  }
+export default handleActions({
+  FETCH_ACCESS_TOKEN: (state, { data }) => ({ ...data, loading: false }),
+  SAVE_ACCESS_TOKEN: (state, { data }) => ({ ...data, loading: false }),
+  SAVE_ACCESS_TOKEN_REQUEST: (state) => ({ ...state, loading: true }),
+  SAVE_ACCESS_TOKEN_ERROR: (state) => ({ ...state, loading: false }),
+  REMOVE_ACCESS_TOKEN: () => initialState
+}, initialState)
 
-  return state
-}
-
-export default user
