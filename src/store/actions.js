@@ -1,6 +1,7 @@
 import { createAction } from 'redux-actions'
 
 export const load = createAction('LOAD')
+export const setPage = createAction('SET_PAGE')
 
 export const requestUser = createAction('REQUEST_USER')
 export const requestUserError = createAction('REQUEST_USER_ERROR')

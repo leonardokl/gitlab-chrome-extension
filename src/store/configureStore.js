@@ -2,19 +2,17 @@ import { applyMiddleware, compose, createStore } from 'redux'
 import reduxSaga from 'redux-saga'
 import reducers from './reducers'
 import sagas from './sagas'
-import { devToolsExtension } from 'utils'
+import { logger } from 'redux-logger'
 
 const __PRODUCTION__ = process.env.NODE_ENV === 'production'
 
 const configureStore = () => {
   const saga = reduxSaga()
-  const middlewares = applyMiddleware(saga)
+  const middlewares = __PRODUCTION__
+    ? applyMiddleware(saga)
+    : applyMiddleware(saga, logger)
 
-  const options = __PRODUCTION__
-    ? middlewares
-    : compose(middlewares, devToolsExtension())
-
-  const store = createStore(reducers, options)
+  const store = createStore(reducers, middlewares)
 
   saga.run(sagas)
 
