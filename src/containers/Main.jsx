@@ -1,10 +1,17 @@
 import React, { PropTypes } from 'react'
+import { connect } from 'react-redux'
+import { getUser } from 'store/selectors'
 
-const Main = () => (
-  <div>Main</div>
+const Main = ({ user }) => (
+  <div>{user.name}</div>
 )
 
 Main.propTypes = {
+  user: PropTypes.object
 }
 
-export default Main
+const mapStateToProps = state => ({
+  user: getUser(state)
+})
+
+export default connect(mapStateToProps)(Main)

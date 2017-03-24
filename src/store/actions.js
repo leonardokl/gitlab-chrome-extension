@@ -2,6 +2,11 @@ import { createAction } from 'redux-actions'
 
 export const load = createAction('LOAD')
 export const setPage = createAction('SET_PAGE')
+export const updateEntity = createAction('UPDATE_ENTITY')
+
+export const requestLocalUser = createAction('REQUEST_LOCAL_USER')
+export const requestLocalUserError = createAction('REQUEST_LOCAL_USER_ERROR')
+export const requestLocalUserSuccess = createAction('REQUEST_LOCAL_USER_SUCCESS')
 
 export const requestUser = createAction('REQUEST_USER')
 export const requestUserError = createAction('REQUEST_USER_ERROR')

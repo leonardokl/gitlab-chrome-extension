@@ -23,11 +23,11 @@ class App extends PureComponent {
         return <AccessToken />
       case Pages.issueBranchName:
         return <IssueBranchName />
-      case Pages.Main:
+      case Pages.main:
         return <Main />
 
       default:
-        return null;
+        return <Landing />;
     }
   }
 

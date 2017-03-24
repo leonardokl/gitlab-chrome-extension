@@ -2,10 +2,10 @@
 
 import { get } from 'axios'
 
-const NOTIFICATION_IMAGE = 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRgzEnTeWQR7O8OLYyLfWKGJ8Qi9ZZ3AJpNunypeswYyymTcUp4'
+const NOTIFICATION_IMAGE = '/public/images/logo-and-name.png'
 
-export const fetchUser = () => {
-
+export const fetchUser = (accessToken) => {
+  console.log('accessToken', accessToken);
 }
 
 export const fetchOpenedIssue = () => {

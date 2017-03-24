@@ -1,1 +1,2 @@
-export devToolsExtension from './devToolsExtension'
+export gitlab from './gitlab'
+export chrome from './chrome'

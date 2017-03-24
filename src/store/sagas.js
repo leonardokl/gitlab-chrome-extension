@@ -3,16 +3,38 @@ import { delay } from 'redux-saga'
 import * as actions from './actions'
 import { Pages } from 'constants'
 import { notification } from './services'
+import { chrome, gitlab } from 'utils'
 
 function* handleLoad () {
-  yield delay(1000)
-  yield put(actions.setPage({ page: Pages.accessToken }))
+  try {
+    const user = yield chrome.storage.get('user')
+
+    yield [
+      put(actions.requestUserSuccess(user)),
+      put(actions.setPage({ page: Pages.main }))
+    ]
+  } catch (err) {
+    console.warn(err)
+    yield put(actions.setPage({ page: Pages.accessToken }))
+  }
+
+  // testing
+  // chrome.browserAction.setBadgeText({text: "2"})
 }
 
-function* handleRequestUser (action) {
-  yield delay(2000)
-  yield put(actions.requestUserError({a: 1}))
-  notification({title: 'Error', message: 'Invalid token'})
+function* handleRequestUser ({ payload: { accessToken } }) {
+  try {
+    const { data } = yield gitlab.fetchUser(accessToken)
+    const user = { ...data, accessToken }
+
+    yield chrome.storage.set('user', user)
+    yield put(actions.requestUserSuccess(user))
+    yield put(actions.setPage({ page: Pages.main }))
+  } catch (err) {
+    console.error(err)
+    notification({ title: 'Error', message: 'Invalid token' })
+    yield put(actions.requestUserError())
+  }
 }
 
 export default function* () {

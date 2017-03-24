@@ -5,3 +5,12 @@ export const Pages = {
   main: 'MAIN',
   error: 'ERROR'
 }
+
+export const Gitlab = {
+  apiUrl: 'https://gitlab.com/api/v4'
+}
+
+export default {
+  Pages,
+  Gitlab
+}

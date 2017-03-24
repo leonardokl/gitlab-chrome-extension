@@ -9,7 +9,7 @@ class AccessToken extends PureComponent {
   handleSave = () => {
     const { value } = this.state
 
-    if (value.trim()) this.props.onSave({ value })
+    if (value.trim()) this.props.onSave(value)
   }
 
   handleInputChange = ({ target: { value }}) => {
