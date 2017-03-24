@@ -32,7 +32,6 @@ class App extends PureComponent {
   }
 
   render () {
-    console.log('this.props', this.props);
     return (
       <AppWrapper>
         {this.renderPage()}

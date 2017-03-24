@@ -33563,7 +33563,7 @@
 	  value: true
 	});
 
-	var _handleActions, _handleActions2, _handleActions3;
+	var _handleActions, _handleActions2, _handleActions3, _handleActions4;
 
 	var _redux = __webpack_require__(482);
 
@@ -33612,9 +33612,11 @@
 	});
 
 	var user = (0, _redux.combineReducers)({
-	  data: (0, _reduxActions.handleAction)(actions.requestUserSuccess, (0, _flip2.default)((0, _get2.default)('payload')), {}),
+	  data: (0, _reduxActions.handleActions)((_handleActions3 = {}, _defineProperty(_handleActions3, actions.requestUserSuccess, (0, _flip2.default)((0, _get2.default)('payload'))), _defineProperty(_handleActions3, actions.removeTokenSuccess, function () {
+	    return {};
+	  }), _handleActions3), {}),
 
-	  loading: (0, _reduxActions.handleActions)((_handleActions3 = {}, _defineProperty(_handleActions3, actions.requestUser, _T2.default), _defineProperty(_handleActions3, actions.requestUserError, _F2.default), _defineProperty(_handleActions3, actions.requestUserSuccess, _F2.default), _handleActions3), false)
+	  loading: (0, _reduxActions.handleActions)((_handleActions4 = {}, _defineProperty(_handleActions4, actions.requestUser, _T2.default), _defineProperty(_handleActions4, actions.requestUserError, _F2.default), _defineProperty(_handleActions4, actions.requestUserSuccess, _F2.default), _handleActions4), false)
 	});
 
 	var entities = (0, _redux.combineReducers)({
@@ -42666,13 +42668,17 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.openProject = exports.searchProjectsSuccess = exports.searchProjectsError = exports.searchProjects = exports.initSearchProjects = exports.requestProjectsSuccess = exports.requestProjectsError = exports.requestProjects = exports.initProjects = exports.requestUserSuccess = exports.requestUserError = exports.requestUser = exports.requestLocalUserSuccess = exports.requestLocalUserError = exports.requestLocalUser = exports.updateEntity = exports.setPage = exports.load = undefined;
+	exports.openProject = exports.searchProjectsSuccess = exports.searchProjectsError = exports.searchProjects = exports.initSearchProjects = exports.requestProjectsSuccess = exports.requestProjectsError = exports.requestProjects = exports.initProjects = exports.requestUserSuccess = exports.requestUserError = exports.requestUser = exports.requestLocalUserSuccess = exports.requestLocalUserError = exports.requestLocalUser = exports.removeTokenSuccess = exports.removeToken = exports.getPersonalToken = exports.updateEntity = exports.setPage = exports.load = undefined;
 
 	var _reduxActions = __webpack_require__(518);
 
 	var load = exports.load = (0, _reduxActions.createAction)('LOAD');
 	var setPage = exports.setPage = (0, _reduxActions.createAction)('SET_PAGE');
 	var updateEntity = exports.updateEntity = (0, _reduxActions.createAction)('UPDATE_ENTITY');
+
+	var getPersonalToken = exports.getPersonalToken = (0, _reduxActions.createAction)('GET_PERSONAL_TOKEN');
+	var removeToken = exports.removeToken = (0, _reduxActions.createAction)('REMOVE_TOKEN');
+	var removeTokenSuccess = exports.removeTokenSuccess = (0, _reduxActions.createAction)('REMOVE_TOKEN_SUCCESS');
 
 	var requestLocalUser = exports.requestLocalUser = (0, _reduxActions.createAction)('REQUEST_LOCAL_USER');
 	var requestLocalUserError = exports.requestLocalUserError = (0, _reduxActions.createAction)('REQUEST_LOCAL_USER_ERROR');
@@ -42712,7 +42718,8 @@
 	};
 
 	var Gitlab = exports.Gitlab = {
-	  apiUrl: 'https://gitlab.com/api/v4'
+	  apiUrl: 'https://gitlab.com/api/v4',
+	  personalTokenUrl: 'https://gitlab.com/profile/personal_access_tokens'
 	};
 
 	exports.default = {
@@ -42750,7 +42757,7 @@
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-	var _marked = [handleLoad, handleRequestUser, _callee].map(regeneratorRuntime.mark);
+	var _marked = [handleLoad, handleRequestUser, handleRemoveToken, handleGetPersonalToken, _callee].map(regeneratorRuntime.mark);
 
 	function handleLoad() {
 	  var user;
@@ -42836,20 +42843,59 @@
 	  }, _marked[1], this, [[0, 14]]);
 	}
 
-	function _callee() {
-	  return regeneratorRuntime.wrap(function _callee$(_context3) {
+	function handleRemoveToken() {
+	  return regeneratorRuntime.wrap(function handleRemoveToken$(_context3) {
 	    while (1) {
 	      switch (_context3.prev = _context3.next) {
 	        case 0:
 	          _context3.next = 2;
-	          return [(0, _effects.takeEvery)(actions.load, handleLoad), (0, _effects.takeEvery)(actions.requestUser, handleRequestUser)];
+	          return _utils.chrome.storage.clear();
 
 	        case 2:
+	          _context3.next = 4;
+	          return (0, _effects.put)(actions.setPage({ page: _constants.Pages.accessToken }));
+
+	        case 4:
+	          _context3.next = 6;
+	          return (0, _effects.put)(actions.removeTokenSuccess());
+
+	        case 6:
 	        case 'end':
 	          return _context3.stop();
 	      }
 	    }
 	  }, _marked[2], this);
+	}
+
+	function handleGetPersonalToken() {
+	  return regeneratorRuntime.wrap(function handleGetPersonalToken$(_context4) {
+	    while (1) {
+	      switch (_context4.prev = _context4.next) {
+	        case 0:
+	          _utils.chrome.openTab(_constants.Gitlab.personalTokenUrl);
+
+	        case 1:
+	        case 'end':
+	          return _context4.stop();
+	      }
+	    }
+	  }, _marked[3], this);
+	}
+
+	function _callee() {
+	  return regeneratorRuntime.wrap(function _callee$(_context5) {
+	    while (1) {
+	      switch (_context5.prev = _context5.next) {
+	        case 0:
+	          _context5.next = 2;
+	          return [(0, _effects.takeEvery)(actions.load, handleLoad), (0, _effects.takeEvery)(actions.requestUser, handleRequestUser), (0, _effects.takeEvery)(actions.removeToken, handleRemoveToken), (0, _effects.takeEvery)(actions.getPersonalToken, handleGetPersonalToken)];
+
+	        case 2:
+	        case 'end':
+	          return _context5.stop();
+	      }
+	    }
+	  }, _marked[4], this);
 	}
 
 /***/ },
@@ -45431,7 +45477,6 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      console.log('this.props', this.props);
 	      return _react2.default.createElement(
 	        _components.AppWrapper,
 	        null,
@@ -45464,7 +45509,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.AccessToken = exports.Error = exports.Landing = exports.AppWrapper = undefined;
+	exports.TopBar = exports.AccessToken = exports.Error = exports.Landing = exports.AppWrapper = undefined;
 
 	var _AppWrapper2 = __webpack_require__(790);
 
@@ -45482,12 +45527,17 @@
 
 	var _AccessToken3 = _interopRequireDefault(_AccessToken2);
 
+	var _TopBar2 = __webpack_require__(1225);
+
+	var _TopBar3 = _interopRequireDefault(_TopBar2);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.AppWrapper = _AppWrapper3.default;
 	exports.Landing = _Landing3.default;
 	exports.Error = _Error3.default;
 	exports.AccessToken = _AccessToken3.default;
+	exports.TopBar = _TopBar3.default;
 
 /***/ },
 /* 790 */
@@ -45557,7 +45607,7 @@
 
 
 	// module
-	exports.push([module.id, "body,\nhtml {\n  height: initial;\n}\n.max-width {\n  width: 100%;\n}\n.App {\n  margin: 10px;\n}\n.App__AccessToken_Form {\n  text-align: center;\n}\n.App__AccessToken_Form div:nth-child(1),\n.App__AccessToken_Form button {\n  margin-bottom: 10px !important;\n}\n.container {\n  margin: 10px 10px 0 10px;\n}\n.access-token {\n  margin-bottom: 10px;\n}\n.ps-scrollbar-y-rail {\n  background-color: transparent !important;\n}\n.projects__item .projects__item__favorite--hidden {\n  visibility: hidden;\n}\n.projects__item:hover .projects__item__favorite--hidden {\n  visibility: visible;\n}\n.projects__item.favorite .projects__item__favorite--hidden {\n  visibility: visible;\n  color: #fca326;\n}\n.projects__item__action {\n  visibility: hidden;\n}\n.projects__item__favorite--hidden {\n  color: #808080;\n}\n.projects__item__favorite--hidden:hover {\n  color: #fca326;\n}\n.item:hover .projects__item__action {\n  visibility: visible;\n}\n.issue-branch-name {\n  margin-bottom: 10px;\n}\n.clipboard-input {\n  width: 100%;\n}\n.ui.dropdown.menu {\n  left: -75px;\n}\n.title {\n  margin-bottom: 10px !important;\n  color: rgba(45,45,45,0.87) !important;\n  text-align: center !important;\n}\ninput::selection {\n  background: #cce1fe;\n}\n", ""]);
+	exports.push([module.id, "body,\nhtml {\n  height: initial;\n}\n.max-width {\n  width: 100%;\n}\n", ""]);
 
 	// exports
 
@@ -45899,8 +45949,6 @@
 	    )
 	  );
 	};
-
-	Landing.propTypes = {};
 
 	exports.default = Landing;
 
@@ -74932,6 +74980,8 @@
 
 	var _semanticUiReact = __webpack_require__(796);
 
+	__webpack_require__(1228);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -74975,8 +75025,6 @@
 	  _createClass(AccessToken, [{
 	    key: 'render',
 	    value: function render() {
-	      var _this2 = this;
-
 	      console.log('this.state', this.state);
 	      var _props = this.props;
 	      var loading = _props.loading;
@@ -75000,9 +75048,6 @@
 	          'div',
 	          { className: 'App__AccessToken_Form' },
 	          _react2.default.createElement(_semanticUiReact.Input, {
-	            ref: function ref(el) {
-	              return _this2.input = el;
-	            },
 	            autoFocus: true,
 	            disabled: loading,
 	            fluid: true,
@@ -75101,13 +75146,24 @@
 	  var hasTokenError = _ref.hasTokenError;
 	  var isValidatingToken = _ref.isValidatingToken;
 	  var onRequestUser = _ref.onRequestUser;
+	  var _onGetPersonalToken = _ref.onGetPersonalToken;
 	  return _react2.default.createElement(_components.AccessToken, {
 	    error: hasTokenError,
 	    loading: isValidatingToken,
+	    onGetPersonalToken: function onGetPersonalToken() {
+	      return _onGetPersonalToken();
+	    },
 	    onSave: function onSave(accessToken) {
 	      return onRequestUser({ accessToken: accessToken });
 	    }
 	  });
+	};
+
+	_components.AccessToken.propTypes = {
+	  hasTokenError: _react.PropTypes.bool,
+	  isValidatingToken: _react.PropTypes.bool,
+	  onRequestUser: _react.PropTypes.func,
+	  onGetPersonalToken: _react.PropTypes.func
 	};
 
 	var mapStateToProps = function mapStateToProps(state) {
@@ -75118,7 +75174,8 @@
 	};
 
 	var mapDispatchToProps = {
-	  onRequestUser: actions.requestUser
+	  onRequestUser: actions.requestUser,
+	  onGetPersonalToken: actions.getPersonalToken
 	};
 
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(AccessTokenContainer);
@@ -75133,6 +75190,8 @@
 	  value: true
 	});
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	var _react = __webpack_require__(299);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -75141,16 +75200,64 @@
 
 	var _selectors = __webpack_require__(1218);
 
+	var _components = __webpack_require__(789);
+
+	var _store = __webpack_require__(1230);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var Main = function Main(_ref) {
-	  var user = _ref.user;
-	  return _react2.default.createElement(
-	    'div',
-	    null,
-	    user.name
-	  );
-	};
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Main = function (_PureComponent) {
+	  _inherits(Main, _PureComponent);
+
+	  function Main() {
+	    var _ref;
+
+	    var _temp, _this, _ret;
+
+	    _classCallCheck(this, Main);
+
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+
+	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Main.__proto__ || Object.getPrototypeOf(Main)).call.apply(_ref, [this].concat(args))), _this), _this.handleDropdownClick = function (evt, _ref2) {
+	      var id = _ref2.id;
+
+	      switch (id) {
+	        case 'removeToken':
+	          return _this.props.onRemoveToken();
+
+	        default:
+	          console.error('Unhandled action of id "' + id + '"');
+	      }
+	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	  }
+
+	  _createClass(Main, [{
+	    key: 'render',
+	    value: function render() {
+	      var user = this.props.user;
+
+
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(_components.TopBar, {
+	          imageUrl: user.avatar_url,
+	          onDropdownClick: this.handleDropdownClick
+	        })
+	      );
+	    }
+	  }]);
+
+	  return Main;
+	}(_react.PureComponent);
 
 	Main.propTypes = {
 	  user: _react.PropTypes.object
@@ -75162,7 +75269,11 @@
 	  };
 	};
 
-	exports.default = (0, _reactRedux.connect)(mapStateToProps)(Main);
+	var mapDispatchToProps = {
+	  onRemoveToken: _store.actions.removeToken
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Main);
 
 /***/ },
 /* 1221 */
@@ -75215,6 +75326,8 @@
 
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+	/* global chrome */
+
 	var storage = {
 	  get: function get(key) {
 	    return new Promise(function (resolve, reject) {
@@ -75227,16 +75340,226 @@
 	      });
 	    });
 	  },
+
 	  set: function set(key, data) {
 	    return new Promise(function (resolve) {
 	      chrome.storage.sync.set(_defineProperty({}, key, data), resolve);
 	    });
+	  },
+
+	  clear: function clear() {
+	    return chrome.storage.sync.clear();
 	  }
 	};
 
-	exports.default = {
-	  storage: storage
+	var openTab = function openTab(url) {
+	  return chrome.tabs.create({ url: url });
 	};
+
+	exports.default = {
+	  storage: storage,
+	  openTab: openTab
+	};
+
+/***/ },
+/* 1224 */,
+/* 1225 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(299);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _semanticUiReact = __webpack_require__(796);
+
+	__webpack_require__(1226);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var TopBar = function (_PureComponent) {
+	  _inherits(TopBar, _PureComponent);
+
+	  function TopBar() {
+	    _classCallCheck(this, TopBar);
+
+	    return _possibleConstructorReturn(this, (TopBar.__proto__ || Object.getPrototypeOf(TopBar)).apply(this, arguments));
+	  }
+
+	  _createClass(TopBar, [{
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props;
+	      var imageUrl = _props.imageUrl;
+	      var onDropdownClick = _props.onDropdownClick;
+
+	      var DropdownTrigger = _react2.default.createElement(
+	        'span',
+	        null,
+	        _react2.default.createElement(_semanticUiReact.Image, { avatar: true, src: imageUrl })
+	      );
+	      var dropdownOptions = [{ id: 'profile', text: 'Profile' }, { id: 'settings', text: 'Settings' }];
+
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'App__TopBar' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'App__TopBar_Content' },
+	          _react2.default.createElement(_semanticUiReact.Input, {
+	            autoFocus: true,
+	            fluid: true,
+	            icon: 'search',
+	            placeholder: 'Filter by name...'
+	          }),
+	          _react2.default.createElement(
+	            _semanticUiReact.Dropdown,
+	            { trigger: DropdownTrigger },
+	            _react2.default.createElement(
+	              _semanticUiReact.Dropdown.Menu,
+	              null,
+	              dropdownOptions.map(function (opt, i) {
+	                return _react2.default.createElement(_semanticUiReact.Dropdown.Item, _extends({}, opt, {
+	                  key: i,
+	                  onClick: onDropdownClick
+	                }));
+	              }),
+	              _react2.default.createElement(_semanticUiReact.Dropdown.Divider, null),
+	              _react2.default.createElement(_semanticUiReact.Dropdown.Item, {
+	                id: 'removeToken',
+	                text: 'Remove Token',
+	                onClick: onDropdownClick
+	              })
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return TopBar;
+	}(_react.PureComponent);
+
+	TopBar.propTypes = {
+	  imageUrl: _react.PropTypes.string,
+	  onDropdownClick: _react.PropTypes.func
+	};
+
+	exports.default = TopBar;
+
+/***/ },
+/* 1226 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(1227);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(794)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/stylus-loader/index.js!./TopBar.styl", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/stylus-loader/index.js!./TopBar.styl");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 1227 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(793)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".App__TopBar {\n  padding: 10px;\n  background-color: #fafafa;\n}\n.App__TopBar_Content {\n  display: flex;\n  align-items: center;\n}\n.App__TopBar_Content .input {\n  flex: 1;\n  margin-right: 10px;\n}\n.App__TopBar_Content .ui.dropdown > .dropdown.icon {\n  margin: 0;\n}\n.App__TopBar_Content .menu {\n  top: 35px !important;\n  left: -87px !important;\n  padding: 3px !important;\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 1228 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(1229);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(794)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/stylus-loader/index.js!./AccessToken.styl", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/stylus-loader/index.js!./AccessToken.styl");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 1229 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(793)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".App__AccessToken {\n  margin: 10px;\n}\n.App__AccessToken_Form {\n  text-align: center;\n}\n.App__AccessToken_Form div:nth-child(1),\n.App__AccessToken_Form button {\n  margin-bottom: 10px !important;\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 1230 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.actions = undefined;
+
+	var _actions2 = __webpack_require__(750);
+
+	var _actions = _interopRequireWildcard(_actions2);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	exports.actions = _actions;
 
 /***/ }
 /******/ ]);

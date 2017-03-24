@@ -1,5 +1,6 @@
 import React, { PropTypes, PureComponent } from 'react'
 import { Button, Header, Input } from 'semantic-ui-react'
+import './AccessToken.styl'
 
 class AccessToken extends PureComponent {
   state = {
@@ -33,7 +34,6 @@ class AccessToken extends PureComponent {
         </Header>
         <div className='App__AccessToken_Form'>
           <Input
-            ref={(el) => (this.input = el)}
             autoFocus
             disabled={loading}
             fluid

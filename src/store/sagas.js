@@ -1,7 +1,7 @@
 import { put, takeEvery } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
 import * as actions from './actions'
-import { Pages } from 'constants'
+import { Pages, Gitlab } from 'constants'
 import { notification } from './services'
 import { chrome, gitlab } from 'utils'
 
@@ -37,9 +37,21 @@ function* handleRequestUser ({ payload: { accessToken } }) {
   }
 }
 
+function* handleRemoveToken () {
+  yield chrome.storage.clear()
+  yield put(actions.setPage({ page: Pages.accessToken }))
+  yield put(actions.removeTokenSuccess())
+}
+
+function* handleGetPersonalToken () {
+  chrome.openTab(Gitlab.personalTokenUrl)
+}
+
 export default function* () {
   yield [
     takeEvery(actions.load, handleLoad),
-    takeEvery(actions.requestUser, handleRequestUser)
+    takeEvery(actions.requestUser, handleRequestUser),
+    takeEvery(actions.removeToken, handleRemoveToken),
+    takeEvery(actions.getPersonalToken, handleGetPersonalToken)
   ]
 }

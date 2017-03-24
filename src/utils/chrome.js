@@ -1,3 +1,5 @@
+/* global chrome */
+
 const storage = ({
   get: (key) => {
     return new Promise((resolve, reject) => {
@@ -10,13 +12,21 @@ const storage = ({
       })
     })
   },
+
   set: (key, data) => {
     return new Promise((resolve) => {
       chrome.storage.sync.set({ [key]: data }, resolve)
     })
-  }
+  },
+
+  clear: () => {
+    return chrome.storage.sync.clear()
+  },
 })
 
+const openTab = (url) => chrome.tabs.create({ url })
+
 export default {
-  storage
+  storage,
+  openTab
 }

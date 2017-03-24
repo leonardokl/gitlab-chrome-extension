@@ -27,7 +27,10 @@ const page = combineReducers({
 })
 
 const user = combineReducers({
-  data: handleAction(actions.requestUserSuccess, flip(get('payload')), {}),
+  data: handleActions({
+    [actions.requestUserSuccess]: flip(get('payload')),
+    [actions.removeTokenSuccess]: () => ({})
+  }, {}),
 
   loading: handleActions({
       [actions.requestUser]: T,

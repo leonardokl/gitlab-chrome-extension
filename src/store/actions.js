@@ -4,6 +4,10 @@ export const load = createAction('LOAD')
 export const setPage = createAction('SET_PAGE')
 export const updateEntity = createAction('UPDATE_ENTITY')
 
+export const getPersonalToken = createAction('GET_PERSONAL_TOKEN')
+export const removeToken = createAction('REMOVE_TOKEN')
+export const removeTokenSuccess = createAction('REMOVE_TOKEN_SUCCESS')
+
 export const requestLocalUser = createAction('REQUEST_LOCAL_USER')
 export const requestLocalUserError = createAction('REQUEST_LOCAL_USER_ERROR')
 export const requestLocalUserSuccess = createAction('REQUEST_LOCAL_USER_SUCCESS')
