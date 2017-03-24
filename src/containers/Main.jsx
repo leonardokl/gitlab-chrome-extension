@@ -3,8 +3,9 @@ import { connect } from 'react-redux'
 import { getUser } from 'store/selectors'
 import { TopBar } from 'components'
 import { actions } from 'store'
+import Projects from './Projects'
 
-class Main extends PureComponent {
+class MainContainer extends PureComponent {
   handleDropdownClick = (evt, { id }) => {
     switch (id) {
       case 'removeToken':
@@ -24,12 +25,13 @@ class Main extends PureComponent {
           imageUrl={user.avatar_url}
           onDropdownClick={this.handleDropdownClick}
         />
+        <Projects />
       </div>
     )
   }
 }
 
-Main.propTypes = {
+MainContainer.propTypes = {
   user: PropTypes.object
 }
 
@@ -41,4 +43,4 @@ const mapDispatchToProps = ({
   onRemoveToken: actions.removeToken
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Main)
+export default connect(mapStateToProps, mapDispatchToProps)(MainContainer)

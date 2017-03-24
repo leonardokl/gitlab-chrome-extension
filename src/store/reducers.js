@@ -4,7 +4,8 @@ import T from 'lodash/fp/T'
 import F from 'lodash/fp/F'
 import get from 'lodash/fp/get'
 import flip from 'lodash/flip'
-import identity from 'lodash/fp/identity'
+import merge from 'lodash/fp/merge'
+import concat from 'lodash/fp/concat'
 import * as actions from './actions'
 import { Pages } from 'constants'
 
@@ -33,21 +34,39 @@ const user = combineReducers({
   }, {}),
 
   loading: handleActions({
-      [actions.requestUser]: T,
-      [actions.requestUserError]: F,
-      [actions.requestUserSuccess]: F
-    }, false)
+    [actions.requestUser]: T,
+    [actions.requestUserError]: F,
+    [actions.requestUserSuccess]: F
+  }, false)
 })
 
+const projects = combineReducers({
+  ids: handleActions({
+    [actions.loadProjects]: () => [],
+    [actions.requestProjectsSuccess]: (state, { payload: { result } }) => concat(state, result)
+  }, []),
 
-const entities = combineReducers({
-  byId: handleAction(actions.updateEntity, flip(get('payload')), {}),
-  ids: handleAction(actions.updateEntity, flip(get('payload')), {}),
+  loading: handleActions({
+    [actions.loadProjects]: T,
+    [actions.requestProjects]: T,
+    [actions.requestProjectsError]: F,
+    [actions.requestProjectsSuccess]: F
+  }, false),
+
+  nextPage: handleActions({
+    [actions.loadProjects]: () => 1,
+    [actions.requestProjectsSuccess]: flip(get('payload.nextPage'))
+  }, 1),
 })
+
+const entities = handleAction(actions.updateEntity, (state, { payload: { entities } }) => {
+  return merge(state, entities)
+}, {})
 
 export default combineReducers({
   user,
   page,
+  projects,
   entities,
 
   loading: handleAction(actions.load, T, false),

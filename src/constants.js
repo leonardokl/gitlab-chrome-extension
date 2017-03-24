@@ -7,7 +7,7 @@ export const Pages = {
 }
 
 export const Gitlab = {
-  apiUrl: 'https://gitlab.com/api/v4',
+  apiUrl: 'https://gitlab.com/api/v3',
   personalTokenUrl: 'https://gitlab.com/profile/personal_access_tokens'
 }
 

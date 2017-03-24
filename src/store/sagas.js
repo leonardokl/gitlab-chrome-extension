@@ -1,9 +1,11 @@
-import { put, takeEvery } from 'redux-saga/effects'
+import { put, select, takeEvery } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
+import { normalize, schema, arrayOf } from 'normalizr'
 import * as actions from './actions'
 import { Pages, Gitlab } from 'constants'
 import { notification } from './services'
 import { chrome, gitlab } from 'utils'
+import { getAccessToken, getProjectsNextPage } from './selectors'
 
 function* handleLoad () {
   try {
@@ -47,11 +49,33 @@ function* handleGetPersonalToken () {
   chrome.openTab(Gitlab.personalTokenUrl)
 }
 
+function* handleRequestProjects () {
+  const [accessToken, page] = yield [
+    select(getAccessToken),
+    select(getProjectsNextPage)
+  ]
+  const project = new schema.Entity('projects');
+
+  try {
+    const response = yield gitlab.fetchProjects({ accessToken, page })
+    const nextPage = response.headers['x-next-page']
+    const normalizedData = normalize(response.data, [project])
+
+    yield put(actions.updateEntity(normalizedData))
+    yield put(actions.requestProjectsSuccess({ ...normalizedData, nextPage }))
+  } catch (err) {
+    console.error(err)
+    yield put(actions.requestProjectsError())
+  }
+}
+
 export default function* () {
   yield [
     takeEvery(actions.load, handleLoad),
     takeEvery(actions.requestUser, handleRequestUser),
     takeEvery(actions.removeToken, handleRemoveToken),
-    takeEvery(actions.getPersonalToken, handleGetPersonalToken)
+    takeEvery(actions.getPersonalToken, handleGetPersonalToken),
+    takeEvery(actions.loadProjects, handleRequestProjects),
+    takeEvery(actions.requestProjects, handleRequestProjects)
   ]
 }

@@ -7,7 +7,10 @@ class TopBar extends PureComponent {
     const { imageUrl, onDropdownClick } = this.props
     const DropdownTrigger = (
       <span>
-        <Image avatar src={imageUrl} />
+        <Image
+          avatar
+          src={imageUrl}
+        />
       </span>
     )
     const dropdownOptions = [

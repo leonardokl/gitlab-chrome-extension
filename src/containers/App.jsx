@@ -8,7 +8,7 @@ import AccessToken from './AccessToken'
 import Main from './Main'
 import IssueBranchName from './IssueBranchName'
 
-class App extends PureComponent {
+class AppContainer extends PureComponent {
   componentDidMount () {
     this.props.onLoad()
   }
@@ -48,4 +48,4 @@ const mapDispatchToProps = ({
   onLoad: actions.load
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(AppContainer)
