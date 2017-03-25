@@ -5,7 +5,8 @@ import * as actions from './actions'
 import { Pages, Gitlab } from 'constants'
 import { notification } from './services'
 import { chrome, gitlab } from 'utils'
-import { getAccessToken, getProjectsNextPage } from './selectors'
+import { getAccessToken, getProjectsNextPage, getUser } from './selectors'
+import { projectsSchema, todosSchema } from './schemas'
 
 function* handleLoad () {
   try {
@@ -13,15 +14,13 @@ function* handleLoad () {
 
     yield [
       put(actions.requestUserSuccess(user)),
-      put(actions.setPage({ page: Pages.main }))
+      put(actions.setPage({ page: Pages.main })),
+      put(actions.requestTodos())
     ]
   } catch (err) {
     console.warn(err)
     yield put(actions.setPage({ page: Pages.accessToken }))
   }
-
-  // testing
-  // chrome.browserAction.setBadgeText({text: "2"})
 }
 
 function* handleRequestUser ({ payload: { accessToken } }) {
@@ -54,18 +53,47 @@ function* handleRequestProjects () {
     select(getAccessToken),
     select(getProjectsNextPage)
   ]
-  const project = new schema.Entity('projects');
 
   try {
     const response = yield gitlab.fetchProjects({ accessToken, page })
     const nextPage = response.headers['x-next-page']
-    const normalizedData = normalize(response.data, [project])
+    const normalizedData = normalize(response.data, projectsSchema)
 
     yield put(actions.updateEntity(normalizedData))
     yield put(actions.requestProjectsSuccess({ ...normalizedData, nextPage }))
   } catch (err) {
     console.error(err)
     yield put(actions.requestProjectsError())
+  }
+}
+
+function* handleOpenProject ({ payload: { web_url } }) {
+  chrome.openTab(web_url)
+}
+
+function* handleOpenProfile () {
+  const user = yield select(getUser)
+
+  chrome.openTab(`${Gitlab.url}/${user.username}`)
+}
+
+function* handleOpenSettings () {
+  chrome.openTab(`${Gitlab.url}/profile`)
+}
+
+function* handleRequestTodos () {
+  const accessToken = yield select(getAccessToken)
+
+  try {
+    const { data } = yield gitlab.fetchTodos(accessToken)
+    const count = data.length
+    const toBadge = number => number
+      ? String(number)
+      : ''
+
+    chrome.setBadge(toBadge(count))
+  } catch (err) {
+    console.error(err)
   }
 }
 
@@ -76,6 +104,10 @@ export default function* () {
     takeEvery(actions.removeToken, handleRemoveToken),
     takeEvery(actions.getPersonalToken, handleGetPersonalToken),
     takeEvery(actions.loadProjects, handleRequestProjects),
-    takeEvery(actions.requestProjects, handleRequestProjects)
+    takeEvery(actions.requestProjects, handleRequestProjects),
+    takeEvery(actions.openProject, handleOpenProject),
+    takeEvery(actions.openProfile, handleOpenProfile),
+    takeEvery(actions.openSettings, handleOpenSettings),
+    takeEvery(actions.requestTodos, handleRequestTodos)
   ]
 }

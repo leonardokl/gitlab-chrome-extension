@@ -32,7 +32,9 @@ const fetchProjects = ({ private_token, page }) => {
 }
 
 const fetchTodos = (private_token) => {
-  return gitlab.get('todos', { pathname: { private_token } })
+  return gitlab.get('todos', {
+    pathname: { private_token, per_page: 10 }
+  })
 }
 
 export default {

@@ -9,7 +9,8 @@ class ProjectsContainer extends PureComponent {
     this.props.onLoadProjects()
   }
 
-  handleProjectClick = (project) => (evt) => {
+  handleProjectClick = (project) => () => {
+    this.props.onOpenProject(project)
   }
 
   render () {
@@ -18,12 +19,12 @@ class ProjectsContainer extends PureComponent {
     return (
       <Projects loading={loading} nextPage={!!nextPage} onNextPage={onNextPage}>
         {projects.map(project =>
-          <div
+          <Projects.Item
             key={project.id}
+            name={project.name}
+            group={project.namespace.name}
             onClick={this.handleProjectClick(project)}
-          >
-            {project.name}
-          </div>
+          />
         )}
       </Projects>
     )
@@ -45,7 +46,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = ({
   onLoadProjects: actions.loadProjects,
-  onNextPage: actions.requestProjects
+  onNextPage: actions.requestProjects,
+  onOpenProject: actions.openProject
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectsContainer)

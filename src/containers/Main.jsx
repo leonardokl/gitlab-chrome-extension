@@ -7,9 +7,15 @@ import Projects from './Projects'
 
 class MainContainer extends PureComponent {
   handleDropdownClick = (evt, { id }) => {
+    const { onRemoveToken, onOpenProfile, onOpenSettings } = this.props
+
     switch (id) {
       case 'removeToken':
-        return this.props.onRemoveToken()
+        return onRemoveToken()
+      case 'profile':
+        return onOpenProfile()
+      case 'settings':
+        return onOpenSettings()
 
       default:
         console.error(`Unhandled action of id "${id}"`)
@@ -40,7 +46,9 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = ({
-  onRemoveToken: actions.removeToken
+  onRemoveToken: actions.removeToken,
+  onOpenProfile: actions.openProfile,
+  onOpenSettings: actions.openSettings
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainContainer)
