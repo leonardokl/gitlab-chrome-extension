@@ -43107,7 +43107,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.requestTodos = exports.searchProjectsSuccess = exports.searchProjectsError = exports.searchProjects = exports.loadSearchProjects = exports.requestProjectsSuccess = exports.requestProjectsError = exports.requestProjects = exports.loadProjects = exports.openProject = exports.requestUserSuccess = exports.requestUserError = exports.requestUser = exports.removeTokenSuccess = exports.removeToken = exports.getPersonalToken = exports.openSettings = exports.openProfile = exports.updateEntity = exports.setPage = exports.load = undefined;
+	exports.requestTodos = exports.searchProjectsSuccess = exports.searchProjectsError = exports.searchProjects = exports.loadSearchProjects = exports.requestProjectsSuccess = exports.requestProjectsError = exports.requestProjects = exports.loadProjects = exports.openProject = exports.requestUserSuccess = exports.requestUserError = exports.requestUser = exports.removeTokenSuccess = exports.removeToken = exports.getPersonalToken = exports.openNewIssue = exports.openSettings = exports.openProfile = exports.updateEntity = exports.setPage = exports.load = undefined;
 
 	var _reduxActions = __webpack_require__(518);
 
@@ -43116,6 +43116,7 @@
 	var updateEntity = exports.updateEntity = (0, _reduxActions.createAction)('UPDATE_ENTITY');
 	var openProfile = exports.openProfile = (0, _reduxActions.createAction)('OPEN_PROFILE');
 	var openSettings = exports.openSettings = (0, _reduxActions.createAction)('OPEN_SETTINGS');
+	var openNewIssue = exports.openNewIssue = (0, _reduxActions.createAction)('OPEN_NEW_ISSUE');
 
 	// TOKEN
 	var getPersonalToken = exports.getPersonalToken = (0, _reduxActions.createAction)('GET_PERSONAL_TOKEN');
@@ -43207,7 +43208,7 @@
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-	var _marked = [handleLoad, handleRequestUser, handleRemoveToken, handleGetPersonalToken, handleRequestProjects, handleOpenProject, handleOpenProfile, handleOpenSettings, handleRequestTodos, _callee].map(regeneratorRuntime.mark);
+	var _marked = [handleLoad, handleRequestUser, handleRemoveToken, handleGetPersonalToken, handleRequestProjects, handleOpenProject, handleOpenProfile, handleOpenSettings, handleRequestTodos, handleOpenNewIssue, _callee].map(regeneratorRuntime.mark);
 
 	function handleLoad() {
 	  var user;
@@ -43479,20 +43480,36 @@
 	  }, _marked[8], this, [[3, 13]]);
 	}
 
-	function _callee() {
-	  return regeneratorRuntime.wrap(function _callee$(_context10) {
+	function handleOpenNewIssue(_ref7) {
+	  var payload = _ref7.payload;
+	  return regeneratorRuntime.wrap(function handleOpenNewIssue$(_context10) {
 	    while (1) {
 	      switch (_context10.prev = _context10.next) {
 	        case 0:
-	          _context10.next = 2;
-	          return [(0, _effects.takeEvery)(actions.load, handleLoad), (0, _effects.takeEvery)(actions.requestUser, handleRequestUser), (0, _effects.takeEvery)(actions.removeToken, handleRemoveToken), (0, _effects.takeEvery)(actions.getPersonalToken, handleGetPersonalToken), (0, _effects.takeEvery)(actions.loadProjects, handleRequestProjects), (0, _effects.takeEvery)(actions.requestProjects, handleRequestProjects), (0, _effects.takeEvery)(actions.openProject, handleOpenProject), (0, _effects.takeEvery)(actions.openProfile, handleOpenProfile), (0, _effects.takeEvery)(actions.openSettings, handleOpenSettings), (0, _effects.takeEvery)(actions.requestTodos, handleRequestTodos)];
+	          _utils.chrome.openTab(payload.web_url + '/issues/new?issue');
 
-	        case 2:
+	        case 1:
 	        case 'end':
 	          return _context10.stop();
 	      }
 	    }
 	  }, _marked[9], this);
+	}
+
+	function _callee() {
+	  return regeneratorRuntime.wrap(function _callee$(_context11) {
+	    while (1) {
+	      switch (_context11.prev = _context11.next) {
+	        case 0:
+	          _context11.next = 2;
+	          return [(0, _effects.takeEvery)(actions.load, handleLoad), (0, _effects.takeEvery)(actions.requestUser, handleRequestUser), (0, _effects.takeEvery)(actions.removeToken, handleRemoveToken), (0, _effects.takeEvery)(actions.getPersonalToken, handleGetPersonalToken), (0, _effects.takeEvery)(actions.loadProjects, handleRequestProjects), (0, _effects.takeEvery)(actions.requestProjects, handleRequestProjects), (0, _effects.takeEvery)(actions.openProject, handleOpenProject), (0, _effects.takeEvery)(actions.openProfile, handleOpenProfile), (0, _effects.takeEvery)(actions.openSettings, handleOpenSettings), (0, _effects.takeEvery)(actions.requestTodos, handleRequestTodos), (0, _effects.takeEvery)(actions.openNewIssue, handleOpenNewIssue)];
+
+	        case 2:
+	        case 'end':
+	          return _context11.stop();
+	      }
+	    }
+	  }, _marked[10], this);
 	}
 
 /***/ },
@@ -47047,6 +47064,8 @@
 	var _react2 = _interopRequireDefault(_react);
 
 	__webpack_require__(815);
+
+	__webpack_require__(1258);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -77031,6 +77050,16 @@
 	      return function () {
 	        _this.props.onOpenProject(project);
 	      };
+	    }, _this.handleActionClick = function (project) {
+	      return function (action) {
+	        switch (action) {
+	          case 'newIssue':
+	            return _this.props.onOpenNewIssue(project);
+
+	          default:
+	            console.error('Unhandled actions ' + action);
+	        }
+	      };
 	    }, _temp), _possibleConstructorReturn(_this, _ret);
 	  }
 
@@ -77059,7 +77088,8 @@
 	            key: project.id,
 	            name: project.name,
 	            group: project.namespace.name,
-	            onClick: _this2.handleProjectClick(project)
+	            onClick: _this2.handleProjectClick(project),
+	            onActionClick: _this2.handleActionClick(project)
 	          });
 	        })
 	      );
@@ -77087,7 +77117,8 @@
 	var mapDispatchToProps = {
 	  onLoadProjects: _store.actions.loadProjects,
 	  onNextPage: _store.actions.requestProjects,
-	  onOpenProject: _store.actions.openProject
+	  onOpenProject: _store.actions.openProject,
+	  onOpenNewIssue: _store.actions.openNewIssue
 	};
 
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(ProjectsContainer);
@@ -77257,6 +77288,8 @@
 
 	var _semanticUiReact = __webpack_require__(820);
 
+	__webpack_require__(1256);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -77269,9 +77302,25 @@
 	  _inherits(Item, _PureComponent);
 
 	  function Item() {
+	    var _ref;
+
+	    var _temp, _this, _ret;
+
 	    _classCallCheck(this, Item);
 
-	    return _possibleConstructorReturn(this, (Item.__proto__ || Object.getPrototypeOf(Item)).apply(this, arguments));
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+
+	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Item.__proto__ || Object.getPrototypeOf(Item)).call.apply(_ref, [this].concat(args))), _this), _this.handleClick = function (evt) {
+	      evt.stopPropagation();
+	      _this.props.onClick();
+	    }, _this.handleActionClick = function (name) {
+	      return function (evt) {
+	        evt.stopPropagation();
+	        _this.props.onActionClick(name);
+	      };
+	    }, _temp), _possibleConstructorReturn(_this, _ret);
 	  }
 
 	  _createClass(Item, [{
@@ -77280,12 +77329,22 @@
 	      var _props = this.props;
 	      var name = _props.name;
 	      var group = _props.group;
-	      var onClick = _props.onClick;
 
 
 	      return _react2.default.createElement(
 	        _semanticUiReact.List.Item,
-	        { onClick: onClick },
+	        { className: 'App__Projects_Item', onClick: this.handleClick },
+	        _react2.default.createElement(
+	          _semanticUiReact.List.Content,
+	          { className: 'App__Projects_Item_Actions', floated: 'right' },
+	          _react2.default.createElement(_semanticUiReact.Button, {
+	            positive: true,
+	            content: 'Issue',
+	            icon: 'plus',
+	            size: 'mini',
+	            onClick: this.handleActionClick('newIssue')
+	          })
+	        ),
 	        _react2.default.createElement(
 	          _semanticUiReact.List.Header,
 	          null,
@@ -77306,10 +77365,91 @@
 	Item.propTypes = {
 	  name: _react.PropTypes.string,
 	  group: _react.PropTypes.string,
-	  onClick: _react.PropTypes.func
+	  onClick: _react.PropTypes.func,
+	  onActionClick: _react.PropTypes.func
 	};
 
 	exports.default = Item;
+
+/***/ },
+/* 1256 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(1257);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(818)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./Item.styl", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./Item.styl");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 1257 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(817)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".App__Projects_Item .description,\n.App__Projects_Item .header {\n  white-space: noWrap;\n  text-overflow: ellipsis;\n  overflow: hidden;\n}\n.App__Projects_Item .App__Projects_Item_Actions {\n  display: none;\n}\n.App__Projects_Item:hover .App__Projects_Item_Actions {\n  display: block;\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 1258 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(1259);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(818)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/stylus-loader/index.js!./AppWrapper.styl", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/stylus-loader/index.js!./AppWrapper.styl");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 1259 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(817)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".App {\n  width: 320px;\n  overflow: hidden;\n}\n", ""]);
+
+	// exports
+
 
 /***/ }
 /******/ ]);

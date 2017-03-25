@@ -97,6 +97,10 @@ function* handleRequestTodos () {
   }
 }
 
+function* handleOpenNewIssue ({ payload }) {
+  chrome.openTab(`${payload.web_url}/issues/new?issue`)
+}
+
 export default function* () {
   yield [
     takeEvery(actions.load, handleLoad),
@@ -108,6 +112,7 @@ export default function* () {
     takeEvery(actions.openProject, handleOpenProject),
     takeEvery(actions.openProfile, handleOpenProfile),
     takeEvery(actions.openSettings, handleOpenSettings),
-    takeEvery(actions.requestTodos, handleRequestTodos)
+    takeEvery(actions.requestTodos, handleRequestTodos),
+    takeEvery(actions.openNewIssue, handleOpenNewIssue)
   ]
 }

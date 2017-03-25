@@ -5,6 +5,7 @@ export const setPage = createAction('SET_PAGE')
 export const updateEntity = createAction('UPDATE_ENTITY')
 export const openProfile = createAction('OPEN_PROFILE')
 export const openSettings = createAction('OPEN_SETTINGS')
+export const openNewIssue = createAction('OPEN_NEW_ISSUE')
 
 // TOKEN
 export const getPersonalToken = createAction('GET_PERSONAL_TOKEN')

@@ -13,6 +13,16 @@ class ProjectsContainer extends PureComponent {
     this.props.onOpenProject(project)
   }
 
+  handleActionClick = (project) => (action) => {
+    switch (action) {
+      case 'newIssue':
+        return this.props.onOpenNewIssue(project)
+
+      default:
+        console.error(`Unhandled actions ${action}`)
+    }
+  }
+
   render () {
     const { loading, nextPage, projects, onNextPage } = this.props
 
@@ -24,6 +34,7 @@ class ProjectsContainer extends PureComponent {
             name={project.name}
             group={project.namespace.name}
             onClick={this.handleProjectClick(project)}
+            onActionClick={this.handleActionClick(project)}
           />
         )}
       </Projects>
@@ -47,7 +58,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = ({
   onLoadProjects: actions.loadProjects,
   onNextPage: actions.requestProjects,
-  onOpenProject: actions.openProject
+  onOpenProject: actions.openProject,
+  onOpenNewIssue: actions.openNewIssue
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectsContainer)
