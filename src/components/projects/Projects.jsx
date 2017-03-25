@@ -1,5 +1,6 @@
 import React, { PropTypes, PureComponent } from 'react'
 import { Button, List } from 'semantic-ui-react'
+import { Scrollbars } from 'react-custom-scrollbars'
 import Loading from './Loading'
 import Item from './Item'
 import './Projects.styl'
@@ -9,12 +10,16 @@ class Projects extends PureComponent {
     return React.Children.count(this.props.children) > 0
   }
 
+  handleScroll = ({ top }) => {
+    if (top >= 1) this.props.onScrollLimit()
+  }
+
   render () {
     const { children, loading, nextPage, onNextPage } = this.props
     const notFoundMessage = `We couldn't find any project`
 
     return (
-      <div className='App__Projects'>
+      <Scrollbars className='App__Projects' onScrollFrame={this.handleScroll}>
         {loading && !this.hasChildren &&
           <Loading text='Loading projects'/>
         }
@@ -34,7 +39,7 @@ class Projects extends PureComponent {
             />
           </div>
         }
-      </div>
+      </Scrollbars>
     )
   }
 }
@@ -43,7 +48,8 @@ Projects.propTypes = {
   children: PropTypes.any,
   loading: PropTypes.bool,
   nextPage: PropTypes.bool,
-  onNextPage: PropTypes.func
+  onNextPage: PropTypes.func,
+  onScrollLimit: PropTypes.func
 }
 
 export default Projects

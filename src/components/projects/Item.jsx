@@ -15,17 +15,20 @@ class Item extends PureComponent {
 
   render () {
     const { name, group } = this.props
+    const IssueButton = () => (
+      <Button
+        positive
+        content='Issue'
+        icon='plus'
+        size='mini'
+        onClick={this.handleActionClick('newIssue')}
+      />
+    )
 
     return (
       <List.Item className='App__Projects_Item' onClick={this.handleClick}>
          <List.Content className='App__Projects_Item_Actions' floated='right'>
-          <Button
-            positive
-            content='Issue'
-            icon='plus'
-            size='mini'
-            onClick={this.handleActionClick('newIssue')}
-          />
+          <IssueButton/>
         </List.Content>
         <List.Header>{name}</List.Header>
         <List.Description>{group}</List.Description>

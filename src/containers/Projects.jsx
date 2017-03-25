@@ -1,5 +1,6 @@
 import React, { PropTypes, PureComponent } from 'react'
 import { connect } from 'react-redux'
+import throttle from 'lodash/throttle'
 import { getLoadingProjects, getProjects, getProjectsNextPage } from 'store/selectors'
 import { Projects } from 'components'
 import { actions } from 'store'
@@ -23,11 +24,22 @@ class ProjectsContainer extends PureComponent {
     }
   }
 
+  handleScrollLimit = throttle(() => {
+    const { loading, nextPage, onNextPage } = this.props
+
+    if (!loading && !!nextPage) onNextPage()
+  })
+
   render () {
     const { loading, nextPage, projects, onNextPage } = this.props
 
     return (
-      <Projects loading={loading} nextPage={!!nextPage} onNextPage={onNextPage}>
+      <Projects
+        loading={loading}
+        nextPage={!!nextPage}
+        onNextPage={onNextPage}
+        onScrollLimit={this.handleScrollLimit}
+      >
         {projects.map(project =>
           <Projects.Item
             key={project.id}

@@ -5,4 +5,4 @@ export const projectsSchema = [projectSchema]
 
 
 export const todoSchema = new schema.Entity('todos');
-export const todosSchema = [projectSchema]
+export const todosSchema = [todoSchema]

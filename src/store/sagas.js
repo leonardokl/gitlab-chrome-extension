@@ -86,12 +86,14 @@ function* handleRequestTodos () {
 
   try {
     const { data } = yield gitlab.fetchTodos(accessToken)
+    const normalizedData = normalize(data, todosSchema)
     const count = data.length
     const toBadge = number => number
       ? String(number)
       : ''
-
+    console.log('normalizedData', normalizedData);
     chrome.setBadge(toBadge(count))
+    yield put(actions.updateEntity(normalizedData))
   } catch (err) {
     console.error(err)
   }
