@@ -1,12 +1,25 @@
 import React, { PropTypes, PureComponent } from 'react'
 import { connect } from 'react-redux'
-import { getUser } from 'store/selectors'
+import { getUser, getLoadingSearch, getSelectedPage } from 'store/selectors'
 import { TopBar } from 'components'
 import { actions } from 'store'
 import Projects from './Projects'
+import Search from './Search'
+import { Pages } from 'constants'
 
 class MainContainer extends PureComponent {
-  handleDropdownClick = (evt, { id }) => {
+  renderPage = () => {
+    const { page } = this.props
+
+    switch (page) {
+      case Pages.search:
+        return <Search />
+      case Pages.main:
+        return <Projects />
+    }
+  }
+
+  handleDropdown = (evt, { id }) => {
     const { onRemoveToken, onOpenProfile, onOpenSettings } = this.props
 
     switch (id) {
@@ -22,33 +35,43 @@ class MainContainer extends PureComponent {
     }
   }
 
+  handleSearch = query => {
+    this.props.onSearch(query)
+  }
+
   render () {
-    const { user } = this.props
+    const { user, searching, page } = this.props
 
     return (
       <div>
         <TopBar
           imageUrl={user.avatar_url}
-          onDropdownClick={this.handleDropdownClick}
+          searching={searching && page !== Pages.search}
+          onDropdownClick={this.handleDropdown}
+          onSearch={this.handleSearch}
         />
-        <Projects />
+        {this.renderPage()}
       </div>
     )
   }
 }
 
 MainContainer.propTypes = {
-  user: PropTypes.object
+  user: PropTypes.object,
+  searching: PropTypes.bool
 }
 
 const mapStateToProps = state => ({
-  user: getUser(state)
+  user: getUser(state),
+  searching: getLoadingSearch(state),
+  page: getSelectedPage(state)
 })
 
 const mapDispatchToProps = ({
   onRemoveToken: actions.removeToken,
   onOpenProfile: actions.openProfile,
-  onOpenSettings: actions.openSettings
+  onOpenSettings: actions.openSettings,
+  onSearch: actions.loadSearchProjects
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainContainer)

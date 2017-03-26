@@ -5,7 +5,13 @@ import * as actions from './actions'
 import { Pages, Gitlab } from 'constants'
 import { notification } from './services'
 import { chrome, gitlab } from 'utils'
-import { getAccessToken, getProjectsNextPage, getUser } from './selectors'
+import {
+  getAccessToken,
+  getProjectsNextPage,
+  getUser,
+  getQuery,
+  getSearchNextPage
+} from './selectors'
 import { projectsSchema, todosSchema } from './schemas'
 
 function* handleLoad () {
@@ -14,12 +20,13 @@ function* handleLoad () {
 
     yield [
       put(actions.requestUserSuccess(user)),
-      put(actions.setPage({ page: Pages.main })),
-      put(actions.requestTodos())
+      put(actions.setPage(Pages.main)),
+      put(actions.requestTodos()),
+      put(actions.loadProjects())
     ]
   } catch (err) {
     console.warn(err)
-    yield put(actions.setPage({ page: Pages.accessToken }))
+    yield put(actions.setPage(Pages.accessToken))
   }
 }
 
@@ -30,7 +37,7 @@ function* handleRequestUser ({ payload: { accessToken } }) {
 
     yield chrome.storage.set('user', user)
     yield put(actions.requestUserSuccess(user))
-    yield put(actions.setPage({ page: Pages.main }))
+    yield put(actions.setPage(Pages.main))
   } catch (err) {
     console.error(err)
     notification({ title: 'Error', message: 'Invalid token' })
@@ -40,7 +47,7 @@ function* handleRequestUser ({ payload: { accessToken } }) {
 
 function* handleRemoveToken () {
   yield chrome.storage.clear()
-  yield put(actions.setPage({ page: Pages.accessToken }))
+  yield put(actions.setPage(Pages.accessToken))
   yield put(actions.removeTokenSuccess())
 }
 
@@ -64,6 +71,37 @@ function* handleRequestProjects () {
   } catch (err) {
     console.error(err)
     yield put(actions.requestProjectsError())
+  }
+}
+
+function* handleSearchProjects () {
+  const [accessToken, page, query] = yield [
+    select(getAccessToken),
+    select(getSearchNextPage),
+    select(getQuery)
+  ]
+
+  try {
+    const response = yield gitlab.searchProjects({ accessToken, page, query })
+    const nextPage = response.headers['x-next-page']
+    const normalizedData = normalize(response.data, projectsSchema)
+
+    console.log('response', response);
+    yield put(actions.updateEntity(normalizedData))
+    yield put(actions.searchProjectsSuccess({ ...normalizedData, nextPage }))
+  } catch (err) {
+    console.error(err)
+    yield put(actions.searchProjectsError())
+  } finally {
+    yield put(actions.setPage(Pages.search))
+  }
+}
+
+function* handleLoadSearchProjects ({ payload: { query } }) {
+  if (!query) {
+    yield put(actions.setPage(Pages.main))
+  } else {
+    yield put(actions.searchProjects())
   }
 }
 
@@ -110,6 +148,8 @@ export default function* () {
     takeEvery(actions.openProfile, handleOpenProfile),
     takeEvery(actions.openSettings, handleOpenSettings),
     takeEvery(actions.requestTodos, handleRequestTodos),
-    takeEvery(actions.openTab, handleOpenTab)
+    takeEvery(actions.openTab, handleOpenTab),
+    takeEvery(actions.loadSearchProjects, handleLoadSearchProjects),
+    takeEvery(actions.searchProjects, handleSearchProjects)
   ]
 }

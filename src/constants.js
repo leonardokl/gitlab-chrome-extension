@@ -3,7 +3,8 @@ export const Pages = {
   accessToken: 'ACCESS_TOKEN',
   issueBranchName: 'ISSUE_BRANCH_NAME',
   main: 'MAIN',
-  error: 'ERROR'
+  error: 'ERROR',
+  search: 'SEARCH'
 }
 
 export const Gitlab = {

@@ -23,6 +23,7 @@ class AppContainer extends PureComponent {
         return <AccessToken />
       case Pages.issueBranchName:
         return <IssueBranchName />
+      case Pages.search:
       case Pages.main:
         return <Main />
 

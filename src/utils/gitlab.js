@@ -25,9 +25,15 @@ const fetchUser = (private_token) => {
   return gitlab.get('user', { pathname: { private_token } })
 }
 
-const fetchProjects = ({ private_token, page }) => {
+const fetchProjects = ({ accessToken, page }) => {
   return gitlab.get('projects', {
-    pathname: { page, private_token, per_page: 10 }
+    pathname: { page, private_token: accessToken, per_page: 10 }
+  })
+}
+
+const searchProjects = ({ accessToken, page, query }) => {
+  return gitlab.get('projects', {
+    pathname: { page, private_token: accessToken, per_page: 10, search: query }
   })
 }
 
@@ -40,5 +46,6 @@ const fetchTodos = (private_token) => {
 export default {
   fetchUser,
   fetchProjects,
-  fetchTodos
+  fetchTodos,
+  searchProjects
 }

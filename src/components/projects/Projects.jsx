@@ -1,8 +1,10 @@
 import React, { PropTypes, PureComponent } from 'react'
 import { Button, List } from 'semantic-ui-react'
 import { Scrollbars } from 'react-custom-scrollbars'
+import throttle from 'lodash/throttle'
 import Loading from './Loading'
 import Item from './Item'
+import { when } from 'utils'
 import './Projects.styl'
 
 class Projects extends PureComponent {
@@ -10,18 +12,24 @@ class Projects extends PureComponent {
     return React.Children.count(this.props.children) > 0
   }
 
+  handleScrollLimit = throttle(() => {
+    const { loading, nextPage, onNextPage } = this.props
+
+    when(!loading && !!nextPage, onNextPage)
+  }, 300)
+
   handleScroll = ({ top }) => {
-    if (top >= 1) this.props.onScrollLimit()
+    when(top >= 1, this.handleScrollLimit)
   }
 
   render () {
-    const { children, loading, nextPage, onNextPage } = this.props
+    const { children, loading, loadingMessage, nextPage, onNextPage } = this.props
     const notFoundMessage = `We couldn't find any project`
 
     return (
       <Scrollbars className='App__Projects' onScrollFrame={this.handleScroll}>
         {loading && !this.hasChildren &&
-          <Loading text='Loading projects'/>
+          <Loading text={loadingMessage}/>
         }
         {this.hasChildren &&
           <List divided relaxed selection>
@@ -47,6 +55,7 @@ class Projects extends PureComponent {
 Projects.propTypes = {
   children: PropTypes.any,
   loading: PropTypes.bool,
+  loadingMessage: PropTypes.string,
   nextPage: PropTypes.bool,
   onNextPage: PropTypes.func,
   onScrollLimit: PropTypes.func

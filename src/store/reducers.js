@@ -59,6 +59,28 @@ const projects = combineReducers({
   }, 1),
 })
 
+const search = combineReducers({
+  query: handleActions({
+    [actions.loadSearchProjects]: flip(get('payload.query'))
+  }, ''),
+
+  ids: handleActions({
+    [actions.loadSearchProjects]: () => [],
+    [actions.searchProjectsSuccess]: (state, { payload: { result } }) => concat(state, result)
+  }, []),
+
+  loading: handleActions({
+    [actions.searchProjects]: T,
+    [actions.searchProjectsError]: F,
+    [actions.searchProjectsSuccess]: F
+  }, false),
+
+  nextPage: handleActions({
+    [actions.loadSearchProjects]: () => 1,
+    [actions.searchProjectsSuccess]: flip(get('payload.nextPage'))
+  }, 1),
+})
+
 const entities = handleAction(actions.updateEntity, (state, { payload: { entities } }) => {
   return merge(state, entities)
 }, {})
@@ -67,6 +89,7 @@ export default combineReducers({
   user,
   page,
   projects,
+  search,
   entities,
 
   loading: handleAction(actions.load, T, false),

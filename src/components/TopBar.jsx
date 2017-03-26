@@ -3,8 +3,12 @@ import { Dropdown, Icon, Image, Input } from 'semantic-ui-react'
 import './TopBar.styl'
 
 class TopBar extends PureComponent {
+  handleOnKeyPress = ({ key, target: { value } }) => {
+    if (key === 'Enter') this.props.onSearch(value)
+  }
+
   render () {
-    const { imageUrl, onDropdownClick } = this.props
+    const { imageUrl, searching, onDropdownClick } = this.props
     const DropdownTrigger = (
       <span>
         <Image
@@ -25,7 +29,9 @@ class TopBar extends PureComponent {
             autoFocus
             fluid
             icon='search'
+            loading={searching}
             placeholder='Filter by name...'
+            onKeyPress={this.handleOnKeyPress}
           />
           <Dropdown trigger={DropdownTrigger}>
             <Dropdown.Menu>
@@ -52,7 +58,9 @@ class TopBar extends PureComponent {
 
 TopBar.propTypes = {
   imageUrl: PropTypes.string,
-  onDropdownClick: PropTypes.func
+  searching: PropTypes.bool,
+  onDropdownClick: PropTypes.func,
+  onSearch: PropTypes.func
 }
 
 export default TopBar
