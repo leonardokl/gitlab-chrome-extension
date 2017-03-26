@@ -4,6 +4,7 @@ import { Scrollbars } from 'react-custom-scrollbars'
 import throttle from 'lodash/throttle'
 import Loading from './Loading'
 import Item from './Item'
+import NotFound from './NotFound'
 import { when } from 'utils'
 import './Projects.styl'
 
@@ -23,7 +24,7 @@ class Projects extends PureComponent {
   }
 
   render () {
-    const { children, loading, loadingMessage, nextPage, onNextPage } = this.props
+    const { children, loading, loadingMessage, nextPage, query, onNextPage } = this.props
     const notFoundMessage = `We couldn't find any project`
 
     return (
@@ -35,6 +36,9 @@ class Projects extends PureComponent {
           <List divided relaxed selection>
             {children}
           </List>
+        }
+        {!this.hasChildren && !loading &&
+          <NotFound query={query}/>
         }
         {!!nextPage && this.hasChildren &&
           <div className='App__Projects_More'>
@@ -57,6 +61,7 @@ Projects.propTypes = {
   loading: PropTypes.bool,
   loadingMessage: PropTypes.string,
   nextPage: PropTypes.bool,
+  query: PropTypes.string,
   onNextPage: PropTypes.func,
   onScrollLimit: PropTypes.func
 }

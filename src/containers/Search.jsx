@@ -2,20 +2,21 @@ import React, { PropTypes, PureComponent } from 'react'
 import { connect } from 'react-redux'
 import curry from 'lodash/fp/curry'
 import throttle from 'lodash/throttle'
-import { getLoadingSearch, getSearchProjects, getSearchNextPage } from 'store/selectors'
+import { getLoadingSearch, getSearchProjects, getSearchNextPage, getQuery } from 'store/selectors'
 import { Projects } from 'components'
 import { actions } from 'store'
 import Project from './Project'
 
 class SearchContainer extends PureComponent {
   render () {
-    const { loading, nextPage, projects, onNextPage } = this.props
+    const { loading, nextPage, projects, query, onNextPage } = this.props
 
     return (
       <Projects
         loading={loading}
         loadingMessage='Searching'
         nextPage={!!nextPage}
+        query={query}
         onNextPage={onNextPage}
       >
         {projects.map(project =>
@@ -36,7 +37,8 @@ SearchContainer.propTypes = {
 const mapStateToProps = state => ({
   loading: getLoadingSearch(state),
   nextPage: getSearchNextPage(state),
-  projects: getSearchProjects(state)
+  projects: getSearchProjects(state),
+  query: getQuery(state)
 })
 
 const mapDispatchToProps = ({

@@ -36,7 +36,8 @@ ProjectsContainer.propTypes = {
 const mapStateToProps = state => ({
   loading: getLoadingProjects(state),
   nextPage: getProjectsNextPage(state),
-  projects: getProjects(state)
+  // projects: getProjects(state)
+  projects: []
 })
 
 const mapDispatchToProps = ({

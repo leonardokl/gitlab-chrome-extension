@@ -76943,6 +76943,10 @@
 
 	var _Item2 = _interopRequireDefault(_Item);
 
+	var _NotFound = __webpack_require__(1284);
+
+	var _NotFound2 = _interopRequireDefault(_NotFound);
+
 	var _utils = __webpack_require__(799);
 
 	__webpack_require__(1253);
@@ -76992,6 +76996,7 @@
 	      var loading = _props.loading;
 	      var loadingMessage = _props.loadingMessage;
 	      var nextPage = _props.nextPage;
+	      var query = _props.query;
 	      var onNextPage = _props.onNextPage;
 
 	      var notFoundMessage = 'We couldn\'t find any project';
@@ -77005,6 +77010,7 @@
 	          { divided: true, relaxed: true, selection: true },
 	          children
 	        ),
+	        !this.hasChildren && !loading && _react2.default.createElement(_NotFound2.default, { query: query }),
 	        !!nextPage && this.hasChildren && _react2.default.createElement(
 	          'div',
 	          { className: 'App__Projects_More' },
@@ -77033,6 +77039,7 @@
 	  loading: _react.PropTypes.bool,
 	  loadingMessage: _react.PropTypes.string,
 	  nextPage: _react.PropTypes.bool,
+	  query: _react.PropTypes.string,
 	  onNextPage: _react.PropTypes.func,
 	  onScrollLimit: _react.PropTypes.func
 	};
@@ -77642,7 +77649,8 @@
 	  return {
 	    loading: (0, _selectors.getLoadingProjects)(state),
 	    nextPage: (0, _selectors.getProjectsNextPage)(state),
-	    projects: (0, _selectors.getProjects)(state)
+	    // projects: getProjects(state)
+	    projects: []
 	  };
 	};
 
@@ -79505,6 +79513,7 @@
 	      var loading = _props.loading;
 	      var nextPage = _props.nextPage;
 	      var projects = _props.projects;
+	      var query = _props.query;
 	      var onNextPage = _props.onNextPage;
 
 
@@ -79514,6 +79523,7 @@
 	          loading: loading,
 	          loadingMessage: 'Searching',
 	          nextPage: !!nextPage,
+	          query: query,
 	          onNextPage: onNextPage
 	        },
 	        projects.map(function (project) {
@@ -79537,7 +79547,8 @@
 	  return {
 	    loading: (0, _selectors.getLoadingSearch)(state),
 	    nextPage: (0, _selectors.getSearchNextPage)(state),
-	    projects: (0, _selectors.getSearchProjects)(state)
+	    projects: (0, _selectors.getSearchProjects)(state),
+	    query: (0, _selectors.getQuery)(state)
 	  };
 	};
 
@@ -79546,6 +79557,97 @@
 	};
 
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(SearchContainer);
+
+/***/ },
+/* 1284 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(299);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _semanticUiReact = __webpack_require__(822);
+
+	__webpack_require__(1285);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var NotFound = function NotFound(_ref) {
+	  var query = _ref.query;
+	  return _react2.default.createElement(
+	    'div',
+	    { className: 'App__Projects_NotFound' },
+	    _react2.default.createElement(_semanticUiReact.Icon, { name: query ? 'search' : 'warning circle', size: 'big' }),
+	    query ? _react2.default.createElement(
+	      'div',
+	      null,
+	      'We couldn\'t find any project ',
+	      _react2.default.createElement('br', null),
+	      'matching ',
+	      _react2.default.createElement(
+	        'span',
+	        { className: 'query' },
+	        query
+	      )
+	    ) : _react2.default.createElement(
+	      'div',
+	      null,
+	      'We couldn\'t find any project'
+	    )
+	  );
+	};
+
+	NotFound.propTypes = {
+	  query: _react.PropTypes.string
+	};
+
+	exports.default = NotFound;
+
+/***/ },
+/* 1285 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(1286);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(818)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./NotFound.styl", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./NotFound.styl");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 1286 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(817)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".App__Projects_NotFound {\n  display: flex;\n  justify-content: center;\n  flex: 1;\n  height: 100%;\n  align-items: center;\n  flex-direction: column;\n  color: #808080;\n  text-align: center;\n}\n.App__Projects_NotFound .icon {\n  margin-bottom: 10px;\n}\n.App__Projects_NotFound .query {\n  color: #c7254e;\n  background-color: #f9f2f4;\n  radius: 3px;\n  padding: 2px 4px;\n}\n", ""]);
+
+	// exports
+
 
 /***/ }
 /******/ ]);
