@@ -76746,6 +76746,10 @@
 
 	var _semanticUiReact = __webpack_require__(822);
 
+	var _Search = __webpack_require__(1287);
+
+	var _Search2 = _interopRequireDefault(_Search);
+
 	__webpack_require__(1243);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -76760,22 +76764,9 @@
 	  _inherits(TopBar, _PureComponent);
 
 	  function TopBar() {
-	    var _ref;
-
-	    var _temp, _this, _ret;
-
 	    _classCallCheck(this, TopBar);
 
-	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
-	    }
-
-	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = TopBar.__proto__ || Object.getPrototypeOf(TopBar)).call.apply(_ref, [this].concat(args))), _this), _this.handleOnKeyPress = function (_ref2) {
-	      var key = _ref2.key;
-	      var value = _ref2.target.value;
-
-	      if (key === 'Enter') _this.props.onSearch(value);
-	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	    return _possibleConstructorReturn(this, (TopBar.__proto__ || Object.getPrototypeOf(TopBar)).apply(this, arguments));
 	  }
 
 	  _createClass(TopBar, [{
@@ -76802,13 +76793,9 @@
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'App__TopBar_Content' },
-	          _react2.default.createElement(_semanticUiReact.Input, {
-	            autoFocus: true,
-	            fluid: true,
-	            icon: 'search',
+	          _react2.default.createElement(_Search2.default, {
 	            loading: searching,
-	            placeholder: 'Filter by name...',
-	            onKeyPress: this.handleOnKeyPress
+	            onSearch: this.props.onSearch
 	          }),
 	          _react2.default.createElement(
 	            _semanticUiReact.Dropdown,
@@ -77649,8 +77636,7 @@
 	  return {
 	    loading: (0, _selectors.getLoadingProjects)(state),
 	    nextPage: (0, _selectors.getProjectsNextPage)(state),
-	    // projects: getProjects(state)
-	    projects: []
+	    projects: (0, _selectors.getProjects)(state)
 	  };
 	};
 
@@ -79648,6 +79634,96 @@
 
 	// exports
 
+
+/***/ },
+/* 1287 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(299);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _semanticUiReact = __webpack_require__(822);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Search = function (_PureComponent) {
+	  _inherits(Search, _PureComponent);
+
+	  function Search() {
+	    var _ref;
+
+	    var _temp, _this, _ret;
+
+	    _classCallCheck(this, Search);
+
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+
+	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Search.__proto__ || Object.getPrototypeOf(Search)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+	      value: ''
+	    }, _this.handleSearch = function () {
+	      _this.props.onSearch(_this.state.value);
+	    }, _this.handleClose = function () {
+	      _this.setState({ value: '' }, _this.handleSearch);
+	    }, _this.handleChange = function (_ref2) {
+	      var value = _ref2.target.value;
+
+	      _this.setState({ value: value });
+	    }, _this.handleOnKeyPress = function (_ref3) {
+	      var key = _ref3.key;
+
+	      if (key === 'Enter') _this.handleSearch();
+	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	  }
+
+	  _createClass(Search, [{
+	    key: 'render',
+	    value: function render() {
+	      var value = this.state.value;
+	      var _props = this.props;
+	      var loading = _props.loading;
+	      var onSearch = _props.onSearch;
+
+	      var SearchIcon = _react2.default.createElement(_semanticUiReact.Icon, { name: 'search', link: true, onClick: this.handleSearch });
+	      var CloseIcon = _react2.default.createElement(_semanticUiReact.Icon, { name: 'close', link: true, onClick: this.handleClose });
+
+	      return _react2.default.createElement(_semanticUiReact.Input, {
+	        autoFocus: true,
+	        fluid: true,
+	        icon: value ? CloseIcon : SearchIcon,
+	        loading: loading,
+	        placeholder: 'Filter by name...',
+	        onChange: this.handleChange,
+	        onKeyPress: this.handleOnKeyPress
+	      });
+	    }
+	  }]);
+
+	  return Search;
+	}(_react.PureComponent);
+
+	Search.propTypes = {
+	  loading: _react.PropTypes.bool,
+	  onSearch: _react.PropTypes.func
+	};
+
+	exports.default = Search;
 
 /***/ }
 /******/ ]);
