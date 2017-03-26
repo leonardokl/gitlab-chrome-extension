@@ -12,6 +12,12 @@ export const Gitlab = {
   personalTokenUrl: 'https://gitlab.com/profile/personal_access_tokens'
 }
 
+export const PROJECT_DROPDOWN_OPTIONS = [
+  { id: 'code', text: 'Code', icon: 'code' },
+  { id: 'branches', text: 'Branches', icon: 'fork' },
+  { id: 'issues', text: 'Issues', icon: 'warning circle' }
+]
+
 export default {
   Pages,
   Gitlab

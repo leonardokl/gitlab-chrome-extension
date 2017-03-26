@@ -43107,7 +43107,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.requestTodos = exports.searchProjectsSuccess = exports.searchProjectsError = exports.searchProjects = exports.loadSearchProjects = exports.requestProjectsSuccess = exports.requestProjectsError = exports.requestProjects = exports.loadProjects = exports.openProject = exports.requestUserSuccess = exports.requestUserError = exports.requestUser = exports.removeTokenSuccess = exports.removeToken = exports.getPersonalToken = exports.openNewIssue = exports.openSettings = exports.openProfile = exports.updateEntity = exports.setPage = exports.load = undefined;
+	exports.requestTodos = exports.searchProjectsSuccess = exports.searchProjectsError = exports.searchProjects = exports.loadSearchProjects = exports.requestProjectsSuccess = exports.requestProjectsError = exports.requestProjects = exports.loadProjects = exports.requestUserSuccess = exports.requestUserError = exports.requestUser = exports.removeTokenSuccess = exports.removeToken = exports.getPersonalToken = exports.openTab = exports.openNewIssue = exports.openSettings = exports.openProfile = exports.updateEntity = exports.setPage = exports.load = undefined;
 
 	var _reduxActions = __webpack_require__(518);
 
@@ -43117,6 +43117,9 @@
 	var openProfile = exports.openProfile = (0, _reduxActions.createAction)('OPEN_PROFILE');
 	var openSettings = exports.openSettings = (0, _reduxActions.createAction)('OPEN_SETTINGS');
 	var openNewIssue = exports.openNewIssue = (0, _reduxActions.createAction)('OPEN_NEW_ISSUE');
+	var openTab = exports.openTab = (0, _reduxActions.createAction)('OPEN_TAB', function (url) {
+	  return { url: url };
+	});
 
 	// TOKEN
 	var getPersonalToken = exports.getPersonalToken = (0, _reduxActions.createAction)('GET_PERSONAL_TOKEN');
@@ -43129,7 +43132,6 @@
 	var requestUserSuccess = exports.requestUserSuccess = (0, _reduxActions.createAction)('REQUEST_USER_SUCCESS');
 
 	// projects
-	var openProject = exports.openProject = (0, _reduxActions.createAction)('OPEN_PROJECT');
 	var loadProjects = exports.loadProjects = (0, _reduxActions.createAction)('LOAD_PROJECTS');
 	var requestProjects = exports.requestProjects = (0, _reduxActions.createAction)('REQUEST_PROJECTS');
 	var requestProjectsError = exports.requestProjectsError = (0, _reduxActions.createAction)('REQUEST_PROJECTS_ERROR');
@@ -43164,6 +43166,8 @@
 	  apiUrl: 'https://gitlab.com/api/v3',
 	  personalTokenUrl: 'https://gitlab.com/profile/personal_access_tokens'
 	};
+
+	var PROJECT_DROPDOWN_OPTIONS = exports.PROJECT_DROPDOWN_OPTIONS = [{ id: 'code', text: 'Code', icon: 'code' }, { id: 'branches', text: 'Branches', icon: 'fork' }, { id: 'issues', text: 'Issues', icon: 'warning circle' }];
 
 	exports.default = {
 	  Pages: Pages,
@@ -43208,7 +43212,7 @@
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-	var _marked = [handleLoad, handleRequestUser, handleRemoveToken, handleGetPersonalToken, handleRequestProjects, handleOpenProject, handleOpenProfile, handleOpenSettings, handleRequestTodos, handleOpenNewIssue, _callee].map(regeneratorRuntime.mark);
+	var _marked = [handleLoad, handleRequestUser, handleRemoveToken, handleGetPersonalToken, handleRequestProjects, handleOpenProfile, handleOpenSettings, handleRequestTodos, handleOpenTab, _callee].map(regeneratorRuntime.mark);
 
 	function handleLoad() {
 	  var user;
@@ -43383,15 +43387,22 @@
 	  }, _marked[4], this, [[6, 18]]);
 	}
 
-	function handleOpenProject(_ref5) {
-	  var web_url = _ref5.payload.web_url;
-	  return regeneratorRuntime.wrap(function handleOpenProject$(_context6) {
+	function handleOpenProfile() {
+	  var user;
+	  return regeneratorRuntime.wrap(function handleOpenProfile$(_context6) {
 	    while (1) {
 	      switch (_context6.prev = _context6.next) {
 	        case 0:
-	          _utils.chrome.openTab(web_url);
+	          _context6.next = 2;
+	          return (0, _effects.select)(_selectors.getUser);
 
-	        case 1:
+	        case 2:
+	          user = _context6.sent;
+
+
+	          _utils.chrome.openTab(_constants.Gitlab.url + '/' + user.username);
+
+	        case 4:
 	        case 'end':
 	          return _context6.stop();
 	      }
@@ -43399,22 +43410,14 @@
 	  }, _marked[5], this);
 	}
 
-	function handleOpenProfile() {
-	  var user;
-	  return regeneratorRuntime.wrap(function handleOpenProfile$(_context7) {
+	function handleOpenSettings() {
+	  return regeneratorRuntime.wrap(function handleOpenSettings$(_context7) {
 	    while (1) {
 	      switch (_context7.prev = _context7.next) {
 	        case 0:
-	          _context7.next = 2;
-	          return (0, _effects.select)(_selectors.getUser);
+	          _utils.chrome.openTab(_constants.Gitlab.url + '/profile');
 
-	        case 2:
-	          user = _context7.sent;
-
-
-	          _utils.chrome.openTab(_constants.Gitlab.url + '/' + user.username);
-
-	        case 4:
+	        case 1:
 	        case 'end':
 	          return _context7.stop();
 	      }
@@ -43422,40 +43425,25 @@
 	  }, _marked[6], this);
 	}
 
-	function handleOpenSettings() {
-	  return regeneratorRuntime.wrap(function handleOpenSettings$(_context8) {
+	function handleRequestTodos() {
+	  var accessToken, _ref5, data, normalizedData, count, toBadge;
+
+	  return regeneratorRuntime.wrap(function handleRequestTodos$(_context8) {
 	    while (1) {
 	      switch (_context8.prev = _context8.next) {
 	        case 0:
-	          _utils.chrome.openTab(_constants.Gitlab.url + '/profile');
-
-	        case 1:
-	        case 'end':
-	          return _context8.stop();
-	      }
-	    }
-	  }, _marked[7], this);
-	}
-
-	function handleRequestTodos() {
-	  var accessToken, _ref6, data, normalizedData, count, toBadge;
-
-	  return regeneratorRuntime.wrap(function handleRequestTodos$(_context9) {
-	    while (1) {
-	      switch (_context9.prev = _context9.next) {
-	        case 0:
-	          _context9.next = 2;
+	          _context8.next = 2;
 	          return (0, _effects.select)(_selectors.getAccessToken);
 
 	        case 2:
-	          accessToken = _context9.sent;
-	          _context9.prev = 3;
-	          _context9.next = 6;
+	          accessToken = _context8.sent;
+	          _context8.prev = 3;
+	          _context8.next = 6;
 	          return _utils.gitlab.fetchTodos(accessToken);
 
 	        case 6:
-	          _ref6 = _context9.sent;
-	          data = _ref6.data;
+	          _ref5 = _context8.sent;
+	          data = _ref5.data;
 	          normalizedData = (0, _normalizr.normalize)(data, _schemas.todosSchema);
 	          count = data.length;
 
@@ -43463,59 +43451,58 @@
 	            return number ? String(number) : '';
 	          };
 
-	          console.log('normalizedData', normalizedData);
 	          _utils.chrome.setBadge(toBadge(count));
-	          _context9.next = 15;
+	          _context8.next = 14;
 	          return (0, _effects.put)(actions.updateEntity(normalizedData));
 
-	        case 15:
-	          _context9.next = 20;
+	        case 14:
+	          _context8.next = 19;
 	          break;
 
-	        case 17:
-	          _context9.prev = 17;
-	          _context9.t0 = _context9['catch'](3);
+	        case 16:
+	          _context8.prev = 16;
+	          _context8.t0 = _context8['catch'](3);
 
-	          console.error(_context9.t0);
+	          console.error(_context8.t0);
 
-	        case 20:
+	        case 19:
+	        case 'end':
+	          return _context8.stop();
+	      }
+	    }
+	  }, _marked[7], this, [[3, 16]]);
+	}
+
+	function handleOpenTab(_ref6) {
+	  var url = _ref6.payload.url;
+	  return regeneratorRuntime.wrap(function handleOpenTab$(_context9) {
+	    while (1) {
+	      switch (_context9.prev = _context9.next) {
+	        case 0:
+	          _utils.chrome.openTab(url);
+
+	        case 1:
 	        case 'end':
 	          return _context9.stop();
 	      }
 	    }
-	  }, _marked[8], this, [[3, 17]]);
+	  }, _marked[8], this);
 	}
 
-	function handleOpenNewIssue(_ref7) {
-	  var payload = _ref7.payload;
-	  return regeneratorRuntime.wrap(function handleOpenNewIssue$(_context10) {
+	function _callee() {
+	  return regeneratorRuntime.wrap(function _callee$(_context10) {
 	    while (1) {
 	      switch (_context10.prev = _context10.next) {
 	        case 0:
-	          _utils.chrome.openTab(payload.web_url + '/issues/new?issue');
+	          _context10.next = 2;
+	          return [(0, _effects.takeEvery)(actions.load, handleLoad), (0, _effects.takeEvery)(actions.requestUser, handleRequestUser), (0, _effects.takeEvery)(actions.removeToken, handleRemoveToken), (0, _effects.takeEvery)(actions.getPersonalToken, handleGetPersonalToken), (0, _effects.takeEvery)(actions.loadProjects, handleRequestProjects), (0, _effects.takeEvery)(actions.requestProjects, handleRequestProjects), (0, _effects.takeEvery)(actions.openProfile, handleOpenProfile), (0, _effects.takeEvery)(actions.openSettings, handleOpenSettings), (0, _effects.takeEvery)(actions.requestTodos, handleRequestTodos), (0, _effects.takeEvery)(actions.openTab, handleOpenTab)];
 
-	        case 1:
+	        case 2:
 	        case 'end':
 	          return _context10.stop();
 	      }
 	    }
 	  }, _marked[9], this);
-	}
-
-	function _callee() {
-	  return regeneratorRuntime.wrap(function _callee$(_context11) {
-	    while (1) {
-	      switch (_context11.prev = _context11.next) {
-	        case 0:
-	          _context11.next = 2;
-	          return [(0, _effects.takeEvery)(actions.load, handleLoad), (0, _effects.takeEvery)(actions.requestUser, handleRequestUser), (0, _effects.takeEvery)(actions.removeToken, handleRemoveToken), (0, _effects.takeEvery)(actions.getPersonalToken, handleGetPersonalToken), (0, _effects.takeEvery)(actions.loadProjects, handleRequestProjects), (0, _effects.takeEvery)(actions.requestProjects, handleRequestProjects), (0, _effects.takeEvery)(actions.openProject, handleOpenProject), (0, _effects.takeEvery)(actions.openProfile, handleOpenProfile), (0, _effects.takeEvery)(actions.openSettings, handleOpenSettings), (0, _effects.takeEvery)(actions.requestTodos, handleRequestTodos), (0, _effects.takeEvery)(actions.openNewIssue, handleOpenNewIssue)];
-
-	        case 2:
-	        case 'end':
-	          return _context11.stop();
-	      }
-	    }
-	  }, _marked[10], this);
 	}
 
 /***/ },
@@ -76954,6 +76941,8 @@
 	  value: true
 	});
 
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _react = __webpack_require__(299);
@@ -76961,6 +76950,8 @@
 	var _react2 = _interopRequireDefault(_react);
 
 	var _semanticUiReact = __webpack_require__(822);
+
+	var _constants = __webpack_require__(762);
 
 	__webpack_require__(1251);
 
@@ -77006,14 +76997,33 @@
 	      var name = _props.name;
 	      var group = _props.group;
 
+
 	      var IssueButton = function IssueButton() {
-	        return _react2.default.createElement(_semanticUiReact.Button, {
-	          positive: true,
-	          content: 'Issue',
-	          icon: 'plus',
-	          size: 'mini',
-	          onClick: _this2.handleActionClick('newIssue')
-	        });
+	        return _react2.default.createElement(
+	          _semanticUiReact.Button.Group,
+	          { positive: true, size: 'mini' },
+	          _react2.default.createElement(_semanticUiReact.Button, {
+	            positive: true,
+	            content: 'Issue',
+	            icon: 'plus',
+	            size: 'mini',
+	            onClick: _this2.handleActionClick('newIssue')
+	          }),
+	          _react2.default.createElement(
+	            _semanticUiReact.Dropdown,
+	            { floating: true, button: true },
+	            _react2.default.createElement(
+	              _semanticUiReact.Dropdown.Menu,
+	              null,
+	              _constants.PROJECT_DROPDOWN_OPTIONS.map(function (opt, i) {
+	                return _react2.default.createElement(_semanticUiReact.Dropdown.Item, _extends({}, opt, {
+	                  key: i,
+	                  onClick: _this2.handleActionClick(opt.id)
+	                }));
+	              })
+	            )
+	          )
+	        );
 	      };
 
 	      return _react2.default.createElement(
@@ -77085,7 +77095,7 @@
 
 
 	// module
-	exports.push([module.id, ".App__Projects_Item .description,\n.App__Projects_Item .header {\n  white-space: noWrap;\n  text-overflow: ellipsis;\n  overflow: hidden;\n}\n.App__Projects_Item .App__Projects_Item_Actions {\n  display: none;\n}\n.App__Projects_Item:hover .App__Projects_Item_Actions {\n  display: block;\n}\n", ""]);
+	exports.push([module.id, ".App__Projects_Item .description,\n.App__Projects_Item .header {\n  white-space: noWrap;\n  text-overflow: ellipsis;\n  overflow: hidden;\n}\n.App__Projects_Item .button {\n  padding: 0.78571429em 1em;\n}\n.App__Projects_Item .dropdown > .dropdown.icon {\n  margin: 0;\n}\n.App__Projects_Item .App__Projects_Item_Actions {\n  display: none;\n}\n.App__Projects_Item:hover .App__Projects_Item_Actions {\n  display: block;\n}\n", ""]);
 
 	// exports
 
@@ -77344,6 +77354,10 @@
 
 	var _reactRedux = __webpack_require__(475);
 
+	var _curry = __webpack_require__(804);
+
+	var _curry2 = _interopRequireDefault(_curry);
+
 	var _throttle = __webpack_require__(1277);
 
 	var _throttle2 = _interopRequireDefault(_throttle);
@@ -77378,19 +77392,30 @@
 
 	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ProjectsContainer.__proto__ || Object.getPrototypeOf(ProjectsContainer)).call.apply(_ref, [this].concat(args))), _this), _this.handleProjectClick = function (project) {
 	      return function () {
-	        _this.props.onOpenProject(project);
+	        _this.handleAction(project, 'open');
 	      };
-	    }, _this.handleActionClick = function (project) {
-	      return function (action) {
-	        switch (action) {
-	          case 'newIssue':
-	            return _this.props.onOpenNewIssue(project);
+	    }, _this.handleAction = (0, _curry2.default)(function (project, action) {
+	      var onOpenTab = _this.props.onOpenTab;
+	      var web_url = project.web_url;
+	      var default_branch = project.default_branch;
 
-	          default:
-	            console.error('Unhandled actions ' + action);
-	        }
-	      };
-	    }, _this.handleScrollLimit = (0, _throttle2.default)(function () {
+
+	      switch (action) {
+	        case 'open':
+	          return onOpenTab('' + web_url);
+	        case 'newIssue':
+	          return onOpenTab(web_url + '/issues/new?issue');
+	        case 'code':
+	          return onOpenTab(web_url + '/tree/' + default_branch);
+	        case 'branches':
+	          return onOpenTab(web_url + '/branches');
+	        case 'issues':
+	          return onOpenTab(web_url + '/issues');
+
+	        default:
+	          console.error('Unhandled action ' + action);
+	      }
+	    }), _this.handleScrollLimit = (0, _throttle2.default)(function () {
 	      var _this$props = _this.props;
 	      var loading = _this$props.loading;
 	      var nextPage = _this$props.nextPage;
@@ -77398,7 +77423,7 @@
 
 
 	      if (!loading && !!nextPage) onNextPage();
-	    }), _temp), _possibleConstructorReturn(_this, _ret);
+	    }, 300), _temp), _possibleConstructorReturn(_this, _ret);
 	  }
 
 	  _createClass(ProjectsContainer, [{
@@ -77432,7 +77457,7 @@
 	            name: project.name,
 	            group: project.namespace.name,
 	            onClick: _this2.handleProjectClick(project),
-	            onActionClick: _this2.handleActionClick(project)
+	            onActionClick: _this2.handleAction(project)
 	          });
 	        })
 	      );
@@ -77460,8 +77485,7 @@
 	var mapDispatchToProps = {
 	  onLoadProjects: _store.actions.loadProjects,
 	  onNextPage: _store.actions.requestProjects,
-	  onOpenProject: _store.actions.openProject,
-	  onOpenNewIssue: _store.actions.openNewIssue
+	  onOpenTab: _store.actions.openTab
 	};
 
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(ProjectsContainer);

@@ -6,6 +6,7 @@ export const updateEntity = createAction('UPDATE_ENTITY')
 export const openProfile = createAction('OPEN_PROFILE')
 export const openSettings = createAction('OPEN_SETTINGS')
 export const openNewIssue = createAction('OPEN_NEW_ISSUE')
+export const openTab = createAction('OPEN_TAB', (url) => ({ url }))
 
 // TOKEN
 export const getPersonalToken = createAction('GET_PERSONAL_TOKEN')
@@ -18,7 +19,6 @@ export const requestUserError = createAction('REQUEST_USER_ERROR')
 export const requestUserSuccess = createAction('REQUEST_USER_SUCCESS')
 
 // projects
-export const openProject = createAction('OPEN_PROJECT')
 export const loadProjects = createAction('LOAD_PROJECTS')
 export const requestProjects = createAction('REQUEST_PROJECTS')
 export const requestProjectsError = createAction('REQUEST_PROJECTS_ERROR')

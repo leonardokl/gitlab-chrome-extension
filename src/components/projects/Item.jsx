@@ -1,5 +1,6 @@
 import React, { PropTypes, PureComponent } from 'react'
-import { Button, List } from 'semantic-ui-react'
+import { Button, Dropdown, List } from 'semantic-ui-react'
+import { PROJECT_DROPDOWN_OPTIONS } from 'constants'
 import './Item.styl'
 
 class Item extends PureComponent {
@@ -15,14 +16,28 @@ class Item extends PureComponent {
 
   render () {
     const { name, group } = this.props
+
     const IssueButton = () => (
-      <Button
-        positive
-        content='Issue'
-        icon='plus'
-        size='mini'
-        onClick={this.handleActionClick('newIssue')}
-      />
+      <Button.Group positive size='mini'>
+        <Button
+          positive
+          content='Issue'
+          icon='plus'
+          size='mini'
+          onClick={this.handleActionClick('newIssue')}
+        />
+        <Dropdown floating button>
+          <Dropdown.Menu>
+              {PROJECT_DROPDOWN_OPTIONS.map((opt, i) =>
+                <Dropdown.Item
+                  {...opt}
+                  key={i}
+                  onClick={this.handleActionClick(opt.id)}
+                />
+              )}
+            </Dropdown.Menu>
+        </Dropdown>
+      </Button.Group>
     )
 
     return (

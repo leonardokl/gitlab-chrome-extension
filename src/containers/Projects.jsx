@@ -1,5 +1,6 @@
 import React, { PropTypes, PureComponent } from 'react'
 import { connect } from 'react-redux'
+import curry from 'lodash/fp/curry'
 import throttle from 'lodash/throttle'
 import { getLoadingProjects, getProjects, getProjectsNextPage } from 'store/selectors'
 import { Projects } from 'components'
@@ -11,24 +12,35 @@ class ProjectsContainer extends PureComponent {
   }
 
   handleProjectClick = (project) => () => {
-    this.props.onOpenProject(project)
+    this.handleAction(project, 'open')
   }
 
-  handleActionClick = (project) => (action) => {
+  handleAction = curry((project, action) => {
+    const { onOpenTab } = this.props
+    const { web_url, default_branch } = project
+
     switch (action) {
+      case 'open':
+        return onOpenTab(`${web_url}`)
       case 'newIssue':
-        return this.props.onOpenNewIssue(project)
+        return onOpenTab(`${web_url}/issues/new?issue`)
+      case 'code':
+        return onOpenTab(`${web_url}/tree/${default_branch}`)
+      case 'branches':
+        return onOpenTab(`${web_url}/branches`)
+      case 'issues':
+        return onOpenTab(`${web_url}/issues`)
 
       default:
-        console.error(`Unhandled actions ${action}`)
+        console.error(`Unhandled action ${action}`)
     }
-  }
+  })
 
   handleScrollLimit = throttle(() => {
     const { loading, nextPage, onNextPage } = this.props
 
     if (!loading && !!nextPage) onNextPage()
-  })
+  }, 300)
 
   render () {
     const { loading, nextPage, projects, onNextPage } = this.props
@@ -46,7 +58,7 @@ class ProjectsContainer extends PureComponent {
             name={project.name}
             group={project.namespace.name}
             onClick={this.handleProjectClick(project)}
-            onActionClick={this.handleActionClick(project)}
+            onActionClick={this.handleAction(project)}
           />
         )}
       </Projects>
@@ -70,8 +82,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = ({
   onLoadProjects: actions.loadProjects,
   onNextPage: actions.requestProjects,
-  onOpenProject: actions.openProject,
-  onOpenNewIssue: actions.openNewIssue
+  onOpenTab: actions.openTab
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectsContainer)

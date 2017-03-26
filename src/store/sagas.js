@@ -67,10 +67,6 @@ function* handleRequestProjects () {
   }
 }
 
-function* handleOpenProject ({ payload: { web_url } }) {
-  chrome.openTab(web_url)
-}
-
 function* handleOpenProfile () {
   const user = yield select(getUser)
 
@@ -91,7 +87,7 @@ function* handleRequestTodos () {
     const toBadge = number => number
       ? String(number)
       : ''
-    console.log('normalizedData', normalizedData);
+
     chrome.setBadge(toBadge(count))
     yield put(actions.updateEntity(normalizedData))
   } catch (err) {
@@ -99,8 +95,8 @@ function* handleRequestTodos () {
   }
 }
 
-function* handleOpenNewIssue ({ payload }) {
-  chrome.openTab(`${payload.web_url}/issues/new?issue`)
+function* handleOpenTab ({ payload: { url } }) {
+  chrome.openTab(url)
 }
 
 export default function* () {
@@ -111,10 +107,9 @@ export default function* () {
     takeEvery(actions.getPersonalToken, handleGetPersonalToken),
     takeEvery(actions.loadProjects, handleRequestProjects),
     takeEvery(actions.requestProjects, handleRequestProjects),
-    takeEvery(actions.openProject, handleOpenProject),
     takeEvery(actions.openProfile, handleOpenProfile),
     takeEvery(actions.openSettings, handleOpenSettings),
     takeEvery(actions.requestTodos, handleRequestTodos),
-    takeEvery(actions.openNewIssue, handleOpenNewIssue)
+    takeEvery(actions.openTab, handleOpenTab)
   ]
 }
