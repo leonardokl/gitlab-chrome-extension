@@ -8248,7 +8248,7 @@
 
 	var _configureStore2 = _interopRequireDefault(_configureStore);
 
-	var _App = __webpack_require__(812);
+	var _App = __webpack_require__(814);
 
 	var _App2 = _interopRequireDefault(_App);
 
@@ -31253,7 +31253,7 @@
 
 	var _sagas2 = _interopRequireDefault(_sagas);
 
-	var _reduxLogger = __webpack_require__(806);
+	var _reduxLogger = __webpack_require__(808);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -43229,13 +43229,13 @@
 
 	var _utils = __webpack_require__(799);
 
-	var _selectors = __webpack_require__(802);
+	var _selectors = __webpack_require__(803);
 
-	var _schemas = __webpack_require__(805);
+	var _schemas = __webpack_require__(807);
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-	var _marked = [handleLoad, handleRequestUser, handleRemoveToken, handleGetPersonalToken, handleRequestProjects, handleSearchProjects, handleLoadSearchProjects, handleOpenProfile, handleOpenSettings, handleRequestTodos, handleOpenTab, _callee].map(regeneratorRuntime.mark);
+	var _marked = [handleLoad, handleRequestUser, handleRequestUserSuccess, handleRemoveToken, handleGetPersonalToken, handleRequestProjects, handleSearchProjects, handleLoadSearchProjects, handleOpenProfile, handleOpenSettings, handleRequestTodos, handleOpenTab, _callee].map(regeneratorRuntime.mark);
 
 	function handleLoad() {
 	  var user;
@@ -43250,7 +43250,7 @@
 	        case 3:
 	          user = _context.sent;
 	          _context.next = 6;
-	          return [(0, _effects.put)(actions.requestUserSuccess(user)), (0, _effects.put)(actions.setPage(_constants.Pages.main)), (0, _effects.put)(actions.requestTodos()), (0, _effects.put)(actions.loadProjects())];
+	          return (0, _effects.put)(actions.requestUserSuccess(user));
 
 	        case 6:
 	          _context.next = 13;
@@ -43297,47 +43297,35 @@
 	          return (0, _effects.put)(actions.requestUserSuccess(user));
 
 	        case 10:
-	          _context2.next = 12;
-	          return (0, _effects.put)(actions.setPage(_constants.Pages.main));
-
-	        case 12:
-	          _context2.next = 20;
+	          _context2.next = 18;
 	          break;
 
-	        case 14:
-	          _context2.prev = 14;
+	        case 12:
+	          _context2.prev = 12;
 	          _context2.t0 = _context2['catch'](0);
 
 	          console.error(_context2.t0);
 	          (0, _services.notification)({ title: 'Error', message: 'Invalid token' });
-	          _context2.next = 20;
+	          _context2.next = 18;
 	          return (0, _effects.put)(actions.requestUserError());
 
-	        case 20:
+	        case 18:
 	        case 'end':
 	          return _context2.stop();
 	      }
 	    }
-	  }, _marked[1], this, [[0, 14]]);
+	  }, _marked[1], this, [[0, 12]]);
 	}
 
-	function handleRemoveToken() {
-	  return regeneratorRuntime.wrap(function handleRemoveToken$(_context3) {
+	function handleRequestUserSuccess() {
+	  return regeneratorRuntime.wrap(function handleRequestUserSuccess$(_context3) {
 	    while (1) {
 	      switch (_context3.prev = _context3.next) {
 	        case 0:
 	          _context3.next = 2;
-	          return _utils.chrome.storage.clear();
+	          return [(0, _effects.put)(actions.setPage(_constants.Pages.main)), (0, _effects.put)(actions.requestTodos()), (0, _effects.put)(actions.loadProjects())];
 
 	        case 2:
-	          _context3.next = 4;
-	          return (0, _effects.put)(actions.setPage(_constants.Pages.accessToken));
-
-	        case 4:
-	          _context3.next = 6;
-	          return (0, _effects.put)(actions.removeTokenSuccess());
-
-	        case 6:
 	        case 'end':
 	          return _context3.stop();
 	      }
@@ -43345,14 +43333,26 @@
 	  }, _marked[2], this);
 	}
 
-	function handleGetPersonalToken() {
-	  return regeneratorRuntime.wrap(function handleGetPersonalToken$(_context4) {
+	function handleRemoveToken() {
+	  return regeneratorRuntime.wrap(function handleRemoveToken$(_context4) {
 	    while (1) {
 	      switch (_context4.prev = _context4.next) {
 	        case 0:
-	          _utils.chrome.openTab(_constants.Gitlab.personalTokenUrl);
+	          _context4.next = 2;
+	          return _utils.chrome.storage.clear();
 
-	        case 1:
+	        case 2:
+	          _context4.next = 4;
+	          return (0, _effects.put)(actions.setPage(_constants.Pages.accessToken));
+
+	        case 4:
+	          _context4.next = 6;
+	          return (0, _effects.put)(actions.removeTokenSuccess());
+
+	        case 6:
+	          _utils.chrome.setBadge('');
+
+	        case 7:
 	        case 'end':
 	          return _context4.stop();
 	      }
@@ -43360,164 +43360,156 @@
 	  }, _marked[3], this);
 	}
 
-	function handleRequestProjects() {
-	  var _ref3, _ref4, accessToken, page, response, nextPage, normalizedData;
-
-	  return regeneratorRuntime.wrap(function handleRequestProjects$(_context5) {
+	function handleGetPersonalToken() {
+	  return regeneratorRuntime.wrap(function handleGetPersonalToken$(_context5) {
 	    while (1) {
 	      switch (_context5.prev = _context5.next) {
 	        case 0:
-	          _context5.next = 2;
-	          return [(0, _effects.select)(_selectors.getAccessToken), (0, _effects.select)(_selectors.getProjectsNextPage)];
+	          _utils.chrome.openTab(_constants.Gitlab.personalTokenUrl);
 
-	        case 2:
-	          _ref3 = _context5.sent;
-	          _ref4 = _slicedToArray(_ref3, 2);
-	          accessToken = _ref4[0];
-	          page = _ref4[1];
-	          _context5.prev = 6;
-	          _context5.next = 9;
-	          return _utils.gitlab.fetchProjects({ accessToken: accessToken, page: page });
-
-	        case 9:
-	          response = _context5.sent;
-	          nextPage = response.headers['x-next-page'];
-	          normalizedData = (0, _normalizr.normalize)(response.data, _schemas.projectsSchema);
-	          _context5.next = 14;
-	          return (0, _effects.put)(actions.updateEntity(normalizedData));
-
-	        case 14:
-	          _context5.next = 16;
-	          return (0, _effects.put)(actions.requestProjectsSuccess(_extends({}, normalizedData, { nextPage: nextPage })));
-
-	        case 16:
-	          _context5.next = 23;
-	          break;
-
-	        case 18:
-	          _context5.prev = 18;
-	          _context5.t0 = _context5['catch'](6);
-
-	          console.error(_context5.t0);
-	          _context5.next = 23;
-	          return (0, _effects.put)(actions.requestProjectsError());
-
-	        case 23:
+	        case 1:
 	        case 'end':
 	          return _context5.stop();
 	      }
 	    }
-	  }, _marked[4], this, [[6, 18]]);
+	  }, _marked[4], this);
+	}
+
+	function handleRequestProjects() {
+	  var _ref3, _ref4, accessToken, page, response, nextPage, normalizedData;
+
+	  return regeneratorRuntime.wrap(function handleRequestProjects$(_context6) {
+	    while (1) {
+	      switch (_context6.prev = _context6.next) {
+	        case 0:
+	          _context6.next = 2;
+	          return [(0, _effects.select)(_selectors.getAccessToken), (0, _effects.select)(_selectors.getProjectsNextPage)];
+
+	        case 2:
+	          _ref3 = _context6.sent;
+	          _ref4 = _slicedToArray(_ref3, 2);
+	          accessToken = _ref4[0];
+	          page = _ref4[1];
+	          _context6.prev = 6;
+	          _context6.next = 9;
+	          return _utils.gitlab.fetchProjects({ accessToken: accessToken, page: page });
+
+	        case 9:
+	          response = _context6.sent;
+	          nextPage = response.headers['x-next-page'];
+	          normalizedData = (0, _normalizr.normalize)(response.data, _schemas.projectsSchema);
+	          _context6.next = 14;
+	          return (0, _effects.put)(actions.updateEntity(normalizedData));
+
+	        case 14:
+	          _context6.next = 16;
+	          return (0, _effects.put)(actions.requestProjectsSuccess(_extends({}, normalizedData, { nextPage: nextPage })));
+
+	        case 16:
+	          _context6.next = 23;
+	          break;
+
+	        case 18:
+	          _context6.prev = 18;
+	          _context6.t0 = _context6['catch'](6);
+
+	          console.error(_context6.t0);
+	          _context6.next = 23;
+	          return (0, _effects.put)(actions.requestProjectsError());
+
+	        case 23:
+	        case 'end':
+	          return _context6.stop();
+	      }
+	    }
+	  }, _marked[5], this, [[6, 18]]);
 	}
 
 	function handleSearchProjects() {
 	  var _ref5, _ref6, accessToken, page, query, response, nextPage, normalizedData;
 
-	  return regeneratorRuntime.wrap(function handleSearchProjects$(_context6) {
+	  return regeneratorRuntime.wrap(function handleSearchProjects$(_context7) {
 	    while (1) {
-	      switch (_context6.prev = _context6.next) {
+	      switch (_context7.prev = _context7.next) {
 	        case 0:
-	          _context6.next = 2;
+	          _context7.next = 2;
 	          return [(0, _effects.select)(_selectors.getAccessToken), (0, _effects.select)(_selectors.getSearchNextPage), (0, _effects.select)(_selectors.getQuery)];
 
 	        case 2:
-	          _ref5 = _context6.sent;
+	          _ref5 = _context7.sent;
 	          _ref6 = _slicedToArray(_ref5, 3);
 	          accessToken = _ref6[0];
 	          page = _ref6[1];
 	          query = _ref6[2];
-	          _context6.prev = 7;
-	          _context6.next = 10;
+	          _context7.prev = 7;
+	          _context7.next = 10;
 	          return _utils.gitlab.searchProjects({ accessToken: accessToken, page: page, query: query });
 
 	        case 10:
-	          response = _context6.sent;
+	          response = _context7.sent;
 	          nextPage = response.headers['x-next-page'];
 	          normalizedData = (0, _normalizr.normalize)(response.data, _schemas.projectsSchema);
 
 
 	          console.log('response', response);
-	          _context6.next = 16;
+	          _context7.next = 16;
 	          return (0, _effects.put)(actions.updateEntity(normalizedData));
 
 	        case 16:
-	          _context6.next = 18;
+	          _context7.next = 18;
 	          return (0, _effects.put)(actions.searchProjectsSuccess(_extends({}, normalizedData, { nextPage: nextPage })));
 
 	        case 18:
-	          _context6.next = 25;
+	          _context7.next = 25;
 	          break;
 
 	        case 20:
-	          _context6.prev = 20;
-	          _context6.t0 = _context6['catch'](7);
+	          _context7.prev = 20;
+	          _context7.t0 = _context7['catch'](7);
 
-	          console.error(_context6.t0);
-	          _context6.next = 25;
+	          console.error(_context7.t0);
+	          _context7.next = 25;
 	          return (0, _effects.put)(actions.searchProjectsError());
 
 	        case 25:
-	          _context6.prev = 25;
-	          _context6.next = 28;
+	          _context7.prev = 25;
+	          _context7.next = 28;
 	          return (0, _effects.put)(actions.setPage(_constants.Pages.search));
 
 	        case 28:
-	          return _context6.finish(25);
+	          return _context7.finish(25);
 
 	        case 29:
-	        case 'end':
-	          return _context6.stop();
-	      }
-	    }
-	  }, _marked[5], this, [[7, 20, 25, 29]]);
-	}
-
-	function handleLoadSearchProjects(_ref7) {
-	  var query = _ref7.payload.query;
-	  return regeneratorRuntime.wrap(function handleLoadSearchProjects$(_context7) {
-	    while (1) {
-	      switch (_context7.prev = _context7.next) {
-	        case 0:
-	          if (query) {
-	            _context7.next = 5;
-	            break;
-	          }
-
-	          _context7.next = 3;
-	          return (0, _effects.put)(actions.setPage(_constants.Pages.main));
-
-	        case 3:
-	          _context7.next = 7;
-	          break;
-
-	        case 5:
-	          _context7.next = 7;
-	          return (0, _effects.put)(actions.searchProjects());
-
-	        case 7:
 	        case 'end':
 	          return _context7.stop();
 	      }
 	    }
-	  }, _marked[6], this);
+	  }, _marked[6], this, [[7, 20, 25, 29]]);
 	}
 
-	function handleOpenProfile() {
-	  var user;
-	  return regeneratorRuntime.wrap(function handleOpenProfile$(_context8) {
+	function handleLoadSearchProjects(_ref7) {
+	  var query = _ref7.payload.query;
+	  return regeneratorRuntime.wrap(function handleLoadSearchProjects$(_context8) {
 	    while (1) {
 	      switch (_context8.prev = _context8.next) {
 	        case 0:
-	          _context8.next = 2;
-	          return (0, _effects.select)(_selectors.getUser);
+	          if (query) {
+	            _context8.next = 5;
+	            break;
+	          }
 
-	        case 2:
-	          user = _context8.sent;
+	          _context8.next = 3;
+	          return (0, _effects.put)(actions.setPage(_constants.Pages.main));
 
+	        case 3:
+	          _context8.next = 7;
+	          break;
 
-	          _utils.chrome.openTab(_constants.Gitlab.url + '/' + user.username);
+	        case 5:
+	          _context8.next = 7;
+	          return (0, _effects.put)(actions.searchProjects());
 
-	        case 4:
+	        case 7:
 	        case 'end':
 	          return _context8.stop();
 	      }
@@ -43525,14 +43517,22 @@
 	  }, _marked[7], this);
 	}
 
-	function handleOpenSettings() {
-	  return regeneratorRuntime.wrap(function handleOpenSettings$(_context9) {
+	function handleOpenProfile() {
+	  var user;
+	  return regeneratorRuntime.wrap(function handleOpenProfile$(_context9) {
 	    while (1) {
 	      switch (_context9.prev = _context9.next) {
 	        case 0:
-	          _utils.chrome.openTab(_constants.Gitlab.url + '/profile');
+	          _context9.next = 2;
+	          return (0, _effects.select)(_selectors.getUser);
 
-	        case 1:
+	        case 2:
+	          user = _context9.sent;
+
+
+	          _utils.chrome.openTab(_constants.Gitlab.url + '/' + user.username);
+
+	        case 4:
 	        case 'end':
 	          return _context9.stop();
 	      }
@@ -43540,24 +43540,39 @@
 	  }, _marked[8], this);
 	}
 
-	function handleRequestTodos() {
-	  var accessToken, _ref8, data, normalizedData, count, toBadge;
-
-	  return regeneratorRuntime.wrap(function handleRequestTodos$(_context10) {
+	function handleOpenSettings() {
+	  return regeneratorRuntime.wrap(function handleOpenSettings$(_context10) {
 	    while (1) {
 	      switch (_context10.prev = _context10.next) {
 	        case 0:
-	          _context10.next = 2;
+	          _utils.chrome.openTab(_constants.Gitlab.url + '/profile');
+
+	        case 1:
+	        case 'end':
+	          return _context10.stop();
+	      }
+	    }
+	  }, _marked[9], this);
+	}
+
+	function handleRequestTodos() {
+	  var accessToken, _ref8, data, normalizedData, count, toBadge;
+
+	  return regeneratorRuntime.wrap(function handleRequestTodos$(_context11) {
+	    while (1) {
+	      switch (_context11.prev = _context11.next) {
+	        case 0:
+	          _context11.next = 2;
 	          return (0, _effects.select)(_selectors.getAccessToken);
 
 	        case 2:
-	          accessToken = _context10.sent;
-	          _context10.prev = 3;
-	          _context10.next = 6;
+	          accessToken = _context11.sent;
+	          _context11.prev = 3;
+	          _context11.next = 6;
 	          return _utils.gitlab.fetchTodos(accessToken);
 
 	        case 6:
-	          _ref8 = _context10.sent;
+	          _ref8 = _context11.sent;
 	          data = _ref8.data;
 	          normalizedData = (0, _normalizr.normalize)(data, _schemas.todosSchema);
 	          count = data.length;
@@ -43567,57 +43582,57 @@
 	          };
 
 	          _utils.chrome.setBadge(toBadge(count));
-	          _context10.next = 14;
+	          _context11.next = 14;
 	          return (0, _effects.put)(actions.updateEntity(normalizedData));
 
 	        case 14:
-	          _context10.next = 19;
+	          _context11.next = 19;
 	          break;
 
 	        case 16:
-	          _context10.prev = 16;
-	          _context10.t0 = _context10['catch'](3);
+	          _context11.prev = 16;
+	          _context11.t0 = _context11['catch'](3);
 
-	          console.error(_context10.t0);
+	          console.error(_context11.t0);
 
 	        case 19:
 	        case 'end':
-	          return _context10.stop();
+	          return _context11.stop();
 	      }
 	    }
-	  }, _marked[9], this, [[3, 16]]);
+	  }, _marked[10], this, [[3, 16]]);
 	}
 
 	function handleOpenTab(_ref9) {
 	  var url = _ref9.payload.url;
-	  return regeneratorRuntime.wrap(function handleOpenTab$(_context11) {
+	  return regeneratorRuntime.wrap(function handleOpenTab$(_context12) {
 	    while (1) {
-	      switch (_context11.prev = _context11.next) {
+	      switch (_context12.prev = _context12.next) {
 	        case 0:
 	          _utils.chrome.openTab(url);
 
 	        case 1:
 	        case 'end':
-	          return _context11.stop();
-	      }
-	    }
-	  }, _marked[10], this);
-	}
-
-	function _callee() {
-	  return regeneratorRuntime.wrap(function _callee$(_context12) {
-	    while (1) {
-	      switch (_context12.prev = _context12.next) {
-	        case 0:
-	          _context12.next = 2;
-	          return [(0, _effects.takeEvery)(actions.load, handleLoad), (0, _effects.takeEvery)(actions.requestUser, handleRequestUser), (0, _effects.takeEvery)(actions.removeToken, handleRemoveToken), (0, _effects.takeEvery)(actions.getPersonalToken, handleGetPersonalToken), (0, _effects.takeEvery)(actions.loadProjects, handleRequestProjects), (0, _effects.takeEvery)(actions.requestProjects, handleRequestProjects), (0, _effects.takeEvery)(actions.openProfile, handleOpenProfile), (0, _effects.takeEvery)(actions.openSettings, handleOpenSettings), (0, _effects.takeEvery)(actions.requestTodos, handleRequestTodos), (0, _effects.takeEvery)(actions.openTab, handleOpenTab), (0, _effects.takeEvery)(actions.loadSearchProjects, handleLoadSearchProjects), (0, _effects.takeEvery)(actions.searchProjects, handleSearchProjects)];
-
-	        case 2:
-	        case 'end':
 	          return _context12.stop();
 	      }
 	    }
 	  }, _marked[11], this);
+	}
+
+	function _callee() {
+	  return regeneratorRuntime.wrap(function _callee$(_context13) {
+	    while (1) {
+	      switch (_context13.prev = _context13.next) {
+	        case 0:
+	          _context13.next = 2;
+	          return [(0, _effects.takeEvery)(actions.load, handleLoad), (0, _effects.takeEvery)(actions.requestUser, handleRequestUser), (0, _effects.takeEvery)(actions.requestUserSuccess, handleRequestUserSuccess), (0, _effects.takeEvery)(actions.removeToken, handleRemoveToken), (0, _effects.takeEvery)(actions.getPersonalToken, handleGetPersonalToken), (0, _effects.takeEvery)(actions.loadProjects, handleRequestProjects), (0, _effects.takeEvery)(actions.requestProjects, handleRequestProjects), (0, _effects.takeEvery)(actions.openProfile, handleOpenProfile), (0, _effects.takeEvery)(actions.openSettings, handleOpenSettings), (0, _effects.takeEvery)(actions.requestTodos, handleRequestTodos), (0, _effects.takeEvery)(actions.openTab, handleOpenTab), (0, _effects.takeEvery)(actions.loadSearchProjects, handleLoadSearchProjects), (0, _effects.takeEvery)(actions.searchProjects, handleSearchProjects)];
+
+	        case 2:
+	        case 'end':
+	          return _context13.stop();
+	      }
+	    }
+	  }, _marked[12], this);
 	}
 
 /***/ },
@@ -45902,7 +45917,7 @@
 
 	var _chrome3 = _interopRequireDefault(_chrome2);
 
-	var _when2 = __webpack_require__(1281);
+	var _when2 = __webpack_require__(802);
 
 	var _when3 = _interopRequireDefault(_when2);
 
@@ -46041,6 +46056,21 @@
 
 /***/ },
 /* 802 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var when = function when(condition, callback) {
+	  return condition ? callback() : null;
+	};
+
+	exports.default = when;
+
+/***/ },
+/* 803 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -46050,7 +46080,7 @@
 	});
 	exports.getSearchProjects = exports.getLoadingSearch = exports.getSearchNextPage = exports.getSearchIds = exports.getQuery = exports.getProjects = exports.getLoadingProjects = exports.getProjectsNextPage = exports.getProjectsIds = exports.getProjectById = exports.getAccessToken = exports.getUser = exports.getLoadingUser = exports.getHasTokenError = exports.getIsValidatingToken = exports.getSelectedPage = exports.getEntityById = undefined;
 
-	var _2 = __webpack_require__(1280);
+	var _2 = __webpack_require__(804);
 
 	var _3 = _interopRequireDefault(_2);
 
@@ -46058,11 +46088,11 @@
 
 	var _get2 = _interopRequireDefault(_get);
 
-	var _getOr = __webpack_require__(803);
+	var _getOr = __webpack_require__(805);
 
 	var _getOr2 = _interopRequireDefault(_getOr);
 
-	var _curry = __webpack_require__(804);
+	var _curry = __webpack_require__(806);
 
 	var _curry2 = _interopRequireDefault(_curry);
 
@@ -46110,7 +46140,14 @@
 	};
 
 /***/ },
-/* 803 */
+/* 804 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(608);
+
+
+/***/ },
+/* 805 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var convert = __webpack_require__(605),
@@ -46121,7 +46158,7 @@
 
 
 /***/ },
-/* 804 */
+/* 806 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var convert = __webpack_require__(605),
@@ -46132,7 +46169,7 @@
 
 
 /***/ },
-/* 805 */
+/* 807 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -46151,7 +46188,7 @@
 	var todosSchema = exports.todosSchema = [todoSchema];
 
 /***/ },
-/* 806 */
+/* 808 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -46163,11 +46200,11 @@
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var _core = __webpack_require__(807);
+	var _core = __webpack_require__(809);
 
-	var _helpers = __webpack_require__(808);
+	var _helpers = __webpack_require__(810);
 
-	var _defaults = __webpack_require__(811);
+	var _defaults = __webpack_require__(813);
 
 	var _defaults2 = _interopRequireDefault(_defaults);
 
@@ -46287,7 +46324,7 @@
 	exports.default = createLogger;
 
 /***/ },
-/* 807 */
+/* 809 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -46300,9 +46337,9 @@
 
 	exports.printBuffer = printBuffer;
 
-	var _helpers = __webpack_require__(808);
+	var _helpers = __webpack_require__(810);
 
-	var _diff = __webpack_require__(809);
+	var _diff = __webpack_require__(811);
 
 	var _diff2 = _interopRequireDefault(_diff);
 
@@ -46433,7 +46470,7 @@
 	}
 
 /***/ },
-/* 808 */
+/* 810 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -46457,7 +46494,7 @@
 	var timer = exports.timer = typeof performance !== "undefined" && performance !== null && typeof performance.now === "function" ? performance : Date;
 
 /***/ },
-/* 809 */
+/* 811 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -46467,7 +46504,7 @@
 	});
 	exports.default = diffLogger;
 
-	var _deepDiff = __webpack_require__(810);
+	var _deepDiff = __webpack_require__(812);
 
 	var _deepDiff2 = _interopRequireDefault(_deepDiff);
 
@@ -46556,7 +46593,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 810 */
+/* 812 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global) {/*!
@@ -46985,7 +47022,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 811 */
+/* 813 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -47036,7 +47073,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 812 */
+/* 814 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -47057,21 +47094,21 @@
 
 	var actions = _interopRequireWildcard(_actions);
 
-	var _components = __webpack_require__(813);
+	var _components = __webpack_require__(815);
 
-	var _selectors = __webpack_require__(802);
+	var _selectors = __webpack_require__(803);
 
 	var _constants = __webpack_require__(762);
 
-	var _AccessToken = __webpack_require__(1255);
+	var _AccessToken = __webpack_require__(1283);
 
 	var _AccessToken2 = _interopRequireDefault(_AccessToken);
 
-	var _Main = __webpack_require__(1256);
+	var _Main = __webpack_require__(1284);
 
 	var _Main2 = _interopRequireDefault(_Main);
 
-	var _IssueBranchName = __webpack_require__(1259);
+	var _IssueBranchName = __webpack_require__(1289);
 
 	var _IssueBranchName2 = _interopRequireDefault(_IssueBranchName);
 
@@ -47152,7 +47189,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(AppContainer);
 
 /***/ },
-/* 813 */
+/* 815 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -47160,9 +47197,9 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.Projects = exports.TopBar = exports.AccessToken = exports.Error = exports.Landing = exports.AppWrapper = undefined;
+	exports.FlexItem = exports.FlexContainer = exports.Projects = exports.TopBar = exports.AccessToken = exports.Error = exports.Landing = exports.AppWrapper = undefined;
 
-	var _AppWrapper2 = __webpack_require__(814);
+	var _AppWrapper2 = __webpack_require__(816);
 
 	var _AppWrapper3 = _interopRequireDefault(_AppWrapper2);
 
@@ -47182,9 +47219,17 @@
 
 	var _TopBar3 = _interopRequireDefault(_TopBar2);
 
-	var _projects = __webpack_require__(1245);
+	var _Projects2 = __webpack_require__(1246);
 
-	var _projects2 = _interopRequireDefault(_projects);
+	var _Projects3 = _interopRequireDefault(_Projects2);
+
+	var _FlexContainer2 = __webpack_require__(1279);
+
+	var _FlexContainer3 = _interopRequireDefault(_FlexContainer2);
+
+	var _FlexItem2 = __webpack_require__(1280);
+
+	var _FlexItem3 = _interopRequireDefault(_FlexItem2);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -47193,10 +47238,12 @@
 	exports.Error = _Error3.default;
 	exports.AccessToken = _AccessToken3.default;
 	exports.TopBar = _TopBar3.default;
-	exports.Projects = _projects2.default;
+	exports.Projects = _Projects3.default;
+	exports.FlexContainer = _FlexContainer3.default;
+	exports.FlexItem = _FlexItem3.default;
 
 /***/ },
-/* 814 */
+/* 816 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -47209,9 +47256,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	__webpack_require__(815);
-
-	__webpack_require__(819);
+	__webpack_require__(817);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -47231,23 +47276,23 @@
 	exports.default = AppWrapper;
 
 /***/ },
-/* 815 */
+/* 817 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(816);
+	var content = __webpack_require__(818);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(818)(content, {});
+	var update = __webpack_require__(820)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/stylus-loader/index.js!./main.styl", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/stylus-loader/index.js!./main.styl");
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/stylus-loader/index.js!./AppWrapper.styl", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/stylus-loader/index.js!./AppWrapper.styl");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -47257,21 +47302,21 @@
 	}
 
 /***/ },
-/* 816 */
+/* 818 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(817)();
+	exports = module.exports = __webpack_require__(819)();
 	// imports
 
 
 	// module
-	exports.push([module.id, "body,\nhtml {\n  height: initial;\n}\n.max-width {\n  width: 100%;\n}\n", ""]);
+	exports.push([module.id, ".App {\n  display: flex;\n  width: 100%;\n  height: 100%;\n  overflow: hidden;\n}\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 817 */
+/* 819 */
 /***/ function(module, exports) {
 
 	/*
@@ -47327,7 +47372,7 @@
 
 
 /***/ },
-/* 818 */
+/* 820 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -47576,46 +47621,6 @@
 		if(oldSrc)
 			URL.revokeObjectURL(oldSrc);
 	}
-
-
-/***/ },
-/* 819 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(820);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(818)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/stylus-loader/index.js!./AppWrapper.styl", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/stylus-loader/index.js!./AppWrapper.styl");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 820 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(817)();
-	// imports
-
-
-	// module
-	exports.push([module.id, ".App {\n  width: 320px;\n  overflow: hidden;\n}\n", ""]);
-
-	// exports
 
 
 /***/ },
@@ -55451,7 +55456,7 @@
 
 	var _flow3 = _interopRequireDefault(_flow2);
 
-	var _curry2 = __webpack_require__(804);
+	var _curry2 = __webpack_require__(806);
 
 	var _curry3 = _interopRequireDefault(_curry2);
 
@@ -76696,7 +76701,7 @@
 	var content = __webpack_require__(1241);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(818)(content, {});
+	var update = __webpack_require__(820)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -76716,12 +76721,12 @@
 /* 1241 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(817)();
+	exports = module.exports = __webpack_require__(819)();
 	// imports
 
 
 	// module
-	exports.push([module.id, ".App__AccessToken {\n  margin: 10px;\n}\n.App__AccessToken_Form {\n  text-align: center;\n}\n.App__AccessToken_Form div:nth-child(1),\n.App__AccessToken_Form button {\n  margin-bottom: 10px !important;\n}\n", ""]);
+	exports.push([module.id, ".App__AccessToken {\n  flex: 1;\n  align-self: center;\n  margin: 10px;\n}\n.App__AccessToken_Form {\n  text-align: center;\n}\n.App__AccessToken_Form div:nth-child(1),\n.App__AccessToken_Form button {\n  margin-bottom: 10px !important;\n}\n", ""]);
 
 	// exports
 
@@ -76746,11 +76751,11 @@
 
 	var _semanticUiReact = __webpack_require__(822);
 
-	var _Search = __webpack_require__(1287);
+	var _Search = __webpack_require__(1243);
 
 	var _Search2 = _interopRequireDefault(_Search);
 
-	__webpack_require__(1243);
+	__webpack_require__(1244);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -76838,13 +76843,104 @@
 /* 1243 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(299);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _semanticUiReact = __webpack_require__(822);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Search = function (_PureComponent) {
+	  _inherits(Search, _PureComponent);
+
+	  function Search() {
+	    var _ref;
+
+	    var _temp, _this, _ret;
+
+	    _classCallCheck(this, Search);
+
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+
+	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Search.__proto__ || Object.getPrototypeOf(Search)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+	      value: ''
+	    }, _this.handleSearch = function () {
+	      _this.props.onSearch(_this.state.value);
+	    }, _this.handleClose = function () {
+	      _this.setState({ value: '' }, _this.handleSearch);
+	    }, _this.handleChange = function (_ref2) {
+	      var value = _ref2.target.value;
+
+	      _this.setState({ value: value });
+	    }, _this.handleOnKeyPress = function (_ref3) {
+	      var key = _ref3.key;
+
+	      if (key === 'Enter') _this.handleSearch();
+	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	  }
+
+	  _createClass(Search, [{
+	    key: 'render',
+	    value: function render() {
+	      var value = this.state.value;
+	      var _props = this.props;
+	      var loading = _props.loading;
+	      var onSearch = _props.onSearch;
+
+	      var SearchIcon = _react2.default.createElement(_semanticUiReact.Icon, { name: 'search', link: true, onClick: this.handleSearch });
+	      var CloseIcon = _react2.default.createElement(_semanticUiReact.Icon, { name: 'close', link: true, onClick: this.handleClose });
+
+	      return _react2.default.createElement(_semanticUiReact.Input, {
+	        value: value,
+	        autoFocus: true,
+	        fluid: true,
+	        icon: value ? CloseIcon : SearchIcon,
+	        loading: loading,
+	        placeholder: 'Filter by name...',
+	        onChange: this.handleChange,
+	        onKeyPress: this.handleOnKeyPress
+	      });
+	    }
+	  }]);
+
+	  return Search;
+	}(_react.PureComponent);
+
+	Search.propTypes = {
+	  loading: _react.PropTypes.bool,
+	  onSearch: _react.PropTypes.func
+	};
+
+	exports.default = Search;
+
+/***/ },
+/* 1244 */
+/***/ function(module, exports, __webpack_require__) {
+
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(1244);
+	var content = __webpack_require__(1245);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(818)(content, {});
+	var update = __webpack_require__(820)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -76861,10 +76957,10 @@
 	}
 
 /***/ },
-/* 1244 */
+/* 1245 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(817)();
+	exports = module.exports = __webpack_require__(819)();
 	// imports
 
 
@@ -76875,7 +76971,7 @@
 
 
 /***/ },
-/* 1245 */
+/* 1246 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -76884,11 +76980,11 @@
 	  value: true
 	});
 
-	var _Projects = __webpack_require__(1246);
+	var _Projects = __webpack_require__(1247);
 
 	var _Projects2 = _interopRequireDefault(_Projects);
 
-	var _Item = __webpack_require__(1250);
+	var _Item = __webpack_require__(1271);
 
 	var _Item2 = _interopRequireDefault(_Item);
 
@@ -76899,7 +76995,7 @@
 	exports.default = _Projects2.default;
 
 /***/ },
-/* 1246 */
+/* 1247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -76916,27 +77012,27 @@
 
 	var _semanticUiReact = __webpack_require__(822);
 
-	var _reactCustomScrollbars = __webpack_require__(1260);
+	var _reactCustomScrollbars = __webpack_require__(1248);
 
-	var _throttle = __webpack_require__(1277);
+	var _throttle = __webpack_require__(1265);
 
 	var _throttle2 = _interopRequireDefault(_throttle);
 
-	var _Loading = __webpack_require__(1247);
+	var _Loading = __webpack_require__(1268);
 
 	var _Loading2 = _interopRequireDefault(_Loading);
 
-	var _Item = __webpack_require__(1250);
+	var _Item = __webpack_require__(1271);
 
 	var _Item2 = _interopRequireDefault(_Item);
 
-	var _NotFound = __webpack_require__(1284);
+	var _NotFound = __webpack_require__(1274);
 
 	var _NotFound2 = _interopRequireDefault(_NotFound);
 
 	var _utils = __webpack_require__(799);
 
-	__webpack_require__(1253);
+	__webpack_require__(1277);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -77034,649 +77130,7 @@
 	exports.default = Projects;
 
 /***/ },
-/* 1247 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(299);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _semanticUiReact = __webpack_require__(822);
-
-	__webpack_require__(1248);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var Loading = function Loading(_ref) {
-	  var text = _ref.text;
-	  return _react2.default.createElement(
-	    'div',
-	    { className: 'App__Projects_Loading' },
-	    _react2.default.createElement(
-	      _semanticUiReact.Loader,
-	      { active: true },
-	      text
-	    )
-	  );
-	};
-
-	Loading.propTypes = {
-	  text: _react.PropTypes.string
-	};
-
-	exports.default = Loading;
-
-/***/ },
 /* 1248 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(1249);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(818)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./Loading.styl", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./Loading.styl");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 1249 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(817)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "", ""]);
-
-	// exports
-
-
-/***/ },
-/* 1250 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(299);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _semanticUiReact = __webpack_require__(822);
-
-	var _constants = __webpack_require__(762);
-
-	__webpack_require__(1251);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var Item = function (_PureComponent) {
-	  _inherits(Item, _PureComponent);
-
-	  function Item() {
-	    var _ref;
-
-	    var _temp, _this, _ret;
-
-	    _classCallCheck(this, Item);
-
-	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
-	    }
-
-	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Item.__proto__ || Object.getPrototypeOf(Item)).call.apply(_ref, [this].concat(args))), _this), _this.handleClick = function (evt) {
-	      evt.stopPropagation();
-	      _this.props.onClick();
-	    }, _this.handleActionClick = function (name) {
-	      return function (evt) {
-	        evt.stopPropagation();
-	        _this.props.onActionClick(name);
-	      };
-	    }, _temp), _possibleConstructorReturn(_this, _ret);
-	  }
-
-	  _createClass(Item, [{
-	    key: 'render',
-	    value: function render() {
-	      var _this2 = this;
-
-	      var _props = this.props;
-	      var name = _props.name;
-	      var group = _props.group;
-
-
-	      var IssueButton = function IssueButton() {
-	        return _react2.default.createElement(
-	          _semanticUiReact.Button.Group,
-	          { positive: true, size: 'mini' },
-	          _react2.default.createElement(_semanticUiReact.Button, {
-	            positive: true,
-	            content: 'Issue',
-	            icon: 'plus',
-	            size: 'mini',
-	            onClick: _this2.handleActionClick('newIssue')
-	          }),
-	          _react2.default.createElement(
-	            _semanticUiReact.Dropdown,
-	            { floating: true, button: true },
-	            _react2.default.createElement(
-	              _semanticUiReact.Dropdown.Menu,
-	              null,
-	              _constants.PROJECT_DROPDOWN_OPTIONS.map(function (opt, i) {
-	                return _react2.default.createElement(_semanticUiReact.Dropdown.Item, _extends({}, opt, {
-	                  key: i,
-	                  onClick: _this2.handleActionClick(opt.id)
-	                }));
-	              })
-	            )
-	          )
-	        );
-	      };
-
-	      return _react2.default.createElement(
-	        _semanticUiReact.List.Item,
-	        { className: 'App__Projects_Item', onClick: this.handleClick },
-	        _react2.default.createElement(
-	          _semanticUiReact.List.Content,
-	          { className: 'App__Projects_Item_Actions', floated: 'right' },
-	          _react2.default.createElement(IssueButton, null)
-	        ),
-	        _react2.default.createElement(
-	          _semanticUiReact.List.Header,
-	          null,
-	          name
-	        ),
-	        _react2.default.createElement(
-	          _semanticUiReact.List.Description,
-	          null,
-	          group
-	        )
-	      );
-	    }
-	  }]);
-
-	  return Item;
-	}(_react.PureComponent);
-
-	Item.propTypes = {
-	  name: _react.PropTypes.string,
-	  group: _react.PropTypes.string,
-	  onClick: _react.PropTypes.func,
-	  onActionClick: _react.PropTypes.func
-	};
-
-	exports.default = Item;
-
-/***/ },
-/* 1251 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(1252);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(818)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./Item.styl", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./Item.styl");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 1252 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(817)();
-	// imports
-
-
-	// module
-	exports.push([module.id, ".App__Projects_Item .description,\n.App__Projects_Item .header {\n  white-space: noWrap;\n  text-overflow: ellipsis;\n  overflow: hidden;\n}\n.App__Projects_Item .button {\n  padding: 0.78571429em 1em;\n}\n.App__Projects_Item .dropdown > .dropdown.icon {\n  margin: 0;\n}\n.App__Projects_Item .App__Projects_Item_Actions {\n  display: none;\n}\n.App__Projects_Item:hover .App__Projects_Item_Actions {\n  display: block;\n}\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 1253 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(1254);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(818)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./Projects.styl", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./Projects.styl");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 1254 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(817)();
-	// imports
-
-
-	// module
-	exports.push([module.id, ".App__Projects {\n  height: 300px !important;\n  overflow: auto;\n  padding: 5px;\n}\n.App__Projects_More {\n  display: flex;\n  justify-content: center;\n}\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 1255 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(299);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(475);
-
-	var _components = __webpack_require__(813);
-
-	var _actions = __webpack_require__(761);
-
-	var actions = _interopRequireWildcard(_actions);
-
-	var _selectors = __webpack_require__(802);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var AccessTokenContainer = function AccessTokenContainer(_ref) {
-	  var hasTokenError = _ref.hasTokenError;
-	  var isValidatingToken = _ref.isValidatingToken;
-	  var onRequestUser = _ref.onRequestUser;
-	  var _onGetPersonalToken = _ref.onGetPersonalToken;
-	  return _react2.default.createElement(_components.AccessToken, {
-	    error: hasTokenError,
-	    loading: isValidatingToken,
-	    onGetPersonalToken: function onGetPersonalToken() {
-	      return _onGetPersonalToken();
-	    },
-	    onSave: function onSave(accessToken) {
-	      return onRequestUser({ accessToken: accessToken });
-	    }
-	  });
-	};
-
-	_components.AccessToken.propTypes = {
-	  hasTokenError: _react.PropTypes.bool,
-	  isValidatingToken: _react.PropTypes.bool,
-	  onRequestUser: _react.PropTypes.func,
-	  onGetPersonalToken: _react.PropTypes.func
-	};
-
-	var mapStateToProps = function mapStateToProps(state) {
-	  return {
-	    hasTokenError: (0, _selectors.getHasTokenError)(state),
-	    isValidatingToken: (0, _selectors.getIsValidatingToken)(state)
-	  };
-	};
-
-	var mapDispatchToProps = {
-	  onRequestUser: actions.requestUser,
-	  onGetPersonalToken: actions.getPersonalToken
-	};
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(AccessTokenContainer);
-
-/***/ },
-/* 1256 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(299);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(475);
-
-	var _selectors = __webpack_require__(802);
-
-	var _components = __webpack_require__(813);
-
-	var _store = __webpack_require__(1257);
-
-	var _Projects = __webpack_require__(1258);
-
-	var _Projects2 = _interopRequireDefault(_Projects);
-
-	var _Search = __webpack_require__(1283);
-
-	var _Search2 = _interopRequireDefault(_Search);
-
-	var _constants = __webpack_require__(762);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var MainContainer = function (_PureComponent) {
-	  _inherits(MainContainer, _PureComponent);
-
-	  function MainContainer() {
-	    var _ref;
-
-	    var _temp, _this, _ret;
-
-	    _classCallCheck(this, MainContainer);
-
-	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
-	    }
-
-	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = MainContainer.__proto__ || Object.getPrototypeOf(MainContainer)).call.apply(_ref, [this].concat(args))), _this), _this.renderPage = function () {
-	      var page = _this.props.page;
-
-
-	      switch (page) {
-	        case _constants.Pages.search:
-	          return _react2.default.createElement(_Search2.default, null);
-	        case _constants.Pages.main:
-	          return _react2.default.createElement(_Projects2.default, null);
-	      }
-	    }, _this.handleDropdown = function (evt, _ref2) {
-	      var id = _ref2.id;
-	      var _this$props = _this.props;
-	      var onRemoveToken = _this$props.onRemoveToken;
-	      var onOpenProfile = _this$props.onOpenProfile;
-	      var onOpenSettings = _this$props.onOpenSettings;
-
-
-	      switch (id) {
-	        case 'removeToken':
-	          return onRemoveToken();
-	        case 'profile':
-	          return onOpenProfile();
-	        case 'settings':
-	          return onOpenSettings();
-
-	        default:
-	          console.error('Unhandled action of id "' + id + '"');
-	      }
-	    }, _this.handleSearch = function (query) {
-	      _this.props.onSearch(query);
-	    }, _temp), _possibleConstructorReturn(_this, _ret);
-	  }
-
-	  _createClass(MainContainer, [{
-	    key: 'render',
-	    value: function render() {
-	      var _props = this.props;
-	      var user = _props.user;
-	      var searching = _props.searching;
-	      var page = _props.page;
-
-
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement(_components.TopBar, {
-	          imageUrl: user.avatar_url,
-	          searching: searching && page !== _constants.Pages.search,
-	          onDropdownClick: this.handleDropdown,
-	          onSearch: this.handleSearch
-	        }),
-	        this.renderPage()
-	      );
-	    }
-	  }]);
-
-	  return MainContainer;
-	}(_react.PureComponent);
-
-	MainContainer.propTypes = {
-	  user: _react.PropTypes.object,
-	  searching: _react.PropTypes.bool
-	};
-
-	var mapStateToProps = function mapStateToProps(state) {
-	  return {
-	    user: (0, _selectors.getUser)(state),
-	    searching: (0, _selectors.getLoadingSearch)(state),
-	    page: (0, _selectors.getSelectedPage)(state)
-	  };
-	};
-
-	var mapDispatchToProps = {
-	  onRemoveToken: _store.actions.removeToken,
-	  onOpenProfile: _store.actions.openProfile,
-	  onOpenSettings: _store.actions.openSettings,
-	  onSearch: _store.actions.loadSearchProjects
-	};
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(MainContainer);
-
-/***/ },
-/* 1257 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.actions = undefined;
-
-	var _actions2 = __webpack_require__(761);
-
-	var _actions = _interopRequireWildcard(_actions2);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	exports.actions = _actions;
-
-/***/ },
-/* 1258 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(299);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(475);
-
-	var _curry = __webpack_require__(804);
-
-	var _curry2 = _interopRequireDefault(_curry);
-
-	var _throttle = __webpack_require__(1277);
-
-	var _throttle2 = _interopRequireDefault(_throttle);
-
-	var _selectors = __webpack_require__(802);
-
-	var _components = __webpack_require__(813);
-
-	var _store = __webpack_require__(1257);
-
-	var _Project = __webpack_require__(1282);
-
-	var _Project2 = _interopRequireDefault(_Project);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var ProjectsContainer = function (_PureComponent) {
-	  _inherits(ProjectsContainer, _PureComponent);
-
-	  function ProjectsContainer() {
-	    _classCallCheck(this, ProjectsContainer);
-
-	    return _possibleConstructorReturn(this, (ProjectsContainer.__proto__ || Object.getPrototypeOf(ProjectsContainer)).apply(this, arguments));
-	  }
-
-	  _createClass(ProjectsContainer, [{
-	    key: 'render',
-	    value: function render() {
-	      var _props = this.props;
-	      var loading = _props.loading;
-	      var nextPage = _props.nextPage;
-	      var projects = _props.projects;
-	      var onNextPage = _props.onNextPage;
-
-
-	      return _react2.default.createElement(
-	        _components.Projects,
-	        {
-	          loading: loading,
-	          loadingMessage: 'Loading projects',
-	          nextPage: !!nextPage,
-	          onNextPage: onNextPage
-	        },
-	        projects.map(function (project) {
-	          return _react2.default.createElement(_Project2.default, { key: project.id, data: project });
-	        })
-	      );
-	    }
-	  }]);
-
-	  return ProjectsContainer;
-	}(_react.PureComponent);
-
-	ProjectsContainer.propTypes = {
-	  loading: _react.PropTypes.bool,
-	  projects: _react.PropTypes.array,
-	  onLoadProjects: _react.PropTypes.func,
-	  onNextPage: _react.PropTypes.func
-	};
-
-	var mapStateToProps = function mapStateToProps(state) {
-	  return {
-	    loading: (0, _selectors.getLoadingProjects)(state),
-	    nextPage: (0, _selectors.getProjectsNextPage)(state),
-	    projects: (0, _selectors.getProjects)(state)
-	  };
-	};
-
-	var mapDispatchToProps = {
-	  onLoadProjects: _store.actions.loadProjects,
-	  onNextPage: _store.actions.requestProjects
-	};
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(ProjectsContainer);
-
-/***/ },
-/* 1259 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(299);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var IssueBranchName = function IssueBranchName() {
-	  return _react2.default.createElement(
-	    'div',
-	    null,
-	    'IssueBranchName'
-	  );
-	};
-
-	IssueBranchName.propTypes = {};
-
-	exports.default = IssueBranchName;
-
-/***/ },
-/* 1260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -77686,7 +77140,7 @@
 	});
 	exports.Scrollbars = undefined;
 
-	var _Scrollbars = __webpack_require__(1261);
+	var _Scrollbars = __webpack_require__(1249);
 
 	var _Scrollbars2 = _interopRequireDefault(_Scrollbars);
 
@@ -77696,7 +77150,7 @@
 	exports.Scrollbars = _Scrollbars2["default"];
 
 /***/ },
-/* 1261 */
+/* 1249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -77707,39 +77161,39 @@
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var _raf2 = __webpack_require__(1262);
+	var _raf2 = __webpack_require__(1250);
 
 	var _raf3 = _interopRequireDefault(_raf2);
 
-	var _domCss = __webpack_require__(1264);
+	var _domCss = __webpack_require__(1252);
 
 	var _domCss2 = _interopRequireDefault(_domCss);
 
 	var _react = __webpack_require__(299);
 
-	var _isString = __webpack_require__(1270);
+	var _isString = __webpack_require__(1258);
 
 	var _isString2 = _interopRequireDefault(_isString);
 
-	var _getScrollbarWidth = __webpack_require__(1271);
+	var _getScrollbarWidth = __webpack_require__(1259);
 
 	var _getScrollbarWidth2 = _interopRequireDefault(_getScrollbarWidth);
 
-	var _returnFalse = __webpack_require__(1272);
+	var _returnFalse = __webpack_require__(1260);
 
 	var _returnFalse2 = _interopRequireDefault(_returnFalse);
 
-	var _getInnerWidth = __webpack_require__(1273);
+	var _getInnerWidth = __webpack_require__(1261);
 
 	var _getInnerWidth2 = _interopRequireDefault(_getInnerWidth);
 
-	var _getInnerHeight = __webpack_require__(1274);
+	var _getInnerHeight = __webpack_require__(1262);
 
 	var _getInnerHeight2 = _interopRequireDefault(_getInnerHeight);
 
-	var _styles = __webpack_require__(1275);
+	var _styles = __webpack_require__(1263);
 
-	var _defaultRenderElements = __webpack_require__(1276);
+	var _defaultRenderElements = __webpack_require__(1264);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -78355,10 +77809,10 @@
 	});
 
 /***/ },
-/* 1262 */
+/* 1250 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {var now = __webpack_require__(1263)
+	/* WEBPACK VAR INJECTION */(function(global) {var now = __webpack_require__(1251)
 	  , root = typeof window === 'undefined' ? global : window
 	  , vendors = ['moz', 'webkit']
 	  , suffix = 'AnimationFrame'
@@ -78434,7 +77888,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 1263 */
+/* 1251 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {// Generated by CoffeeScript 1.7.1
@@ -78473,13 +77927,13 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(294)))
 
 /***/ },
-/* 1264 */
+/* 1252 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var prefix = __webpack_require__(1265)
-	var toCamelCase = __webpack_require__(1266)
+	var prefix = __webpack_require__(1253)
+	var toCamelCase = __webpack_require__(1254)
 	var cache = { 'float': 'cssFloat' }
-	var addPxToStyle = __webpack_require__(1269)
+	var addPxToStyle = __webpack_require__(1257)
 
 	function style (element, property, value) {
 	  var camel = cache[property]
@@ -78540,7 +77994,7 @@
 
 
 /***/ },
-/* 1265 */
+/* 1253 */
 /***/ function(module, exports) {
 
 	var div = null
@@ -78576,11 +78030,11 @@
 
 
 /***/ },
-/* 1266 */
+/* 1254 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
-	var space = __webpack_require__(1267)
+	var space = __webpack_require__(1255)
 
 	/**
 	 * Export.
@@ -78603,11 +78057,11 @@
 
 
 /***/ },
-/* 1267 */
+/* 1255 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
-	var clean = __webpack_require__(1268)
+	var clean = __webpack_require__(1256)
 
 	/**
 	 * Export.
@@ -78630,7 +78084,7 @@
 
 
 /***/ },
-/* 1268 */
+/* 1256 */
 /***/ function(module, exports) {
 
 	
@@ -78703,7 +78157,7 @@
 
 
 /***/ },
-/* 1269 */
+/* 1257 */
 /***/ function(module, exports) {
 
 	/* The following list is defined in React's core */
@@ -78749,7 +78203,7 @@
 	};
 
 /***/ },
-/* 1270 */
+/* 1258 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -78763,7 +78217,7 @@
 	}
 
 /***/ },
-/* 1271 */
+/* 1259 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -78773,7 +78227,7 @@
 	});
 	exports["default"] = getScrollbarWidth;
 
-	var _domCss = __webpack_require__(1264);
+	var _domCss = __webpack_require__(1252);
 
 	var _domCss2 = _interopRequireDefault(_domCss);
 
@@ -78804,7 +78258,7 @@
 	}
 
 /***/ },
-/* 1272 */
+/* 1260 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -78818,7 +78272,7 @@
 	}
 
 /***/ },
-/* 1273 */
+/* 1261 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -78838,7 +78292,7 @@
 	}
 
 /***/ },
-/* 1274 */
+/* 1262 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -78858,7 +78312,7 @@
 	}
 
 /***/ },
-/* 1275 */
+/* 1263 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -78934,7 +78388,7 @@
 	};
 
 /***/ },
-/* 1276 */
+/* 1264 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79016,10 +78470,10 @@
 	}
 
 /***/ },
-/* 1277 */
+/* 1265 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var debounce = __webpack_require__(1278),
+	var debounce = __webpack_require__(1266),
 	    isObject = __webpack_require__(522);
 
 	/** Error message constants. */
@@ -79091,11 +78545,11 @@
 
 
 /***/ },
-/* 1278 */
+/* 1266 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var isObject = __webpack_require__(522),
-	    now = __webpack_require__(1279),
+	    now = __webpack_require__(1267),
 	    toNumber = __webpack_require__(538);
 
 	/** Error message constants. */
@@ -79285,7 +78739,7 @@
 
 
 /***/ },
-/* 1279 */
+/* 1267 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var root = __webpack_require__(487);
@@ -79314,29 +78768,564 @@
 
 
 /***/ },
-/* 1280 */
+/* 1268 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(608);
-
-
-/***/ },
-/* 1281 */
-/***/ function(module, exports) {
-
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	var when = function when(condition, callback) {
-	  return condition ? callback() : null;
+
+	var _react = __webpack_require__(299);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _semanticUiReact = __webpack_require__(822);
+
+	__webpack_require__(1269);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Loading = function Loading(_ref) {
+	  var text = _ref.text;
+	  return _react2.default.createElement(
+	    'div',
+	    { className: 'App__Projects_Loading' },
+	    _react2.default.createElement(
+	      _semanticUiReact.Loader,
+	      { active: true },
+	      text
+	    )
+	  );
 	};
 
-	exports.default = when;
+	Loading.propTypes = {
+	  text: _react.PropTypes.string
+	};
+
+	exports.default = Loading;
+
+/***/ },
+/* 1269 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(1270);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(820)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./Loading.styl", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./Loading.styl");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 1270 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(819)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "", ""]);
+
+	// exports
+
+
+/***/ },
+/* 1271 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(299);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _semanticUiReact = __webpack_require__(822);
+
+	var _constants = __webpack_require__(762);
+
+	__webpack_require__(1272);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Item = function (_PureComponent) {
+	  _inherits(Item, _PureComponent);
+
+	  function Item() {
+	    var _ref;
+
+	    var _temp, _this, _ret;
+
+	    _classCallCheck(this, Item);
+
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+
+	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Item.__proto__ || Object.getPrototypeOf(Item)).call.apply(_ref, [this].concat(args))), _this), _this.handleClick = function (evt) {
+	      evt.stopPropagation();
+	      _this.props.onClick();
+	    }, _this.handleActionClick = function (name) {
+	      return function (evt) {
+	        evt.stopPropagation();
+	        _this.props.onActionClick(name);
+	      };
+	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	  }
+
+	  _createClass(Item, [{
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      var _props = this.props;
+	      var name = _props.name;
+	      var group = _props.group;
+
+
+	      var IssueButton = function IssueButton() {
+	        return _react2.default.createElement(
+	          _semanticUiReact.Button.Group,
+	          { positive: true, size: 'mini' },
+	          _react2.default.createElement(_semanticUiReact.Button, {
+	            positive: true,
+	            content: 'Issue',
+	            icon: 'plus',
+	            size: 'mini',
+	            onClick: _this2.handleActionClick('newIssue')
+	          }),
+	          _react2.default.createElement(
+	            _semanticUiReact.Dropdown,
+	            { floating: true, button: true },
+	            _react2.default.createElement(
+	              _semanticUiReact.Dropdown.Menu,
+	              null,
+	              _constants.PROJECT_DROPDOWN_OPTIONS.map(function (opt, i) {
+	                return _react2.default.createElement(_semanticUiReact.Dropdown.Item, _extends({}, opt, {
+	                  key: i,
+	                  onClick: _this2.handleActionClick(opt.id)
+	                }));
+	              })
+	            )
+	          )
+	        );
+	      };
+
+	      return _react2.default.createElement(
+	        _semanticUiReact.List.Item,
+	        { className: 'App__Projects_Item', onClick: this.handleClick },
+	        _react2.default.createElement(
+	          _semanticUiReact.List.Content,
+	          { className: 'App__Projects_Item_Actions', floated: 'right' },
+	          _react2.default.createElement(IssueButton, null)
+	        ),
+	        _react2.default.createElement(
+	          _semanticUiReact.List.Header,
+	          null,
+	          name
+	        ),
+	        _react2.default.createElement(
+	          _semanticUiReact.List.Description,
+	          null,
+	          group
+	        )
+	      );
+	    }
+	  }]);
+
+	  return Item;
+	}(_react.PureComponent);
+
+	Item.propTypes = {
+	  name: _react.PropTypes.string,
+	  group: _react.PropTypes.string,
+	  onClick: _react.PropTypes.func,
+	  onActionClick: _react.PropTypes.func
+	};
+
+	exports.default = Item;
+
+/***/ },
+/* 1272 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(1273);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(820)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./Item.styl", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./Item.styl");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 1273 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(819)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".App__Projects_Item .description,\n.App__Projects_Item .header {\n  white-space: noWrap;\n  text-overflow: ellipsis;\n  overflow: hidden;\n}\n.App__Projects_Item .button {\n  padding: 0.78571429em 1em;\n}\n.App__Projects_Item .dropdown > .dropdown.icon {\n  margin: 0;\n}\n.App__Projects_Item .App__Projects_Item_Actions {\n  display: none;\n}\n.App__Projects_Item:hover .App__Projects_Item_Actions {\n  display: block;\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 1274 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(299);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _semanticUiReact = __webpack_require__(822);
+
+	__webpack_require__(1275);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var NotFound = function NotFound(_ref) {
+	  var query = _ref.query;
+	  return _react2.default.createElement(
+	    'div',
+	    { className: 'App__Projects_NotFound' },
+	    _react2.default.createElement(_semanticUiReact.Icon, { name: query ? 'search' : 'warning circle', size: 'big' }),
+	    query ? _react2.default.createElement(
+	      'div',
+	      null,
+	      'We couldn\'t find any project ',
+	      _react2.default.createElement('br', null),
+	      'matching ',
+	      _react2.default.createElement(
+	        'span',
+	        { className: 'query' },
+	        query
+	      )
+	    ) : _react2.default.createElement(
+	      'div',
+	      null,
+	      'We couldn\'t find any project'
+	    )
+	  );
+	};
+
+	NotFound.propTypes = {
+	  query: _react.PropTypes.string
+	};
+
+	exports.default = NotFound;
+
+/***/ },
+/* 1275 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(1276);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(820)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./NotFound.styl", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./NotFound.styl");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 1276 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(819)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".App__Projects_NotFound {\n  display: flex;\n  justify-content: center;\n  flex: 1;\n  height: 100%;\n  align-items: center;\n  flex-direction: column;\n  color: #808080;\n  text-align: center;\n}\n.App__Projects_NotFound .icon {\n  margin-bottom: 10px;\n}\n.App__Projects_NotFound .query {\n  color: #c7254e;\n  background-color: #f9f2f4;\n  radius: 3px;\n  padding: 2px 4px;\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 1277 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(1278);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(820)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./Projects.styl", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./Projects.styl");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 1278 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(819)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".App__Projects {\n  height: 402px !important;\n  overflow: auto;\n  padding: 5px;\n}\n.App__Projects_More {\n  display: flex;\n  justify-content: center;\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 1279 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(299);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _semanticUiReact = __webpack_require__(822);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var FlexContainer = function FlexContainer(_ref) {
+	  var children = _ref.children;
+	  return _react2.default.createElement(
+	    'div',
+	    { className: 'FlexContainer' },
+	    children
+	  );
+	};
+
+	FlexContainer.propTypes = {
+	  children: _react.PropTypes.any
+	};
+
+	exports.default = FlexContainer;
+
+/***/ },
+/* 1280 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(299);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _classnames = __webpack_require__(941);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	__webpack_require__(1281);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var FlexItem = function FlexItem(_ref) {
+	  var children = _ref.children;
+	  var fluid = _ref.fluid;
+	  return _react2.default.createElement(
+	    'div',
+	    { className: (0, _classnames2.default)('FlexItem', { fluid: fluid }) },
+	    children
+	  );
+	};
+
+	FlexItem.propTypes = {
+	  children: _react.PropTypes.any,
+	  fluid: _react.PropTypes.bool
+	};
+
+	exports.default = FlexItem;
+
+/***/ },
+/* 1281 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(1282);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(820)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/stylus-loader/index.js!./FlexItem.styl", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/stylus-loader/index.js!./FlexItem.styl");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
 
 /***/ },
 /* 1282 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(819)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".fluid {\n  flex: 1;\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 1283 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(299);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(475);
+
+	var _components = __webpack_require__(815);
+
+	var _actions = __webpack_require__(761);
+
+	var actions = _interopRequireWildcard(_actions);
+
+	var _selectors = __webpack_require__(803);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var AccessTokenContainer = function AccessTokenContainer(_ref) {
+	  var hasTokenError = _ref.hasTokenError;
+	  var isValidatingToken = _ref.isValidatingToken;
+	  var onRequestUser = _ref.onRequestUser;
+	  var _onGetPersonalToken = _ref.onGetPersonalToken;
+	  return _react2.default.createElement(_components.AccessToken, {
+	    error: hasTokenError,
+	    loading: isValidatingToken,
+	    onGetPersonalToken: function onGetPersonalToken() {
+	      return _onGetPersonalToken();
+	    },
+	    onSave: function onSave(accessToken) {
+	      return onRequestUser({ accessToken: accessToken });
+	    }
+	  });
+	};
+
+	_components.AccessToken.propTypes = {
+	  hasTokenError: _react.PropTypes.bool,
+	  isValidatingToken: _react.PropTypes.bool,
+	  onRequestUser: _react.PropTypes.func,
+	  onGetPersonalToken: _react.PropTypes.func
+	};
+
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    hasTokenError: (0, _selectors.getHasTokenError)(state),
+	    isValidatingToken: (0, _selectors.getIsValidatingToken)(state)
+	  };
+	};
+
+	var mapDispatchToProps = {
+	  onRequestUser: actions.requestUser,
+	  onGetPersonalToken: actions.getPersonalToken
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(AccessTokenContainer);
+
+/***/ },
+/* 1284 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79353,13 +79342,273 @@
 
 	var _reactRedux = __webpack_require__(475);
 
-	var _curry = __webpack_require__(804);
+	var _selectors = __webpack_require__(803);
+
+	var _components = __webpack_require__(815);
+
+	var _store = __webpack_require__(1285);
+
+	var _Projects = __webpack_require__(1286);
+
+	var _Projects2 = _interopRequireDefault(_Projects);
+
+	var _Search = __webpack_require__(1288);
+
+	var _Search2 = _interopRequireDefault(_Search);
+
+	var _constants = __webpack_require__(762);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var MainContainer = function (_PureComponent) {
+	  _inherits(MainContainer, _PureComponent);
+
+	  function MainContainer() {
+	    var _ref;
+
+	    var _temp, _this, _ret;
+
+	    _classCallCheck(this, MainContainer);
+
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+
+	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = MainContainer.__proto__ || Object.getPrototypeOf(MainContainer)).call.apply(_ref, [this].concat(args))), _this), _this.renderPage = function () {
+	      var page = _this.props.page;
+
+
+	      switch (page) {
+	        case _constants.Pages.search:
+	          return _react2.default.createElement(_Search2.default, null);
+	        case _constants.Pages.main:
+	          return _react2.default.createElement(_Projects2.default, null);
+	      }
+	    }, _this.handleDropdown = function (evt, _ref2) {
+	      var id = _ref2.id;
+	      var _this$props = _this.props;
+	      var onRemoveToken = _this$props.onRemoveToken;
+	      var onOpenProfile = _this$props.onOpenProfile;
+	      var onOpenSettings = _this$props.onOpenSettings;
+
+
+	      switch (id) {
+	        case 'removeToken':
+	          return onRemoveToken();
+	        case 'profile':
+	          return onOpenProfile();
+	        case 'settings':
+	          return onOpenSettings();
+
+	        default:
+	          console.error('Unhandled action of id "' + id + '"');
+	      }
+	    }, _this.handleSearch = function (query) {
+	      _this.props.onSearch(query);
+	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	  }
+
+	  _createClass(MainContainer, [{
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props;
+	      var user = _props.user;
+	      var searching = _props.searching;
+	      var page = _props.page;
+
+
+	      return _react2.default.createElement(
+	        _components.FlexItem,
+	        { fluid: true },
+	        _react2.default.createElement(_components.TopBar, {
+	          imageUrl: user.avatar_url,
+	          searching: searching && page !== _constants.Pages.search,
+	          onDropdownClick: this.handleDropdown,
+	          onSearch: this.handleSearch
+	        }),
+	        this.renderPage()
+	      );
+	    }
+	  }]);
+
+	  return MainContainer;
+	}(_react.PureComponent);
+
+	MainContainer.propTypes = {
+	  user: _react.PropTypes.object,
+	  searching: _react.PropTypes.bool
+	};
+
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    user: (0, _selectors.getUser)(state),
+	    searching: (0, _selectors.getLoadingSearch)(state),
+	    page: (0, _selectors.getSelectedPage)(state)
+	  };
+	};
+
+	var mapDispatchToProps = {
+	  onRemoveToken: _store.actions.removeToken,
+	  onOpenProfile: _store.actions.openProfile,
+	  onOpenSettings: _store.actions.openSettings,
+	  onSearch: _store.actions.loadSearchProjects
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(MainContainer);
+
+/***/ },
+/* 1285 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.actions = undefined;
+
+	var _actions2 = __webpack_require__(761);
+
+	var _actions = _interopRequireWildcard(_actions2);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	exports.actions = _actions;
+
+/***/ },
+/* 1286 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(299);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(475);
+
+	var _curry = __webpack_require__(806);
 
 	var _curry2 = _interopRequireDefault(_curry);
 
-	var _components = __webpack_require__(813);
+	var _throttle = __webpack_require__(1265);
 
-	var _store = __webpack_require__(1257);
+	var _throttle2 = _interopRequireDefault(_throttle);
+
+	var _selectors = __webpack_require__(803);
+
+	var _components = __webpack_require__(815);
+
+	var _store = __webpack_require__(1285);
+
+	var _Project = __webpack_require__(1287);
+
+	var _Project2 = _interopRequireDefault(_Project);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ProjectsContainer = function (_PureComponent) {
+	  _inherits(ProjectsContainer, _PureComponent);
+
+	  function ProjectsContainer() {
+	    _classCallCheck(this, ProjectsContainer);
+
+	    return _possibleConstructorReturn(this, (ProjectsContainer.__proto__ || Object.getPrototypeOf(ProjectsContainer)).apply(this, arguments));
+	  }
+
+	  _createClass(ProjectsContainer, [{
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props;
+	      var loading = _props.loading;
+	      var nextPage = _props.nextPage;
+	      var projects = _props.projects;
+	      var onNextPage = _props.onNextPage;
+
+
+	      return _react2.default.createElement(
+	        _components.Projects,
+	        {
+	          loading: loading,
+	          loadingMessage: 'Loading projects',
+	          nextPage: !!nextPage,
+	          onNextPage: onNextPage
+	        },
+	        projects.map(function (project) {
+	          return _react2.default.createElement(_Project2.default, { key: project.id, data: project });
+	        })
+	      );
+	    }
+	  }]);
+
+	  return ProjectsContainer;
+	}(_react.PureComponent);
+
+	ProjectsContainer.propTypes = {
+	  loading: _react.PropTypes.bool,
+	  projects: _react.PropTypes.array,
+	  onLoadProjects: _react.PropTypes.func,
+	  onNextPage: _react.PropTypes.func
+	};
+
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    loading: (0, _selectors.getLoadingProjects)(state),
+	    nextPage: (0, _selectors.getProjectsNextPage)(state),
+	    projects: (0, _selectors.getProjects)(state)
+	  };
+	};
+
+	var mapDispatchToProps = {
+	  onLoadProjects: _store.actions.loadProjects,
+	  onNextPage: _store.actions.requestProjects
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(ProjectsContainer);
+
+/***/ },
+/* 1287 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(299);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(475);
+
+	var _curry = __webpack_require__(806);
+
+	var _curry2 = _interopRequireDefault(_curry);
+
+	var _components = __webpack_require__(815);
+
+	var _store = __webpack_require__(1285);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -79440,7 +79689,7 @@
 	exports.default = (0, _reactRedux.connect)(null, mapDispatchToProps)(ProjectContainer);
 
 /***/ },
-/* 1283 */
+/* 1288 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79457,21 +79706,21 @@
 
 	var _reactRedux = __webpack_require__(475);
 
-	var _curry = __webpack_require__(804);
+	var _curry = __webpack_require__(806);
 
 	var _curry2 = _interopRequireDefault(_curry);
 
-	var _throttle = __webpack_require__(1277);
+	var _throttle = __webpack_require__(1265);
 
 	var _throttle2 = _interopRequireDefault(_throttle);
 
-	var _selectors = __webpack_require__(802);
+	var _selectors = __webpack_require__(803);
 
-	var _components = __webpack_require__(813);
+	var _components = __webpack_require__(815);
 
-	var _store = __webpack_require__(1257);
+	var _store = __webpack_require__(1285);
 
-	var _Project = __webpack_require__(1282);
+	var _Project = __webpack_require__(1287);
 
 	var _Project2 = _interopRequireDefault(_Project);
 
@@ -79545,7 +79794,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(SearchContainer);
 
 /***/ },
-/* 1284 */
+/* 1289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79558,172 +79807,19 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _semanticUiReact = __webpack_require__(822);
-
-	__webpack_require__(1285);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var NotFound = function NotFound(_ref) {
-	  var query = _ref.query;
+	var IssueBranchName = function IssueBranchName() {
 	  return _react2.default.createElement(
 	    'div',
-	    { className: 'App__Projects_NotFound' },
-	    _react2.default.createElement(_semanticUiReact.Icon, { name: query ? 'search' : 'warning circle', size: 'big' }),
-	    query ? _react2.default.createElement(
-	      'div',
-	      null,
-	      'We couldn\'t find any project ',
-	      _react2.default.createElement('br', null),
-	      'matching ',
-	      _react2.default.createElement(
-	        'span',
-	        { className: 'query' },
-	        query
-	      )
-	    ) : _react2.default.createElement(
-	      'div',
-	      null,
-	      'We couldn\'t find any project'
-	    )
+	    null,
+	    'IssueBranchName'
 	  );
 	};
 
-	NotFound.propTypes = {
-	  query: _react.PropTypes.string
-	};
+	IssueBranchName.propTypes = {};
 
-	exports.default = NotFound;
-
-/***/ },
-/* 1285 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(1286);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(818)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./NotFound.styl", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/stylus-loader/index.js!./NotFound.styl");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 1286 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(817)();
-	// imports
-
-
-	// module
-	exports.push([module.id, ".App__Projects_NotFound {\n  display: flex;\n  justify-content: center;\n  flex: 1;\n  height: 100%;\n  align-items: center;\n  flex-direction: column;\n  color: #808080;\n  text-align: center;\n}\n.App__Projects_NotFound .icon {\n  margin-bottom: 10px;\n}\n.App__Projects_NotFound .query {\n  color: #c7254e;\n  background-color: #f9f2f4;\n  radius: 3px;\n  padding: 2px 4px;\n}\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 1287 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(299);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _semanticUiReact = __webpack_require__(822);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var Search = function (_PureComponent) {
-	  _inherits(Search, _PureComponent);
-
-	  function Search() {
-	    var _ref;
-
-	    var _temp, _this, _ret;
-
-	    _classCallCheck(this, Search);
-
-	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
-	    }
-
-	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Search.__proto__ || Object.getPrototypeOf(Search)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-	      value: ''
-	    }, _this.handleSearch = function () {
-	      _this.props.onSearch(_this.state.value);
-	    }, _this.handleClose = function () {
-	      _this.setState({ value: '' }, _this.handleSearch);
-	    }, _this.handleChange = function (_ref2) {
-	      var value = _ref2.target.value;
-
-	      _this.setState({ value: value });
-	    }, _this.handleOnKeyPress = function (_ref3) {
-	      var key = _ref3.key;
-
-	      if (key === 'Enter') _this.handleSearch();
-	    }, _temp), _possibleConstructorReturn(_this, _ret);
-	  }
-
-	  _createClass(Search, [{
-	    key: 'render',
-	    value: function render() {
-	      var value = this.state.value;
-	      var _props = this.props;
-	      var loading = _props.loading;
-	      var onSearch = _props.onSearch;
-
-	      var SearchIcon = _react2.default.createElement(_semanticUiReact.Icon, { name: 'search', link: true, onClick: this.handleSearch });
-	      var CloseIcon = _react2.default.createElement(_semanticUiReact.Icon, { name: 'close', link: true, onClick: this.handleClose });
-
-	      return _react2.default.createElement(_semanticUiReact.Input, {
-	        autoFocus: true,
-	        fluid: true,
-	        icon: value ? CloseIcon : SearchIcon,
-	        loading: loading,
-	        placeholder: 'Filter by name...',
-	        onChange: this.handleChange,
-	        onKeyPress: this.handleOnKeyPress
-	      });
-	    }
-	  }]);
-
-	  return Search;
-	}(_react.PureComponent);
-
-	Search.propTypes = {
-	  loading: _react.PropTypes.bool,
-	  onSearch: _react.PropTypes.func
-	};
-
-	exports.default = Search;
+	exports.default = IssueBranchName;
 
 /***/ }
 /******/ ]);

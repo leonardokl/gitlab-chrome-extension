@@ -1,7 +1,7 @@
 import React, { PropTypes, PureComponent } from 'react'
 import { connect } from 'react-redux'
 import { getUser, getLoadingSearch, getSelectedPage } from 'store/selectors'
-import { TopBar } from 'components'
+import { FlexItem, TopBar } from 'components'
 import { actions } from 'store'
 import Projects from './Projects'
 import Search from './Search'
@@ -43,7 +43,7 @@ class MainContainer extends PureComponent {
     const { user, searching, page } = this.props
 
     return (
-      <div>
+      <FlexItem fluid>
         <TopBar
           imageUrl={user.avatar_url}
           searching={searching && page !== Pages.search}
@@ -51,7 +51,7 @@ class MainContainer extends PureComponent {
           onSearch={this.handleSearch}
         />
         {this.renderPage()}
-      </div>
+      </FlexItem>
     )
   }
 }

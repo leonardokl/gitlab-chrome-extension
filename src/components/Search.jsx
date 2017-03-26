@@ -34,6 +34,7 @@ class Search extends PureComponent {
 
     return (
       <Input
+        value={value}
         autoFocus
         fluid
         icon={value ? CloseIcon : SearchIcon}

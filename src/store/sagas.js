@@ -18,12 +18,7 @@ function* handleLoad () {
   try {
     const user = yield chrome.storage.get('user')
 
-    yield [
-      put(actions.requestUserSuccess(user)),
-      put(actions.setPage(Pages.main)),
-      put(actions.requestTodos()),
-      put(actions.loadProjects())
-    ]
+    yield put(actions.requestUserSuccess(user))
   } catch (err) {
     console.warn(err)
     yield put(actions.setPage(Pages.accessToken))
@@ -37,7 +32,6 @@ function* handleRequestUser ({ payload: { accessToken } }) {
 
     yield chrome.storage.set('user', user)
     yield put(actions.requestUserSuccess(user))
-    yield put(actions.setPage(Pages.main))
   } catch (err) {
     console.error(err)
     notification({ title: 'Error', message: 'Invalid token' })
@@ -45,10 +39,19 @@ function* handleRequestUser ({ payload: { accessToken } }) {
   }
 }
 
+function* handleRequestUserSuccess () {
+  yield [
+    put(actions.setPage(Pages.main)),
+    put(actions.requestTodos()),
+    put(actions.loadProjects())
+  ]
+}
+
 function* handleRemoveToken () {
   yield chrome.storage.clear()
   yield put(actions.setPage(Pages.accessToken))
   yield put(actions.removeTokenSuccess())
+  chrome.setBadge('')
 }
 
 function* handleGetPersonalToken () {
@@ -141,6 +144,7 @@ export default function* () {
   yield [
     takeEvery(actions.load, handleLoad),
     takeEvery(actions.requestUser, handleRequestUser),
+    takeEvery(actions.requestUserSuccess, handleRequestUserSuccess),
     takeEvery(actions.removeToken, handleRemoveToken),
     takeEvery(actions.getPersonalToken, handleGetPersonalToken),
     takeEvery(actions.loadProjects, handleRequestProjects),
