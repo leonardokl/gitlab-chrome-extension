@@ -76596,6 +76596,10 @@
 
 	var _semanticUiReact = __webpack_require__(822);
 
+	var _FlexContainer = __webpack_require__(1279);
+
+	var _FlexContainer2 = _interopRequireDefault(_FlexContainer);
+
 	__webpack_require__(1240);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -76650,44 +76654,53 @@
 
 
 	      return _react2.default.createElement(
-	        'div',
-	        { className: 'App__AccessToken' },
-	        _react2.default.createElement(
-	          _semanticUiReact.Header,
-	          {
-	            as: 'h4',
-	            textAlign: 'center'
-	          },
-	          'Add your Gitlab Personal Access Token'
-	        ),
+	        _FlexContainer2.default,
+	        { fluid: true, className: 'App__AccessToken' },
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'App__AccessToken_Form' },
-	          _react2.default.createElement(_semanticUiReact.Input, {
-	            autoFocus: true,
-	            disabled: loading,
-	            fluid: true,
-	            placeholder: 'Personal Access Token',
-	            error: error,
-	            onChange: this.handleInputChange,
-	            onKeyPress: this.handleInputKeyPress
-	          }),
-	          _react2.default.createElement(_semanticUiReact.Button, {
-	            disabled: loading,
-	            loading: loading,
-	            primary: true,
-	            fluid: true,
-	            icon: 'save',
-	            content: 'Save',
-	            onClick: this.handleSave
-	          }),
+	          { className: 'App__AccessToken_Content' },
+	          _react2.default.createElement(_semanticUiReact.Icon, { name: 'gitlab', size: 'huge' }),
 	          _react2.default.createElement(
-	            'div',
+	            _semanticUiReact.Segment,
 	            null,
 	            _react2.default.createElement(
-	              'a',
-	              { href: '#', onClick: onGetPersonalToken },
-	              'How can you get a Personal Access Token?'
+	              _semanticUiReact.Header,
+	              {
+	                as: 'h4',
+	                textAlign: 'center'
+	              },
+	              'Add your Personal Access Token'
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'App__AccessToken_Form' },
+	              _react2.default.createElement(_semanticUiReact.Input, {
+	                autoFocus: true,
+	                disabled: loading,
+	                fluid: true,
+	                placeholder: 'Personal Access Token',
+	                error: error,
+	                onChange: this.handleInputChange,
+	                onKeyPress: this.handleInputKeyPress
+	              }),
+	              _react2.default.createElement(_semanticUiReact.Button, {
+	                disabled: loading,
+	                loading: loading,
+	                primary: true,
+	                fluid: true,
+	                icon: 'save',
+	                content: 'Save',
+	                onClick: this.handleSave
+	              }),
+	              _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                  'a',
+	                  { href: '#', onClick: onGetPersonalToken },
+	                  'How can you get a Personal Access Token?'
+	                )
+	              )
 	            )
 	          )
 	        )
@@ -76742,7 +76755,7 @@
 
 
 	// module
-	exports.push([module.id, ".App__AccessToken {\n  flex: 1;\n  align-self: center;\n  margin: 10px;\n}\n.App__AccessToken_Form {\n  text-align: center;\n}\n.App__AccessToken_Form div:nth-child(1),\n.App__AccessToken_Form button {\n  margin-bottom: 10px !important;\n}\n", ""]);
+	exports.push([module.id, ".App__AccessToken {\n  background-color: #f3f3f3;\n}\n.App__AccessToken_Content {\n  flex: 1;\n  align-self: center;\n  margin: 10px;\n  text-align: center;\n}\n.App__AccessToken_Form {\n  text-align: center;\n}\n.App__AccessToken_Form div:nth-child(1),\n.App__AccessToken_Form button {\n  margin-bottom: 10px !important;\n}\n", ""]);
 
 	// exports
 
@@ -76802,6 +76815,7 @@
 	      var searching = _props.searching;
 	      var todosCount = _props.todosCount;
 	      var onDropdownClick = _props.onDropdownClick;
+	      var onNewProjectClick = _props.onNewProjectClick;
 	      var onTodosClick = _props.onTodosClick;
 
 	      var DropdownTrigger = _react2.default.createElement(
@@ -76825,6 +76839,13 @@
 	            onSearch: this.props.onSearch
 	          }),
 	          _react2.default.createElement(_TodosCounter2.default, { count: todosCount, onClick: onTodosClick }),
+	          _react2.default.createElement(_semanticUiReact.Icon, {
+	            name: 'plus',
+	            size: 'large',
+	            title: 'New project',
+	            link: true,
+	            onClick: onNewProjectClick
+	          }),
 	          _react2.default.createElement(
 	            _semanticUiReact.Dropdown,
 	            { trigger: DropdownTrigger },
@@ -76859,7 +76880,8 @@
 	  todosCount: _react.PropTypes.number,
 	  onDropdownClick: _react.PropTypes.func,
 	  onSearch: _react.PropTypes.func,
-	  onTodosClick: _react.PropTypes.func
+	  onTodosClick: _react.PropTypes.func,
+	  onNewProjectClick: _react.PropTypes.func
 	};
 
 	exports.default = TopBar;
@@ -76990,7 +77012,7 @@
 
 
 	// module
-	exports.push([module.id, ".App__TopBar {\n  padding: 10px;\n  background-color: #fafafa;\n  border-bottom: 1px solid #e5e5e5;\n}\n.App__TopBar_Content {\n  display: flex;\n  align-items: center;\n}\n.App__TopBar_Content .input {\n  flex: 1;\n  margin-right: 10px;\n}\n.App__TopBar_Content .ui.dropdown > .dropdown.icon {\n  margin: 0;\n}\n.App__TopBar_Content .menu {\n  top: 35px !important;\n  left: -87px !important;\n  padding: 3px !important;\n}\n", ""]);
+	exports.push([module.id, ".App__TopBar {\n  padding: 10px;\n  background-color: #fafafa;\n  border-bottom: 1px solid #e5e5e5;\n}\n.App__TopBar_Content {\n  display: flex;\n  align-items: center;\n}\n.App__TopBar_Content .icon {\n  color: rgba(0,0,0,0.55);\n}\n.App__TopBar_Content .input {\n  flex: 1;\n  margin-right: 10px;\n}\n.App__TopBar_Content .plus {\n  margin-right: 10px;\n}\n.App__TopBar_Content .ui.dropdown > .dropdown.icon {\n  margin: 0;\n}\n.App__TopBar_Content .menu {\n  top: 35px !important;\n  left: -87px !important;\n  padding: 3px !important;\n}\n", ""]);
 
 	// exports
 
@@ -77115,7 +77137,7 @@
 	        loading && !this.hasChildren && _react2.default.createElement(_Loading2.default, { text: loadingMessage }),
 	        this.hasChildren && _react2.default.createElement(
 	          _semanticUiReact.List,
-	          { divided: true, relaxed: true, selection: true },
+	          { className: 'App__Projects_List', divided: true, relaxed: true, selection: true },
 	          children
 	        ),
 	        !this.hasChildren && !loading && _react2.default.createElement(_NotFound2.default, { query: query }),
@@ -79035,7 +79057,7 @@
 
 
 	// module
-	exports.push([module.id, ".App__Projects_Item .description,\n.App__Projects_Item .header {\n  white-space: noWrap;\n  text-overflow: ellipsis;\n  overflow: hidden;\n}\n.App__Projects_Item .button {\n  padding: 0.78571429em 1em;\n}\n.App__Projects_Item .dropdown > .dropdown.icon {\n  margin: 0;\n}\n.App__Projects_Item .App__Projects_Item_Actions {\n  display: none;\n}\n.App__Projects_Item:hover .App__Projects_Item_Actions {\n  display: block;\n}\n", ""]);
+	exports.push([module.id, ".App__Projects_Item .description,\n.App__Projects_Item .header {\n  white-space: noWrap;\n  text-overflow: ellipsis;\n  overflow: hidden;\n}\n.App__Projects_Item .header {\n  font-size: 1.2em;\n  line-height: 1.3em;\n}\n.App__Projects_Item .button {\n  padding: 0.78571429em 1em;\n}\n.App__Projects_Item .dropdown > .dropdown.icon {\n  margin: 0;\n}\n.App__Projects_Item .App__Projects_Item_Actions {\n  display: none;\n  padding-top: 0.42857143em;\n}\n.App__Projects_Item:hover .App__Projects_Item_Actions {\n  display: block;\n}\n", ""]);
 
 	// exports
 
@@ -79166,7 +79188,7 @@
 
 
 	// module
-	exports.push([module.id, ".App__Projects {\n  height: 402px !important;\n  overflow: auto;\n  padding: 5px;\n}\n.App__Projects_More {\n  display: flex;\n  justify-content: center;\n}\n", ""]);
+	exports.push([module.id, ".App__Projects {\n  height: 402px !important;\n  overflow: auto;\n  padding: 5px;\n}\n.App__Projects_More {\n  display: flex;\n  justify-content: center;\n}\n.App__Projects_List {\n  padding-left: 5px !important;\n  padding-right: 5px !important;\n}\n", ""]);
 
 	// exports
 
@@ -79185,21 +79207,31 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _semanticUiReact = __webpack_require__(822);
+	var _classnames = __webpack_require__(941);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	__webpack_require__(1293);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 	var FlexContainer = function FlexContainer(_ref) {
 	  var children = _ref.children;
+	  var fluid = _ref.fluid;
+	  var className = _ref.className;
 	  return _react2.default.createElement(
 	    'div',
-	    { className: 'FlexContainer' },
+	    { className: (0, _classnames2.default)('FlexContainer', _defineProperty({ fluid: fluid }, className, className)) },
 	    children
 	  );
 	};
 
 	FlexContainer.propTypes = {
-	  children: _react.PropTypes.any
+	  children: _react.PropTypes.any,
+	  fluid: _react.PropTypes.bool,
+	  className: _react.PropTypes.string
 	};
 
 	exports.default = FlexContainer;
@@ -79415,6 +79447,8 @@
 	        case _constants.Pages.main:
 	          return _react2.default.createElement(_Projects2.default, null);
 	      }
+	    }, _this.handleNewProjectClick = function () {
+	      _this.props.onOpenTab(_constants.GITLAB_URL + '/projects/new');
 	    }, _this.handleTodosClick = function () {
 	      _this.props.onOpenTab(_constants.GITLAB_URL + '/dashboard/todos');
 	    }, _this.handleDropdown = function (evt, _ref2) {
@@ -79460,7 +79494,8 @@
 	          todosCount: todosCount,
 	          onDropdownClick: this.handleDropdown,
 	          onSearch: this.handleSearch,
-	          onTodosClick: this.handleTodosClick
+	          onTodosClick: this.handleTodosClick,
+	          onNewProjectClick: this.handleNewProjectClick
 	        }),
 	        this.renderPage()
 	      );
@@ -79878,7 +79913,7 @@
 	  var onClick = _ref.onClick;
 	  return _react2.default.createElement(
 	    _semanticUiReact.Icon.Group,
-	    { className: 'App__TopBar_Todos', title: 'todos' },
+	    { className: 'App__TopBar_Todos', title: !!count ? 'Todos (' + count + ')' : 'Todos' },
 	    _react2.default.createElement(_semanticUiReact.Icon, {
 	      className: 'todos',
 	      name: 'bell outline',
@@ -79937,6 +79972,46 @@
 
 	// module
 	exports.push([module.id, ".App__TopBar_Todos {\n  margin-right: 10px;\n  color: rgba(0,0,0,0.55);\n}\n.App__TopBar_Todos .todos {\n  margin: 0 !important;\n}\n.App__TopBar_Todos .counter {\n  height: 13px;\n  width: 15px;\n  text-align: center;\n  background-color: #4285f4;\n  position: absolute;\n  padding: 2px;\n  font-size: 0.7em;\n  border-radius: 3px;\n  color: #fff;\n  left: 10px;\n  cursor: pointer;\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 1293 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(1294);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(820)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/stylus-loader/index.js!./FlexContainer.styl", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/stylus-loader/index.js!./FlexContainer.styl");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 1294 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(819)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".FlexContainer {\n  display: flex;\n}\n.FlexContainer .fluid {\n  flex: 1;\n}\n", ""]);
 
 	// exports
 

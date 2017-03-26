@@ -1,5 +1,6 @@
 import React, { PropTypes, PureComponent } from 'react'
-import { Button, Header, Input } from 'semantic-ui-react'
+import { Button, Header, Input, Segment, Icon } from 'semantic-ui-react'
+import FlexContainer from './FlexContainer'
 import './AccessToken.styl'
 
 class AccessToken extends PureComponent {
@@ -25,39 +26,44 @@ class AccessToken extends PureComponent {
     const { loading, error, onSave, onGetPersonalToken } = this.props
 
     return (
-      <div className='App__AccessToken'>
-        <Header
-          as='h4'
-          textAlign='center'
-        >
-          Add your Gitlab Personal Access Token
-        </Header>
-        <div className='App__AccessToken_Form'>
-          <Input
-            autoFocus
-            disabled={loading}
-            fluid
-            placeholder='Personal Access Token'
-            error={error}
-            onChange={this.handleInputChange}
-            onKeyPress={this.handleInputKeyPress}
-          />
-          <Button
-            disabled={loading}
-            loading={loading}
-            primary
-            fluid
-            icon='save'
-            content='Save'
-            onClick={this.handleSave}
-          />
-          <div>
-            <a href='#' onClick={onGetPersonalToken}>
-              How can you get a Personal Access Token?
-            </a>
-          </div>
+      <FlexContainer fluid className='App__AccessToken'>
+        <div className='App__AccessToken_Content'>
+          <Icon name='gitlab' size='huge'/>
+          <Segment>
+            <Header
+              as='h4'
+              textAlign='center'
+            >
+              Add your Personal Access Token
+            </Header>
+            <div className='App__AccessToken_Form'>
+              <Input
+                autoFocus
+                disabled={loading}
+                fluid
+                placeholder='Personal Access Token'
+                error={error}
+                onChange={this.handleInputChange}
+                onKeyPress={this.handleInputKeyPress}
+              />
+              <Button
+                disabled={loading}
+                loading={loading}
+                primary
+                fluid
+                icon='save'
+                content='Save'
+                onClick={this.handleSave}
+              />
+              <div>
+                <a href='#' onClick={onGetPersonalToken}>
+                  How can you get a Personal Access Token?
+                </a>
+              </div>
+            </div>
+          </Segment>
         </div>
-      </div>
+      </FlexContainer>
     )
   }
 }

@@ -33,7 +33,7 @@ class Projects extends PureComponent {
           <Loading text={loadingMessage}/>
         }
         {this.hasChildren &&
-          <List divided relaxed selection>
+          <List className='App__Projects_List' divided relaxed selection>
             {children}
           </List>
         }

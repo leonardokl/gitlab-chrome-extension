@@ -3,7 +3,7 @@ import { Icon } from 'semantic-ui-react'
 import './TodosCounter.styl'
 
 const TodosCounter = ({ count, onClick }) => (
-  <Icon.Group className='App__TopBar_Todos' title='todos'>
+  <Icon.Group className='App__TopBar_Todos' title={!!count ? `Todos (${count})` : 'Todos'}>
     <Icon
       className='todos'
       name='bell outline'

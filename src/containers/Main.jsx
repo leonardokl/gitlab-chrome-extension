@@ -19,6 +19,10 @@ class MainContainer extends PureComponent {
     }
   }
 
+  handleNewProjectClick = () => {
+    this.props.onOpenTab(`${GITLAB_URL}/projects/new`)
+  }
+
   handleTodosClick = () => {
     this.props.onOpenTab(`${GITLAB_URL}/dashboard/todos`)
   }
@@ -55,6 +59,7 @@ class MainContainer extends PureComponent {
           onDropdownClick={this.handleDropdown}
           onSearch={this.handleSearch}
           onTodosClick={this.handleTodosClick}
+          onNewProjectClick={this.handleNewProjectClick}
         />
         {this.renderPage()}
       </FlexItem>

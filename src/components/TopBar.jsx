@@ -6,7 +6,7 @@ import './TopBar.styl'
 
 class TopBar extends PureComponent {
   render () {
-    const { imageUrl, searching, todosCount, onDropdownClick, onTodosClick } = this.props
+    const { imageUrl, searching, todosCount, onDropdownClick, onNewProjectClick, onTodosClick } = this.props
     const DropdownTrigger = (
       <span>
         <Image
@@ -28,6 +28,13 @@ class TopBar extends PureComponent {
             onSearch={this.props.onSearch}
           />
           <TodosCounter count={todosCount} onClick={onTodosClick}/>
+          <Icon
+            name='plus'
+            size='large'
+            title='New project'
+            link
+            onClick={onNewProjectClick}
+          />
           <Dropdown trigger={DropdownTrigger}>
             <Dropdown.Menu>
               {dropdownOptions.map((opt, i) =>
@@ -57,7 +64,8 @@ TopBar.propTypes = {
   todosCount: PropTypes.number,
   onDropdownClick: PropTypes.func,
   onSearch: PropTypes.func,
-  onTodosClick: PropTypes.func
+  onTodosClick: PropTypes.func,
+  onNewProjectClick: PropTypes.func
 }
 
 export default TopBar
