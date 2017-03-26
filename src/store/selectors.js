@@ -40,3 +40,6 @@ export const getSearchProjects = state => {
 
   return projects
 }
+
+// todos
+export const getTodosCount = state => state.todos.ids.length

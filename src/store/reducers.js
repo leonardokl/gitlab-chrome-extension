@@ -81,6 +81,12 @@ const search = combineReducers({
   }, 1),
 })
 
+const todos = combineReducers({
+  ids: handleActions({
+    [actions.requestTodosSuccess]: flip(get('payload.result')),
+  }, [])
+})
+
 const entities = handleAction(actions.updateEntity, (state, { payload: { entities } }) => {
   return merge(state, entities)
 }, {})
@@ -90,6 +96,7 @@ export default combineReducers({
   page,
   projects,
   search,
+  todos,
   entities,
 
   loading: handleAction(actions.load, T, false),

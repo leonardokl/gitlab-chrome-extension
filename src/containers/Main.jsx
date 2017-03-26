@@ -1,11 +1,11 @@
 import React, { PropTypes, PureComponent } from 'react'
 import { connect } from 'react-redux'
-import { getUser, getLoadingSearch, getSelectedPage } from 'store/selectors'
+import { getUser, getLoadingSearch, getSelectedPage, getTodosCount } from 'store/selectors'
 import { FlexItem, TopBar } from 'components'
 import { actions } from 'store'
 import Projects from './Projects'
 import Search from './Search'
-import { Pages } from 'constants'
+import { Pages, GITLAB_URL } from 'constants'
 
 class MainContainer extends PureComponent {
   renderPage = () => {
@@ -17,6 +17,10 @@ class MainContainer extends PureComponent {
       case Pages.main:
         return <Projects />
     }
+  }
+
+  handleTodosClick = () => {
+    this.props.onOpenTab(`${GITLAB_URL}/dashboard/todos`)
   }
 
   handleDropdown = (evt, { id }) => {
@@ -40,15 +44,17 @@ class MainContainer extends PureComponent {
   }
 
   render () {
-    const { user, searching, page } = this.props
+    const { user, searching, page, todosCount } = this.props
 
     return (
       <FlexItem fluid>
         <TopBar
           imageUrl={user.avatar_url}
           searching={searching && page !== Pages.search}
+          todosCount={todosCount}
           onDropdownClick={this.handleDropdown}
           onSearch={this.handleSearch}
+          onTodosClick={this.handleTodosClick}
         />
         {this.renderPage()}
       </FlexItem>
@@ -64,14 +70,16 @@ MainContainer.propTypes = {
 const mapStateToProps = state => ({
   user: getUser(state),
   searching: getLoadingSearch(state),
-  page: getSelectedPage(state)
+  page: getSelectedPage(state),
+  todosCount: getTodosCount(state)
 })
 
 const mapDispatchToProps = ({
   onRemoveToken: actions.removeToken,
   onOpenProfile: actions.openProfile,
   onOpenSettings: actions.openSettings,
-  onSearch: actions.loadSearchProjects
+  onSearch: actions.loadSearchProjects,
+  onOpenTab: actions.openTab
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainContainer)

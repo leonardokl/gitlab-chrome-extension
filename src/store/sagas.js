@@ -131,6 +131,7 @@ function* handleRequestTodos () {
 
     chrome.setBadge(toBadge(count))
     yield put(actions.updateEntity(normalizedData))
+    yield put(actions.requestTodosSuccess(normalizedData))
   } catch (err) {
     console.error(err)
   }

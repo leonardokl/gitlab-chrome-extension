@@ -1,11 +1,12 @@
 import React, { PropTypes, PureComponent } from 'react'
 import { Dropdown, Icon, Image, Input } from 'semantic-ui-react'
 import Search from './Search'
+import TodosCounter from './TodosCounter'
 import './TopBar.styl'
 
 class TopBar extends PureComponent {
   render () {
-    const { imageUrl, searching, onDropdownClick } = this.props
+    const { imageUrl, searching, todosCount, onDropdownClick, onTodosClick } = this.props
     const DropdownTrigger = (
       <span>
         <Image
@@ -26,6 +27,7 @@ class TopBar extends PureComponent {
             loading={searching}
             onSearch={this.props.onSearch}
           />
+          <TodosCounter count={todosCount} onClick={onTodosClick}/>
           <Dropdown trigger={DropdownTrigger}>
             <Dropdown.Menu>
               {dropdownOptions.map((opt, i) =>
@@ -52,8 +54,10 @@ class TopBar extends PureComponent {
 TopBar.propTypes = {
   imageUrl: PropTypes.string,
   searching: PropTypes.bool,
+  todosCount: PropTypes.number,
   onDropdownClick: PropTypes.func,
-  onSearch: PropTypes.func
+  onSearch: PropTypes.func,
+  onTodosClick: PropTypes.func
 }
 
 export default TopBar

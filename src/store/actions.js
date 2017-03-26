@@ -30,3 +30,4 @@ export const searchProjectsError = createAction('SEARCH_PROJECTS_ERROR')
 export const searchProjectsSuccess = createAction('SEARCH_PROJECTS_SUCCESS')
 
 export const requestTodos = createAction('REQUEST_TODOS')
+export const requestTodosSuccess = createAction('REQUEST_TODOS_SUCCESS')

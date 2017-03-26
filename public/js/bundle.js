@@ -33655,6 +33655,10 @@
 	  }), _defineProperty(_handleActions11, actions.searchProjectsSuccess, (0, _flip2.default)((0, _get2.default)('payload.nextPage'))), _handleActions11), 1)
 	});
 
+	var todos = (0, _redux.combineReducers)({
+	  ids: (0, _reduxActions.handleActions)(_defineProperty({}, actions.requestTodosSuccess, (0, _flip2.default)((0, _get2.default)('payload.result'))), [])
+	});
+
 	var entities = (0, _reduxActions.handleAction)(actions.updateEntity, function (state, _ref3) {
 	  var entities = _ref3.payload.entities;
 
@@ -33666,6 +33670,7 @@
 	  page: page,
 	  projects: projects,
 	  search: search,
+	  todos: todos,
 	  entities: entities,
 
 	  loading: (0, _reduxActions.handleAction)(actions.load, _T2.default, false),
@@ -43125,7 +43130,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.requestTodos = exports.searchProjectsSuccess = exports.searchProjectsError = exports.searchProjects = exports.loadSearchProjects = exports.requestProjectsSuccess = exports.requestProjectsError = exports.requestProjects = exports.loadProjects = exports.requestUserSuccess = exports.requestUserError = exports.requestUser = exports.removeTokenSuccess = exports.removeToken = exports.getPersonalToken = exports.openTab = exports.openNewIssue = exports.openSettings = exports.openProfile = exports.updateEntity = exports.setPage = exports.load = undefined;
+	exports.requestTodosSuccess = exports.requestTodos = exports.searchProjectsSuccess = exports.searchProjectsError = exports.searchProjects = exports.loadSearchProjects = exports.requestProjectsSuccess = exports.requestProjectsError = exports.requestProjects = exports.loadProjects = exports.requestUserSuccess = exports.requestUserError = exports.requestUser = exports.removeTokenSuccess = exports.removeToken = exports.getPersonalToken = exports.openTab = exports.openNewIssue = exports.openSettings = exports.openProfile = exports.updateEntity = exports.setPage = exports.load = undefined;
 
 	var _reduxActions = __webpack_require__(518);
 
@@ -43165,6 +43170,7 @@
 	var searchProjectsSuccess = exports.searchProjectsSuccess = (0, _reduxActions.createAction)('SEARCH_PROJECTS_SUCCESS');
 
 	var requestTodos = exports.requestTodos = (0, _reduxActions.createAction)('REQUEST_TODOS');
+	var requestTodosSuccess = exports.requestTodosSuccess = (0, _reduxActions.createAction)('REQUEST_TODOS_SUCCESS');
 
 /***/ },
 /* 762 */
@@ -43190,6 +43196,7 @@
 	  personalTokenUrl: 'https://gitlab.com/profile/personal_access_tokens'
 	};
 
+	var GITLAB_URL = exports.GITLAB_URL = 'https://gitlab.com';
 	var PROJECT_DROPDOWN_OPTIONS = exports.PROJECT_DROPDOWN_OPTIONS = [{ id: 'code', text: 'Code', icon: 'code' }, { id: 'branches', text: 'Branches', icon: 'fork' }, { id: 'issues', text: 'Issues', icon: 'warning circle' }];
 
 	exports.default = {
@@ -43586,21 +43593,25 @@
 	          return (0, _effects.put)(actions.updateEntity(normalizedData));
 
 	        case 14:
-	          _context11.next = 19;
-	          break;
+	          _context11.next = 16;
+	          return (0, _effects.put)(actions.requestTodosSuccess(normalizedData));
 
 	        case 16:
-	          _context11.prev = 16;
+	          _context11.next = 21;
+	          break;
+
+	        case 18:
+	          _context11.prev = 18;
 	          _context11.t0 = _context11['catch'](3);
 
 	          console.error(_context11.t0);
 
-	        case 19:
+	        case 21:
 	        case 'end':
 	          return _context11.stop();
 	      }
 	    }
-	  }, _marked[10], this, [[3, 16]]);
+	  }, _marked[10], this, [[3, 18]]);
 	}
 
 	function handleOpenTab(_ref9) {
@@ -46078,7 +46089,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.getSearchProjects = exports.getLoadingSearch = exports.getSearchNextPage = exports.getSearchIds = exports.getQuery = exports.getProjects = exports.getLoadingProjects = exports.getProjectsNextPage = exports.getProjectsIds = exports.getProjectById = exports.getAccessToken = exports.getUser = exports.getLoadingUser = exports.getHasTokenError = exports.getIsValidatingToken = exports.getSelectedPage = exports.getEntityById = undefined;
+	exports.getTodosCount = exports.getSearchProjects = exports.getLoadingSearch = exports.getSearchNextPage = exports.getSearchIds = exports.getQuery = exports.getProjects = exports.getLoadingProjects = exports.getProjectsNextPage = exports.getProjectsIds = exports.getProjectById = exports.getAccessToken = exports.getUser = exports.getLoadingUser = exports.getHasTokenError = exports.getIsValidatingToken = exports.getSelectedPage = exports.getEntityById = undefined;
 
 	var _2 = __webpack_require__(804);
 
@@ -46137,6 +46148,11 @@
 	  var projects = ids.map(getProjectById);
 
 	  return projects;
+	};
+
+	// todos
+	var getTodosCount = exports.getTodosCount = function getTodosCount(state) {
+	  return state.todos.ids.length;
 	};
 
 /***/ },
@@ -76755,6 +76771,10 @@
 
 	var _Search2 = _interopRequireDefault(_Search);
 
+	var _TodosCounter = __webpack_require__(1290);
+
+	var _TodosCounter2 = _interopRequireDefault(_TodosCounter);
+
 	__webpack_require__(1244);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -76780,7 +76800,9 @@
 	      var _props = this.props;
 	      var imageUrl = _props.imageUrl;
 	      var searching = _props.searching;
+	      var todosCount = _props.todosCount;
 	      var onDropdownClick = _props.onDropdownClick;
+	      var onTodosClick = _props.onTodosClick;
 
 	      var DropdownTrigger = _react2.default.createElement(
 	        'span',
@@ -76802,6 +76824,7 @@
 	            loading: searching,
 	            onSearch: this.props.onSearch
 	          }),
+	          _react2.default.createElement(_TodosCounter2.default, { count: todosCount, onClick: onTodosClick }),
 	          _react2.default.createElement(
 	            _semanticUiReact.Dropdown,
 	            { trigger: DropdownTrigger },
@@ -76833,8 +76856,10 @@
 	TopBar.propTypes = {
 	  imageUrl: _react.PropTypes.string,
 	  searching: _react.PropTypes.bool,
+	  todosCount: _react.PropTypes.number,
 	  onDropdownClick: _react.PropTypes.func,
-	  onSearch: _react.PropTypes.func
+	  onSearch: _react.PropTypes.func,
+	  onTodosClick: _react.PropTypes.func
 	};
 
 	exports.default = TopBar;
@@ -79390,6 +79415,8 @@
 	        case _constants.Pages.main:
 	          return _react2.default.createElement(_Projects2.default, null);
 	      }
+	    }, _this.handleTodosClick = function () {
+	      _this.props.onOpenTab(_constants.GITLAB_URL + '/dashboard/todos');
 	    }, _this.handleDropdown = function (evt, _ref2) {
 	      var id = _ref2.id;
 	      var _this$props = _this.props;
@@ -79421,6 +79448,7 @@
 	      var user = _props.user;
 	      var searching = _props.searching;
 	      var page = _props.page;
+	      var todosCount = _props.todosCount;
 
 
 	      return _react2.default.createElement(
@@ -79429,8 +79457,10 @@
 	        _react2.default.createElement(_components.TopBar, {
 	          imageUrl: user.avatar_url,
 	          searching: searching && page !== _constants.Pages.search,
+	          todosCount: todosCount,
 	          onDropdownClick: this.handleDropdown,
-	          onSearch: this.handleSearch
+	          onSearch: this.handleSearch,
+	          onTodosClick: this.handleTodosClick
 	        }),
 	        this.renderPage()
 	      );
@@ -79449,7 +79479,8 @@
 	  return {
 	    user: (0, _selectors.getUser)(state),
 	    searching: (0, _selectors.getLoadingSearch)(state),
-	    page: (0, _selectors.getSelectedPage)(state)
+	    page: (0, _selectors.getSelectedPage)(state),
+	    todosCount: (0, _selectors.getTodosCount)(state)
 	  };
 	};
 
@@ -79457,7 +79488,8 @@
 	  onRemoveToken: _store.actions.removeToken,
 	  onOpenProfile: _store.actions.openProfile,
 	  onOpenSettings: _store.actions.openSettings,
-	  onSearch: _store.actions.loadSearchProjects
+	  onSearch: _store.actions.loadSearchProjects,
+	  onOpenTab: _store.actions.openTab
 	};
 
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(MainContainer);
@@ -79820,6 +79852,94 @@
 	IssueBranchName.propTypes = {};
 
 	exports.default = IssueBranchName;
+
+/***/ },
+/* 1290 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(299);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _semanticUiReact = __webpack_require__(822);
+
+	__webpack_require__(1291);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var TodosCounter = function TodosCounter(_ref) {
+	  var count = _ref.count;
+	  var onClick = _ref.onClick;
+	  return _react2.default.createElement(
+	    _semanticUiReact.Icon.Group,
+	    { className: 'App__TopBar_Todos', title: 'todos' },
+	    _react2.default.createElement(_semanticUiReact.Icon, {
+	      className: 'todos',
+	      name: 'bell outline',
+	      size: 'large',
+	      link: true,
+	      onClick: onClick
+	    }),
+	    !!count && _react2.default.createElement(
+	      'span',
+	      { className: 'counter', onClick: onClick },
+	      count > 9 ? '+9' : count
+	    )
+	  );
+	};
+
+	TodosCounter.propTypes = {
+	  count: _react.PropTypes.number,
+	  onClick: _react.PropTypes.func
+	};
+
+	exports.default = TodosCounter;
+
+/***/ },
+/* 1291 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(1292);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(820)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/stylus-loader/index.js!./TodosCounter.styl", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/stylus-loader/index.js!./TodosCounter.styl");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 1292 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(819)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".App__TopBar_Todos {\n  margin-right: 10px;\n  color: rgba(0,0,0,0.55);\n}\n.App__TopBar_Todos .todos {\n  margin: 0 !important;\n}\n.App__TopBar_Todos .counter {\n  height: 13px;\n  width: 15px;\n  text-align: center;\n  background-color: #4285f4;\n  position: absolute;\n  padding: 2px;\n  font-size: 0.7em;\n  border-radius: 3px;\n  color: #fff;\n  left: 10px;\n  cursor: pointer;\n}\n", ""]);
+
+	// exports
+
 
 /***/ }
 /******/ ]);
