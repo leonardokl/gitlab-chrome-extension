@@ -33639,6 +33639,16 @@
 	  ids: (0, _reduxActions.handleActions)((_handleActions5 = {}, _defineProperty(_handleActions5, actions.loadProjects, (0, _flip2.default)((0, _get2.default)('payload'))), _defineProperty(_handleActions5, actions.requestProjectsSuccess, function (state, _ref) {
 	    var result = _ref.payload.result;
 	    return (0, _uniq2.default)([].concat(_toConsumableArray(state), _toConsumableArray(result)));
+	  }), _defineProperty(_handleActions5, actions.pinProject, function (state, _ref2) {
+	    var id = _ref2.payload.id;
+	    return [id].concat(_toConsumableArray(state.filter(function (i) {
+	      return i !== id;
+	    })));
+	  }), _defineProperty(_handleActions5, actions.unpinProject, function (state, _ref3) {
+	    var id = _ref3.payload.id;
+	    return [].concat(_toConsumableArray(state.filter(function (i) {
+	      return i !== id;
+	    })), [id]);
 	  }), _handleActions5), []),
 
 	  loading: (0, _reduxActions.handleActions)((_handleActions6 = {}, _defineProperty(_handleActions6, actions.loadProjects, _T2.default), _defineProperty(_handleActions6, actions.requestProjects, _T2.default), _defineProperty(_handleActions6, actions.requestProjectsError, _F2.default), _defineProperty(_handleActions6, actions.requestProjectsSuccess, _F2.default), _handleActions6), false),
@@ -33653,8 +33663,8 @@
 
 	  ids: (0, _reduxActions.handleActions)((_handleActions9 = {}, _defineProperty(_handleActions9, actions.loadSearchProjects, function () {
 	    return [];
-	  }), _defineProperty(_handleActions9, actions.searchProjectsSuccess, function (state, _ref2) {
-	    var result = _ref2.payload.result;
+	  }), _defineProperty(_handleActions9, actions.searchProjectsSuccess, function (state, _ref4) {
+	    var result = _ref4.payload.result;
 	    return (0, _concat2.default)(state, result);
 	  }), _handleActions9), []),
 
@@ -33669,8 +33679,8 @@
 	  ids: (0, _reduxActions.handleActions)(_defineProperty({}, actions.requestTodosSuccess, (0, _flip2.default)((0, _get2.default)('payload.result'))), [])
 	});
 
-	var entities = (0, _reduxActions.handleAction)(actions.updateEntity, function (state, _ref3) {
-	  var entities = _ref3.payload.entities;
+	var entities = (0, _reduxActions.handleAction)(actions.updateEntity, function (state, _ref5) {
+	  var entities = _ref5.payload.entities;
 
 	  return (0, _merge3.default)(state, entities);
 	}, {});
@@ -33683,16 +33693,16 @@
 	  todos: todos,
 	  entities: entities,
 
-	  pinnedProjects: (0, _reduxActions.handleActions)((_handleActions13 = {}, _defineProperty(_handleActions13, actions.loadProjects, function (state, _ref4) {
-	    var payload = _ref4.payload;
+	  pinnedProjects: (0, _reduxActions.handleActions)((_handleActions13 = {}, _defineProperty(_handleActions13, actions.loadProjects, function (state, _ref6) {
+	    var payload = _ref6.payload;
 	    return payload.reduce(function (acc, currValue) {
 	      return _extends({}, acc, _defineProperty({}, currValue, true));
 	    }, {});
-	  }), _defineProperty(_handleActions13, actions.pinProject, function (state, _ref5) {
-	    var id = _ref5.payload.id;
+	  }), _defineProperty(_handleActions13, actions.pinProject, function (state, _ref7) {
+	    var id = _ref7.payload.id;
 	    return (0, _merge3.default)(state, _defineProperty({}, id, true));
-	  }), _defineProperty(_handleActions13, actions.unpinProject, function (state, _ref6) {
-	    var id = _ref6.payload.id;
+	  }), _defineProperty(_handleActions13, actions.unpinProject, function (state, _ref8) {
+	    var id = _ref8.payload.id;
 	    return (0, _omit2.default)([id], state);
 	  }), _handleActions13), {}),
 

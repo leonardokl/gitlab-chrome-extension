@@ -45,7 +45,9 @@ const user = combineReducers({
 const projects = combineReducers({
   ids: handleActions({
     [actions.loadProjects]: flip(get('payload')),
-    [actions.requestProjectsSuccess]: (state, { payload: { result } }) => uniq([...state, ...result])
+    [actions.requestProjectsSuccess]: (state, { payload: { result } }) => uniq([...state, ...result]),
+    [actions.pinProject]: (state, { payload: { id } }) => [id, ...state.filter(i => i !== id)],
+    [actions.unpinProject]: (state, { payload: { id } }) => [...state.filter(i => i !== id), id]
   }, []),
 
   loading: handleActions({
