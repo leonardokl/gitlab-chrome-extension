@@ -27,6 +27,7 @@ export const getProjects = state => {
 
   return projects
 }
+export const getIsProjectPinned = (state, { id }) => getOr(false, `pinnedProjects.${id}`, state)
 
 // search
 export const getQuery = get('search.query')

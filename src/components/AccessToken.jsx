@@ -1,5 +1,5 @@
 import React, { PropTypes, PureComponent } from 'react'
-import { Button, Header, Input, Segment, Icon } from 'semantic-ui-react'
+import { Button, Header, Input, Segment, Icon, Reveal } from 'semantic-ui-react'
 import FlexContainer from './FlexContainer'
 import './AccessToken.styl'
 

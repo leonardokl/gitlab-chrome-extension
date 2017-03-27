@@ -6,6 +6,8 @@ import get from 'lodash/fp/get'
 import flip from 'lodash/flip'
 import merge from 'lodash/fp/merge'
 import concat from 'lodash/fp/concat'
+import uniq from 'lodash/uniq'
+import omit from 'lodash/fp/omit'
 import * as actions from './actions'
 import { Pages } from 'constants'
 
@@ -42,8 +44,8 @@ const user = combineReducers({
 
 const projects = combineReducers({
   ids: handleActions({
-    [actions.loadProjects]: () => [],
-    [actions.requestProjectsSuccess]: (state, { payload: { result } }) => concat(state, result)
+    [actions.loadProjects]: flip(get('payload')),
+    [actions.requestProjectsSuccess]: (state, { payload: { result } }) => uniq([...state, ...result])
   }, []),
 
   loading: handleActions({
@@ -98,6 +100,15 @@ export default combineReducers({
   search,
   todos,
   entities,
+
+  pinnedProjects: handleActions({
+    [actions.loadProjects]: (state, { payload }) => payload.reduce((acc, currValue) => ({
+      ...acc,
+      [currValue]: true
+    }), {}),
+    [actions.pinProject]: (state, { payload: { id } }) => merge(state, { [id]: true }),
+    [actions.unpinProject]: (state, { payload: { id } }) => omit([id], state)
+  }, {}),
 
   loading: handleAction(actions.load, T, false),
 

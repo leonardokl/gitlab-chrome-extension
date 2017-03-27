@@ -28,8 +28,11 @@ const openTab = (url) => chrome.tabs.create({ url })
 
 const setBadge = (text) => chrome.browserAction.setBadgeText({ text })
 
+const clearBadge = () => chrome.browserAction.setBadgeText({ text: '' })
+
 export default {
   storage,
   openTab,
-  setBadge
+  setBadge,
+  clearBadge
 }

@@ -1,7 +1,7 @@
 import React, { PropTypes, PureComponent } from 'react'
 import { connect } from 'react-redux'
 import { getUser, getLoadingSearch, getSelectedPage, getTodosCount } from 'store/selectors'
-import { FlexItem, TopBar } from 'components'
+import { FlexItem, FlexContainer, TopBar } from 'components'
 import { actions } from 'store'
 import Projects from './Projects'
 import Search from './Search'
@@ -51,7 +51,7 @@ class MainContainer extends PureComponent {
     const { user, searching, page, todosCount } = this.props
 
     return (
-      <FlexItem fluid>
+      <FlexContainer fluid column>
         <TopBar
           imageUrl={user.avatar_url}
           searching={searching && page !== Pages.search}
@@ -61,8 +61,10 @@ class MainContainer extends PureComponent {
           onTodosClick={this.handleTodosClick}
           onNewProjectClick={this.handleNewProjectClick}
         />
-        {this.renderPage()}
-      </FlexItem>
+        <FlexContainer fluid>
+          {this.renderPage()}
+        </FlexContainer>
+      </FlexContainer>
     )
   }
 }

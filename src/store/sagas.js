@@ -1,5 +1,8 @@
 import { put, select, takeEvery } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
+import get from 'lodash/fp/get'
+import compose from 'lodash/fp/compose'
+import equals from 'lodash/fp/equals'
 import { normalize, schema, arrayOf } from 'normalizr'
 import * as actions from './actions'
 import { Pages, Gitlab } from 'constants'
@@ -31,6 +34,7 @@ function* handleRequestUser ({ payload: { accessToken } }) {
     const user = { ...data, accessToken }
 
     yield chrome.storage.set('user', user)
+    yield chrome.storage.set('pinnedProjects', [])
     yield put(actions.requestUserSuccess(user))
   } catch (err) {
     console.error(err)
@@ -40,18 +44,28 @@ function* handleRequestUser ({ payload: { accessToken } }) {
 }
 
 function* handleRequestUserSuccess () {
-  yield [
-    put(actions.setPage(Pages.main)),
-    put(actions.requestTodos()),
-    put(actions.loadProjects())
-  ]
+  try {
+    const pinnedProjects = yield chrome.storage.get('pinnedProjects')
+    const normalizedData = normalize(pinnedProjects, projectsSchema)
+
+    yield put(actions.updateEntity(normalizedData))
+    yield put(actions.loadProjects(normalizedData.result))
+  } catch (err) {
+    console.error(err)
+    yield put(actions.loadProjects([]))
+  } finally {
+    yield [
+      put(actions.setPage(Pages.main)),
+      put(actions.requestTodos()),
+    ]
+  }
 }
 
 function* handleRemoveToken () {
   yield chrome.storage.clear()
   yield put(actions.setPage(Pages.accessToken))
   yield put(actions.removeTokenSuccess())
-  chrome.setBadge('')
+  chrome.clearBadge()
 }
 
 function* handleGetPersonalToken () {
@@ -141,6 +155,26 @@ function* handleOpenTab ({ payload: { url } }) {
   chrome.openTab(url)
 }
 
+function* handlePinProject ({ payload }) {
+  try {
+    const pinnedProjects = yield chrome.storage.get('pinnedProjects')
+
+    chrome.storage.set('pinnedProjects', [payload, ...pinnedProjects])
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+function* handleUnpinProject ({ payload: { id } }) {
+  try {
+    const pinnedProjects = yield chrome.storage.get('pinnedProjects')
+
+    chrome.storage.set('pinnedProjects', pinnedProjects.filter(i => i.id !== id))
+  } catch (err) {
+    console.error(err)
+  }
+}
+
 export default function* () {
   yield [
     takeEvery(actions.load, handleLoad),
@@ -155,6 +189,8 @@ export default function* () {
     takeEvery(actions.requestTodos, handleRequestTodos),
     takeEvery(actions.openTab, handleOpenTab),
     takeEvery(actions.loadSearchProjects, handleLoadSearchProjects),
-    takeEvery(actions.searchProjects, handleSearchProjects)
+    takeEvery(actions.searchProjects, handleSearchProjects),
+    takeEvery(actions.pinProject, handlePinProject),
+    takeEvery(actions.unpinProject, handleUnpinProject)
   ]
 }

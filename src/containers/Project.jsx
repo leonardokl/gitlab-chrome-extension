@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import curry from 'lodash/fp/curry'
 import { Projects } from 'components'
 import { actions } from 'store'
+import { getIsProjectPinned } from 'store/selectors'
 
 class ProjectContainer extends PureComponent {
   handleProjectClick = (project) => () => {
@@ -31,14 +32,17 @@ class ProjectContainer extends PureComponent {
   })
 
   render () {
-    const { data } = this.props
+    const { data, pinned, onPin, onUnpin } = this.props
 
     return (
       <Projects.Item
         name={data.name}
         group={data.namespace.name}
+        pinned={pinned}
         onClick={this.handleProjectClick(data)}
         onActionClick={this.handleAction(data)}
+        onPin={() => onPin(data)}
+        onUnpin={() => onUnpin(data)}
       />
     )
   }
@@ -48,8 +52,14 @@ ProjectContainer.propTypes = {
   data: PropTypes.object
 }
 
-const mapDispatchToProps = ({
-  onOpenTab: actions.openTab
+const mapStateToProps = (state, props) => ({
+  pinned: getIsProjectPinned(state, props.data)
 })
 
-export default connect(null, mapDispatchToProps)(ProjectContainer)
+const mapDispatchToProps = ({
+  onOpenTab: actions.openTab,
+  onPin: actions.pinProject,
+  onUnpin: actions.unpinProject
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectContainer)

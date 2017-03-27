@@ -7,28 +7,32 @@ import Item from './Item'
 import NotFound from './NotFound'
 import { when } from 'utils'
 import './Projects.styl'
+import { FlexContainer } from 'components'
 
 class Projects extends PureComponent {
   get hasChildren() {
     return React.Children.count(this.props.children) > 0
   }
 
-  handleScrollLimit = throttle(() => {
+  handleScrollBottom = throttle(() => {
     const { loading, nextPage, onNextPage } = this.props
 
     when(!loading && !!nextPage, onNextPage)
   }, 300)
 
-  handleScroll = ({ top }) => {
-    when(top >= 1, this.handleScrollLimit)
-  }
-
   render () {
-    const { children, loading, loadingMessage, nextPage, query, onNextPage } = this.props
-    const notFoundMessage = `We couldn't find any project`
+    const {
+      customScroll,
+      children,
+      loading,
+      loadingMessage,
+      nextPage,
+      query,
+      onNextPage
+    } = this.props
 
     return (
-      <Scrollbars className='App__Projects' onScrollFrame={this.handleScroll}>
+      <FlexContainer className='App__Projects' onScrollBottom={this.handleScrollBottom} column customScroll={customScroll}>
         {loading && !this.hasChildren &&
           <Loading text={loadingMessage}/>
         }
@@ -51,7 +55,7 @@ class Projects extends PureComponent {
             />
           </div>
         }
-      </Scrollbars>
+      </FlexContainer>
     )
   }
 }
@@ -62,6 +66,7 @@ Projects.propTypes = {
   loadingMessage: PropTypes.string,
   nextPage: PropTypes.bool,
   query: PropTypes.string,
+  customScroll: PropTypes.bool,
   onNextPage: PropTypes.func,
   onScrollLimit: PropTypes.func
 }

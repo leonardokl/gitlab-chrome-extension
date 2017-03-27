@@ -17,6 +17,7 @@ class SearchContainer extends PureComponent {
         loadingMessage='Searching'
         nextPage={!!nextPage}
         query={query}
+        customScroll
         onNextPage={onNextPage}
       >
         {projects.map(project =>
