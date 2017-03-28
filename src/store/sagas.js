@@ -175,6 +175,25 @@ function* handleUnpinProject ({ payload: { id } }) {
   }
 }
 
+function* handleSwapPinnedProjects ({ payload }) {
+  const [firstId, secondId] = payload
+
+  try {
+    const pinnedProjects = yield chrome.storage.get('pinnedProjects')
+    const firstProject = pinnedProjects.find(i => i.id === firstId)
+    const secondProject = pinnedProjects.find(i => i.id === secondId)
+
+    chrome.storage.set('pinnedProjects', pinnedProjects.map(project => {
+      if (project.id === firstId) return secondProject
+      if (project.id === secondId) return firstProject
+
+      return project
+    }))
+  } catch (err) {
+    console.error(err)
+  }
+}
+
 export default function* () {
   yield [
     takeEvery(actions.load, handleLoad),
@@ -191,6 +210,7 @@ export default function* () {
     takeEvery(actions.loadSearchProjects, handleLoadSearchProjects),
     takeEvery(actions.searchProjects, handleSearchProjects),
     takeEvery(actions.pinProject, handlePinProject),
-    takeEvery(actions.unpinProject, handleUnpinProject)
+    takeEvery(actions.unpinProject, handleUnpinProject),
+    takeEvery(actions.swapPinnedProjects, handleSwapPinnedProjects)
   ]
 }

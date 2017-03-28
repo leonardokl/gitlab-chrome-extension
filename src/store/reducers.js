@@ -8,6 +8,7 @@ import merge from 'lodash/fp/merge'
 import concat from 'lodash/fp/concat'
 import uniq from 'lodash/uniq'
 import omit from 'lodash/fp/omit'
+import equals from 'lodash/fp/equals'
 import * as actions from './actions'
 import { Pages } from 'constants'
 
@@ -44,6 +45,16 @@ const user = combineReducers({
 
 const projects = combineReducers({
   ids: handleActions({
+    [actions.swapPinnedProjects]: (state, { payload }) => {
+      const [firstId, secondId] = payload
+
+      return state.map(id => {
+        if (id === firstId) return secondId
+        if (id === secondId) return firstId
+
+        return id
+      })
+    },
     [actions.loadProjects]: flip(get('payload')),
     [actions.requestProjectsSuccess]: (state, { payload: { result } }) => uniq([...state, ...result]),
     [actions.pinProject]: (state, { payload: { id } }) => [id, ...state.filter(i => i !== id)],

@@ -1,4 +1,6 @@
 import React, { PropTypes, PureComponent } from 'react'
+import { DragDropContext } from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
 import { connect } from 'react-redux'
 import curry from 'lodash/fp/curry'
 import throttle from 'lodash/throttle'
@@ -7,7 +9,7 @@ import { getLoadingProjects, getProjects, getProjectsNextPage } from 'store/sele
 import { Projects, FlexContainer, FlexItem } from 'components'
 import { actions } from 'store'
 import { when } from 'utils'
-import Project from './Project'
+import ProjectDnD from './ProjectDnD'
 
 class ProjectsContainer extends PureComponent {
   handleScrollBottom = throttle(() => {
@@ -28,7 +30,7 @@ class ProjectsContainer extends PureComponent {
           onNextPage={onNextPage}
         >
           {projects.map(project =>
-            <Project key={project.id} data={project}/>
+            <ProjectDnD key={project.id} data={project}/>
           )}
         </Projects>
       </ FlexContainer>
@@ -53,5 +55,7 @@ const mapDispatchToProps = ({
   onLoadProjects: actions.loadProjects,
   onNextPage: actions.requestProjects
 })
+
+// const ProjectsContainerDnD = DragDropContext(HTML5Backend)(ProjectsContainer)
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectsContainer)

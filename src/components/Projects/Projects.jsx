@@ -1,4 +1,6 @@
 import React, { PropTypes, PureComponent } from 'react'
+import { DragDropContext } from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
 import { Button, List } from 'semantic-ui-react'
 import { Scrollbars } from 'react-custom-scrollbars'
 import throttle from 'lodash/throttle'
@@ -71,4 +73,4 @@ Projects.propTypes = {
   onScrollLimit: PropTypes.func
 }
 
-export default Projects
+export default DragDropContext(HTML5Backend)(Projects)

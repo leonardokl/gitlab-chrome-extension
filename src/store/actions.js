@@ -20,6 +20,7 @@ export const requestUserSuccess = createAction('REQUEST_USER_SUCCESS')
 
 // projects
 export const pinProject = createAction('PIN_PROJECT')
+export const swapPinnedProjects = createAction('SWAP_PINNED_PROJECTS')
 export const unpinProject = createAction('UNPIN_PROJECT')
 export const loadProjects = createAction('LOAD_PROJECTS')
 export const requestProjects = createAction('REQUEST_PROJECTS')
