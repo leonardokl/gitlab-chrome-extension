@@ -1,3 +1,1 @@
-import ProjectDrop from './ProjectDrop'
-
-export default ProjectDrop
+export { default } from './ProjectDrop'

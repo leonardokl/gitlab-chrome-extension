@@ -6,10 +6,6 @@ import ProjectDrag from './ProjectDrag'
 import { actions } from 'store'
 import { getIsProjectPinned } from 'store/selectors'
 
-const ItemTypes = {
-  PROJECT: 'project'
-}
-
 const projectSource = {
   canDrop({ pinned, data: { id } }, monitor) {
     const draggingProject = monitor.getItem()
@@ -58,5 +54,5 @@ const mapDispatchToProps = ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-  DropTarget(ItemTypes.PROJECT, projectSource, collect)(ProjectDrop),
+  DropTarget('project', projectSource, collect)(ProjectDrop),
 );

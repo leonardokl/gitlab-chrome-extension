@@ -1,12 +1,11 @@
 import React, { PropTypes, PureComponent } from 'react'
-import { DragDropContext } from 'react-dnd'
-import HTML5Backend from 'react-dnd-html5-backend'
 import { connect } from 'react-redux'
+import { Icon, Button, Divider } from 'semantic-ui-react'
 import curry from 'lodash/fp/curry'
 import throttle from 'lodash/throttle'
 import { Scrollbars } from 'react-custom-scrollbars'
-import { getLoadingProjects, getProjects, getProjectsNextPage } from 'store/selectors'
-import { Projects, FlexContainer, FlexItem } from 'components'
+import { getLoadingProjects, getProjects, getProjectsNextPage, getIssueMessage } from 'store/selectors'
+import { Projects, FlexContainer, FlexItem, IssueMessage } from 'components'
 import { actions } from 'store'
 import { when } from 'utils'
 import ProjectDnD from './ProjectDnD'
@@ -19,10 +18,16 @@ class ProjectsContainer extends PureComponent {
   }, 300)
 
   render () {
-    const { loading, nextPage, projects, onNextPage } = this.props
+    const { loading, nextPage, projects, issueMessage, onNextPage } = this.props
 
     return (
       <FlexContainer fluid column customScroll onScrollBottom={this.handleScrollBottom}>
+        { !!issueMessage &&
+          <IssueMessage
+            title={`Issue #${issueMessage.id}`}
+            branchName={issueMessage.branchName}
+          />
+        }
         <Projects
           loading={loading}
           loadingMessage='Loading projects'
@@ -41,6 +46,7 @@ class ProjectsContainer extends PureComponent {
 ProjectsContainer.propTypes = {
   loading: PropTypes.bool,
   projects: PropTypes.array,
+  issueMessage: PropTypes.object,
   onLoadProjects: PropTypes.func,
   onNextPage: PropTypes.func
 }
@@ -48,14 +54,13 @@ ProjectsContainer.propTypes = {
 const mapStateToProps = state => ({
   loading: getLoadingProjects(state),
   nextPage: getProjectsNextPage(state),
-  projects: getProjects(state)
+  projects: getProjects(state),
+  issueMessage: getIssueMessage(state)
 })
 
 const mapDispatchToProps = ({
   onLoadProjects: actions.loadProjects,
   onNextPage: actions.requestProjects
 })
-
-// const ProjectsContainerDnD = DragDropContext(HTML5Backend)(ProjectsContainer)
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectsContainer)

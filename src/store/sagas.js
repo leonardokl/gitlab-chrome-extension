@@ -5,9 +5,9 @@ import compose from 'lodash/fp/compose'
 import equals from 'lodash/fp/equals'
 import { normalize, schema, arrayOf } from 'normalizr'
 import * as actions from './actions'
-import { Pages, Gitlab } from 'constants'
+import { Pages, Gitlab, GITLAB_URL } from 'constants'
 import { notification } from './services'
-import { chrome, gitlab } from 'utils'
+import { chrome, gitlab, isGitlabUrl, isIssueUrl, gitlabTab, getIssueId } from 'utils'
 import {
   getAccessToken,
   getProjectsNextPage,
@@ -57,6 +57,7 @@ function* handleRequestUserSuccess () {
     yield [
       put(actions.setPage(Pages.main)),
       put(actions.requestTodos()),
+      put(actions.getOpenedTab())
     ]
   }
 }
@@ -194,6 +195,22 @@ function* handleSwapPinnedProjects ({ payload }) {
   }
 }
 
+function* handleGetOpenedTab () {
+  try {
+    const tab = yield chrome.getSelectedTab()
+    const { url } = tab
+
+    if (isGitlabUrl(url) && isIssueUrl(url)) {
+      const issueId = getIssueId(url)
+      const branchName = yield gitlabTab.getIssueNewBranchName()
+
+      yield put(actions.setIssueMessage({ id: issueId, branchName}))
+    }
+  } catch (err) {
+    console.error(err)
+  }
+}
+
 export default function* () {
   yield [
     takeEvery(actions.load, handleLoad),
@@ -211,6 +228,7 @@ export default function* () {
     takeEvery(actions.searchProjects, handleSearchProjects),
     takeEvery(actions.pinProject, handlePinProject),
     takeEvery(actions.unpinProject, handleUnpinProject),
-    takeEvery(actions.swapPinnedProjects, handleSwapPinnedProjects)
+    takeEvery(actions.swapPinnedProjects, handleSwapPinnedProjects),
+    takeEvery(actions.getOpenedTab, handleGetOpenedTab)
   ]
 }

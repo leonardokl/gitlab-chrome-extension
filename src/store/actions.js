@@ -7,6 +7,8 @@ export const openProfile = createAction('OPEN_PROFILE')
 export const openSettings = createAction('OPEN_SETTINGS')
 export const openNewIssue = createAction('OPEN_NEW_ISSUE')
 export const openTab = createAction('OPEN_TAB', url => ({ url }))
+export const getOpenedTab = createAction('GET_OPENED_TAB')
+export const setIssueMessage = createAction('SET_ISSUE_MESSAGE')
 
 // TOKEN
 export const getPersonalToken = createAction('GET_PERSONAL_TOKEN')

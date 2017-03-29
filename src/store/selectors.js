@@ -8,6 +8,8 @@ export const getEntityById = curry((state, entity, id) => get(`entities.${entity
 
 export const getSelectedPage = get('page.selected')
 
+export const getIssueMessage = get('issueMessage')
+
 // user
 export const getIsValidatingToken = get('page.accessToken.loading')
 export const getHasTokenError = get('page.accessToken.error')

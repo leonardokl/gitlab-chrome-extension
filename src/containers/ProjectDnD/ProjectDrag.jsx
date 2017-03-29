@@ -2,13 +2,9 @@ import React, { PropTypes, PureComponent } from 'react'
 import { DragSource } from 'react-dnd'
 import { connect } from 'react-redux'
 import curry from 'lodash/fp/curry'
-import Project from './Project'
+import Project from 'containers/Project'
 import { actions } from 'store'
 import { getIsProjectPinned } from 'store/selectors'
-
-const ItemTypes = {
-  PROJECT: 'project'
-}
 
 const projectSource = {
   beginDrag({ data: { id } }) {
@@ -57,12 +53,6 @@ const mapStateToProps = (state, props) => ({
   pinned: getIsProjectPinned(state, props.data)
 })
 
-const mapDispatchToProps = ({
-  onOpenTab: actions.openTab,
-  onPin: actions.pinProject,
-  onUnpin: actions.unpinProject
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(
-  DragSource(ItemTypes.PROJECT, projectSource, collect)(ProjectDragContainer),
+export default connect(mapStateToProps)(
+  DragSource('project', projectSource, collect)(ProjectDragContainer),
 );

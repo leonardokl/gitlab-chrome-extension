@@ -43,6 +43,10 @@ const user = combineReducers({
   }, false)
 })
 
+const issueMessage = handleActions({
+  [actions.setIssueMessage]: flip(get('payload'))
+}, null)
+
 const projects = combineReducers({
   ids: handleActions({
     [actions.swapPinnedProjects]: (state, { payload }) => {
@@ -113,6 +117,7 @@ export default combineReducers({
   search,
   todos,
   entities,
+  issueMessage,
 
   pinnedProjects: handleActions({
     [actions.loadProjects]: (state, { payload }) => payload.reduce((acc, currValue) => ({
