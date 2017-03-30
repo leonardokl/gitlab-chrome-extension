@@ -1,3 +1,16 @@
+<a name="0.10.0"></a>
+# [0.10.0](https://github.com/leonardokl/gitlab-chrome-extension/compare/v0.9.1...v0.10.0) (2017-03-30)
+
+
+### Features
+
+* Add close button to the search input ([8336c09](https://github.com/leonardokl/gitlab-chrome-extension/commit/8336c09))
+* Add option to open the new project page ([9611fdb](https://github.com/leonardokl/gitlab-chrome-extension/commit/9611fdb))
+* Add todos count ([b9e6bed](https://github.com/leonardokl/gitlab-chrome-extension/commit/b9e6bed))
+* Swap pinned positions with DnD ([22b3549](https://github.com/leonardokl/gitlab-chrome-extension/commit/22b3549))
+
+
+
 <a name="0.9.1"></a>
 ## [0.9.1](https://github.com/leonardokl/gitlab-chrome-extension/compare/v0.9.0...v0.9.1) (2017-02-17)
 
