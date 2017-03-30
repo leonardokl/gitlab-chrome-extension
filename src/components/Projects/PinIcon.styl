@@ -1,0 +1,15 @@
+active-color = #db2828
+unactive-color = grey
+
+active()
+  color: active-color
+  display inline-block!important
+
+.PinIcon
+  color unactive-color
+
+  &:hover
+    active()
+
+.PinIcon.active
+  active()

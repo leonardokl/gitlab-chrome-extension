@@ -1,0 +1,29 @@
+.App__Projects_Item
+  .description, .header
+    white-space noWrap
+    text-overflow ellipsis
+    overflow hidden
+
+  .header
+    font-size 1.2em
+    line-height 1.3em
+
+  .button
+    padding .78571429em 1em
+
+  .dropdown > .dropdown.icon
+    margin 0
+
+  .App__Projects_Item_Actions
+    display none
+    padding-top .42857143em
+
+  .header > .PinIcon
+      display none
+
+  &:hover
+    .App__Projects_Item_Actions
+      display block
+    .header > .PinIcon
+      display inline-block!important
+
