@@ -9,8 +9,8 @@
   - Save your favorite projects
   - Copy to clipboard an issue branch name
 
-![alt text](src/assets/main-page.png)
+![alt text](src/assets/main.png)
 
-![alt text](src/assets/screenshot-main-page.png)
+![alt text](src/assets/main-fullscreen.png)
 
-![alt text](src/assets/screenshot-copy-branch-name.png)
+![alt text](src/assets/branch-name.png)
