@@ -1,7 +1,7 @@
 {
   "name": "gitlab-chrome-extension",
   "version": "0.10.0",
-  "description": "Copy Gitlab new branch name to clipboard",
+  "description": "Quickly access all of your projects",
   "main": "src/index.js",
   "scripts": {
     "start": "NODE_ENV=development webpack --progress --colors --watch",
