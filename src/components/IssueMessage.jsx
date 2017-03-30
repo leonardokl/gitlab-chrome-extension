@@ -22,8 +22,10 @@ class IssueMessage extends PureComponent {
       <div>
         <div style={{ display: 'flex', flexWrap: 0, alignItems: 'center', padding: 10}}>
           <div style={{ flex: 1, alignSelf: 'center' }}>
-            <Icon style={{ fontSize: '1.2em'}} name='warning circle' color='green'/><span><strong>{title}</strong></span><br/>
-            <div style={{ marginLeft: '1.2em', color: '#757575'}}>
+            <div style={{ display: 'flex', alignItems: 'center'}}>
+              <Icon style={{ fontSize: '1.2em'}} name='warning circle' color='green'/><span><strong>{title}</strong></span>
+            </div>
+            <div style={{ marginLeft: '1.45em', color: '#757575'}}>
               {branchName}
             </div>
           </div>

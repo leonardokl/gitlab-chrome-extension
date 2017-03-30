@@ -41,6 +41,7 @@
     "eslint": "^3.5.0",
     "eslint-plugin-react": "^6.2.2",
     "exports-loader": "^0.6.3",
+    "faker": "^4.1.0",
     "imports-loader": "^0.6.5",
     "install": "^0.8.7",
     "jest": "^16.0.1",
