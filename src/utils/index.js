@@ -5,6 +5,7 @@ export chrome from './chrome'
 export when from './when'
 export stopPropagation from './stopPropagation'
 export gitlabTab from './gitlabTab'
+export notification from './notification'
 
 export const isGitlabUrl = url => !!url.match(GITLAB_URL)
 export const isIssueUrl = url => !!url.match(/\/issues\/\d+$/)

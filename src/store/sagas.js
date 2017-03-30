@@ -6,8 +6,7 @@ import equals from 'lodash/fp/equals'
 import { normalize, schema, arrayOf } from 'normalizr'
 import * as actions from './actions'
 import { Pages, Gitlab, GITLAB_URL } from 'constants'
-import { notification } from './services'
-import { chrome, gitlab, isGitlabUrl, isIssueUrl, gitlabTab, getIssueId } from 'utils'
+import { chrome, gitlab, isGitlabUrl, isIssueUrl, gitlabTab, getIssueId, notification } from 'utils'
 import {
   getAccessToken,
   getProjectsNextPage,
@@ -38,7 +37,7 @@ function* handleRequestUser ({ payload: { accessToken } }) {
     yield put(actions.requestUserSuccess(user))
   } catch (err) {
     console.error(err)
-    notification({ title: 'Error', message: 'Invalid token' })
+    notification.basic({ title: 'Error', message: 'Invalid token' })
     yield put(actions.requestUserError())
   }
 }
