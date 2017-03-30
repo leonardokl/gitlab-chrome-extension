@@ -1,4 +1,4 @@
-import { put, select, takeEvery } from 'redux-saga/effects'
+import { put, select, takeEvery, takeLatest } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
 import get from 'lodash/fp/get'
 import compose from 'lodash/fp/compose'
@@ -103,7 +103,6 @@ function* handleSearchProjects () {
     const nextPage = response.headers['x-next-page']
     const normalizedData = normalize(response.data, projectsSchema)
 
-    console.log('response', response);
     yield put(actions.updateEntity(normalizedData))
     yield put(actions.searchProjectsSuccess({ ...normalizedData, nextPage }))
   } catch (err) {
@@ -224,7 +223,7 @@ export default function* () {
     takeEvery(actions.requestTodos, handleRequestTodos),
     takeEvery(actions.openTab, handleOpenTab),
     takeEvery(actions.loadSearchProjects, handleLoadSearchProjects),
-    takeEvery(actions.searchProjects, handleSearchProjects),
+    takeLatest(actions.searchProjects, handleSearchProjects),
     takeEvery(actions.pinProject, handlePinProject),
     takeEvery(actions.unpinProject, handleUnpinProject),
     takeEvery(actions.swapPinnedProjects, handleSwapPinnedProjects),
