@@ -22,7 +22,7 @@ class AccessToken extends PureComponent {
     if (key === 'Enter') this.handleSave()
   }
 
-  render () {console.log('this.state', this.state);
+  render () {
     const { loading, error, onSave, onGetPersonalToken } = this.props
 
     return (

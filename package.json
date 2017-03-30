@@ -4,11 +4,11 @@
   "description": "Copy Gitlab new branch name to clipboard",
   "main": "src/index.js",
   "scripts": {
-    "start": "webpack --progress --colors --watch",
+    "start": "NODE_ENV=development webpack --progress --colors --watch",
     "test": "jest",
     "test:watch": "npm test -- --watch",
     "test:coverage": "jest --coverage",
-    "build": "webpack --progress --colors --config webpack.production.config.js",
+    "build": "NODE_ENV=production webpack --progress --colors",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "version": "npm run build && npm run changelog && git add -A",
     "postversion": "git push && git push --tags"
