@@ -1,7 +1,8 @@
 import React, { PropTypes, PureComponent } from 'react'
 import { connect } from 'react-redux'
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import { getUser, getLoadingSearch, getSelectedPage, getTodosCount } from 'store/selectors'
-import { FlexItem, FlexContainer, TopBar } from 'components'
+import { FlexItem, FlexContainer, TopBar, FadeTransition } from 'components'
 import { actions } from 'store'
 import Projects from './Projects'
 import Search from './Search'
@@ -51,7 +52,7 @@ class MainContainer extends PureComponent {
     const { user, searching, page, todosCount } = this.props
 
     return (
-      <FlexContainer fluid column>
+      <FadeTransition style={{ display: 'flex', flex: 1, flexDirection: 'column'}}>
         <TopBar
           imageUrl={user.avatar_url}
           searching={searching && page !== Pages.search}
@@ -64,7 +65,7 @@ class MainContainer extends PureComponent {
         <FlexContainer fluid>
           {this.renderPage()}
         </FlexContainer>
-      </FlexContainer>
+      </ FadeTransition>
     )
   }
 }

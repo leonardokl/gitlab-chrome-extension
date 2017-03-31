@@ -50,6 +50,7 @@
     "npm": "^4.4.1",
     "perfect-scrollbar": "^0.6.12",
     "react": "^15.4.2",
+    "react-addons-css-transition-group": "^15.4.2",
     "react-addons-test-utils": "^15.3.2",
     "react-custom-scrollbars": "^4.0.2",
     "react-dnd": "^2.3.0",
