@@ -6,6 +6,7 @@ export const updateEntity = createAction('UPDATE_ENTITY')
 export const openProfile = createAction('OPEN_PROFILE')
 export const openSettings = createAction('OPEN_SETTINGS')
 export const openNewIssue = createAction('OPEN_NEW_ISSUE')
+export const newIssue = createAction('NEW_ISSUE')
 export const openTab = createAction('OPEN_TAB', url => ({ url }))
 export const getOpenedTab = createAction('GET_OPENED_TAB')
 export const setIssueMessage = createAction('SET_ISSUE_MESSAGE')
@@ -34,5 +35,10 @@ export const searchProjects = createAction('SEARCH_PROJECTS')
 export const searchProjectsError = createAction('SEARCH_PROJECTS_ERROR')
 export const searchProjectsSuccess = createAction('SEARCH_PROJECTS_SUCCESS')
 
+// TODOS
 export const requestTodos = createAction('REQUEST_TODOS')
 export const requestTodosSuccess = createAction('REQUEST_TODOS_SUCCESS')
+
+// ISSUES
+export const createIssue = createAction('CREATE_ISSUE')
+export const createIssueSuccess = createAction('CREATE_ISSUE_SUCCESS')

@@ -33567,7 +33567,7 @@
 
 	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
-	var _handleActions, _handleActions2, _handleActions3, _handleActions4, _handleActions6, _handleActions7, _handleActions8, _handleActions10, _handleActions11, _handleActions12, _handleActions14;
+	var _handleActions, _handleActions2, _handleActions3, _handleActions4, _handleActions6, _handleActions7, _handleActions8, _handleActions10, _handleActions11, _handleActions12, _handleActions15, _handleActions16;
 
 	var _redux = __webpack_require__(482);
 
@@ -33708,6 +33708,12 @@
 	  return (0, _merge3.default)(state, entities);
 	}, {});
 
+	var newIssue = (0, _redux.combineReducers)({
+	  projectId: (0, _reduxActions.handleActions)(_defineProperty({}, actions.newIssue, (0, _flip2.default)((0, _get2.default)('payload.id'))), null),
+
+	  loading: (0, _reduxActions.handleActions)((_handleActions15 = {}, _defineProperty(_handleActions15, actions.createIssue, _T2.default), _defineProperty(_handleActions15, actions.createIssueSuccess, _F2.default), _handleActions15), false)
+	});
+
 	exports.default = (0, _redux.combineReducers)({
 	  user: user,
 	  page: page,
@@ -33716,19 +33722,20 @@
 	  todos: todos,
 	  entities: entities,
 	  issueMessage: issueMessage,
+	  newIssue: newIssue,
 
-	  pinnedProjects: (0, _reduxActions.handleActions)((_handleActions14 = {}, _defineProperty(_handleActions14, actions.loadProjects, function (state, _ref7) {
+	  pinnedProjects: (0, _reduxActions.handleActions)((_handleActions16 = {}, _defineProperty(_handleActions16, actions.loadProjects, function (state, _ref7) {
 	    var payload = _ref7.payload;
 	    return payload.reduce(function (acc, currValue) {
 	      return _extends({}, acc, _defineProperty({}, currValue, true));
 	    }, {});
-	  }), _defineProperty(_handleActions14, actions.pinProject, function (state, _ref8) {
+	  }), _defineProperty(_handleActions16, actions.pinProject, function (state, _ref8) {
 	    var id = _ref8.payload.id;
 	    return (0, _merge3.default)(state, _defineProperty({}, id, true));
-	  }), _defineProperty(_handleActions14, actions.unpinProject, function (state, _ref9) {
+	  }), _defineProperty(_handleActions16, actions.unpinProject, function (state, _ref9) {
 	    var id = _ref9.payload.id;
 	    return (0, _omit2.default)([id], state);
-	  }), _handleActions14), {}),
+	  }), _handleActions16), {}),
 
 	  loading: (0, _reduxActions.handleAction)(actions.load, _T2.default, false),
 
@@ -43589,7 +43596,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.requestTodosSuccess = exports.requestTodos = exports.searchProjectsSuccess = exports.searchProjectsError = exports.searchProjects = exports.loadSearchProjects = exports.requestProjectsSuccess = exports.requestProjectsError = exports.requestProjects = exports.loadProjects = exports.unpinProject = exports.swapPinnedProjects = exports.pinProject = exports.requestUserSuccess = exports.requestUserError = exports.requestUser = exports.removeTokenSuccess = exports.removeToken = exports.getPersonalToken = exports.setIssueMessage = exports.getOpenedTab = exports.openTab = exports.openNewIssue = exports.openSettings = exports.openProfile = exports.updateEntity = exports.setPage = exports.load = undefined;
+	exports.createIssueSuccess = exports.createIssue = exports.requestTodosSuccess = exports.requestTodos = exports.searchProjectsSuccess = exports.searchProjectsError = exports.searchProjects = exports.loadSearchProjects = exports.requestProjectsSuccess = exports.requestProjectsError = exports.requestProjects = exports.loadProjects = exports.unpinProject = exports.swapPinnedProjects = exports.pinProject = exports.requestUserSuccess = exports.requestUserError = exports.requestUser = exports.removeTokenSuccess = exports.removeToken = exports.getPersonalToken = exports.setIssueMessage = exports.getOpenedTab = exports.openTab = exports.newIssue = exports.openNewIssue = exports.openSettings = exports.openProfile = exports.updateEntity = exports.setPage = exports.load = undefined;
 
 	var _reduxActions = __webpack_require__(518);
 
@@ -43601,6 +43608,7 @@
 	var openProfile = exports.openProfile = (0, _reduxActions.createAction)('OPEN_PROFILE');
 	var openSettings = exports.openSettings = (0, _reduxActions.createAction)('OPEN_SETTINGS');
 	var openNewIssue = exports.openNewIssue = (0, _reduxActions.createAction)('OPEN_NEW_ISSUE');
+	var newIssue = exports.newIssue = (0, _reduxActions.createAction)('NEW_ISSUE');
 	var openTab = exports.openTab = (0, _reduxActions.createAction)('OPEN_TAB', function (url) {
 	  return { url: url };
 	});
@@ -43633,8 +43641,13 @@
 	var searchProjectsError = exports.searchProjectsError = (0, _reduxActions.createAction)('SEARCH_PROJECTS_ERROR');
 	var searchProjectsSuccess = exports.searchProjectsSuccess = (0, _reduxActions.createAction)('SEARCH_PROJECTS_SUCCESS');
 
+	// TODOS
 	var requestTodos = exports.requestTodos = (0, _reduxActions.createAction)('REQUEST_TODOS');
 	var requestTodosSuccess = exports.requestTodosSuccess = (0, _reduxActions.createAction)('REQUEST_TODOS_SUCCESS');
+
+	// ISSUES
+	var createIssue = exports.createIssue = (0, _reduxActions.createAction)('CREATE_ISSUE');
+	var createIssueSuccess = exports.createIssueSuccess = (0, _reduxActions.createAction)('CREATE_ISSUE_SUCCESS');
 
 /***/ },
 /* 775 */
@@ -43651,7 +43664,8 @@
 	  issueBranchName: 'ISSUE_BRANCH_NAME',
 	  main: 'MAIN',
 	  error: 'ERROR',
-	  search: 'SEARCH'
+	  search: 'SEARCH',
+	  NEW_ISSUE: 'newIssue'
 	};
 
 	var Gitlab = exports.Gitlab = {
@@ -43720,7 +43734,7 @@
 
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-	var _marked = [handleLoad, handleRequestUser, handleRequestUserSuccess, handleRemoveToken, handleGetPersonalToken, handleRequestProjects, handleSearchProjects, handleLoadSearchProjects, handleOpenProfile, handleOpenSettings, handleRequestTodos, handleOpenTab, handlePinProject, handleUnpinProject, handleSwapPinnedProjects, handleGetOpenedTab, _callee2].map(regeneratorRuntime.mark);
+	var _marked = [handleLoad, handleRequestUser, handleRequestUserSuccess, handleRemoveToken, handleGetPersonalToken, handleRequestProjects, handleSearchProjects, handleLoadSearchProjects, handleOpenProfile, handleOpenSettings, handleRequestTodos, handleOpenTab, handlePinProject, handleUnpinProject, handleSwapPinnedProjects, handleGetOpenedTab, handleNewIssue, handleCreateIssue, _callee2].map(regeneratorRuntime.mark);
 
 	function handleLoad() {
 	  var user;
@@ -44322,13 +44336,13 @@
 	  }, _marked[15], this, [[0, 14]]);
 	}
 
-	function _callee2() {
-	  return regeneratorRuntime.wrap(function _callee2$(_context18) {
+	function handleNewIssue() {
+	  return regeneratorRuntime.wrap(function handleNewIssue$(_context18) {
 	    while (1) {
 	      switch (_context18.prev = _context18.next) {
 	        case 0:
 	          _context18.next = 2;
-	          return [(0, _effects.takeEvery)(actions.load, handleLoad), (0, _effects.takeEvery)(actions.requestUser, handleRequestUser), (0, _effects.takeEvery)(actions.requestUserSuccess, handleRequestUserSuccess), (0, _effects.takeEvery)(actions.removeToken, handleRemoveToken), (0, _effects.takeEvery)(actions.getPersonalToken, handleGetPersonalToken), (0, _effects.takeEvery)(actions.loadProjects, handleRequestProjects), (0, _effects.takeEvery)(actions.requestProjects, handleRequestProjects), (0, _effects.takeEvery)(actions.openProfile, handleOpenProfile), (0, _effects.takeEvery)(actions.openSettings, handleOpenSettings), (0, _effects.takeEvery)(actions.requestTodos, handleRequestTodos), (0, _effects.takeEvery)(actions.openTab, handleOpenTab), (0, _effects.takeEvery)(actions.loadSearchProjects, handleLoadSearchProjects), (0, _effects.takeLatest)(actions.searchProjects, handleSearchProjects), (0, _effects.takeEvery)(actions.pinProject, handlePinProject), (0, _effects.takeEvery)(actions.unpinProject, handleUnpinProject), (0, _effects.takeEvery)(actions.swapPinnedProjects, handleSwapPinnedProjects), (0, _effects.takeEvery)(actions.getOpenedTab, handleGetOpenedTab)];
+	          return (0, _effects.put)(actions.setPage(_constants.Pages.NEW_ISSUE));
 
 	        case 2:
 	        case 'end':
@@ -44336,6 +44350,76 @@
 	      }
 	    }
 	  }, _marked[16], this);
+	}
+
+	function handleCreateIssue(_ref13) {
+	  var payload = _ref13.payload;
+
+	  var _ref14, _ref15, accessToken, project, form, response;
+
+	  return regeneratorRuntime.wrap(function handleCreateIssue$(_context19) {
+	    while (1) {
+	      switch (_context19.prev = _context19.next) {
+	        case 0:
+	          _context19.next = 2;
+	          return [(0, _effects.select)(_selectors.getAccessToken), (0, _effects.select)(_selectors.getNewIssueProject)];
+
+	        case 2:
+	          _ref14 = _context19.sent;
+	          _ref15 = _slicedToArray(_ref14, 2);
+	          accessToken = _ref15[0];
+	          project = _ref15[1];
+	          form = _extends({}, payload, { id: project.id });
+	          _context19.prev = 7;
+	          _context19.next = 10;
+	          return _utils.gitlab.createIssue(_extends({}, form, { projectId: project.id, accessToken: accessToken }));
+
+	        case 10:
+	          response = _context19.sent;
+
+
+	          _utils.notification.basic({ title: 'Success', message: 'Issue created!' });
+
+	          _context19.next = 14;
+	          return (0, _effects.put)(actions.createIssueSuccess(response));
+
+	        case 14:
+	          _context19.next = 16;
+	          return (0, _effects.put)(actions.setPage(_constants.Pages.main));
+
+	        case 16:
+	          _context19.next = 22;
+	          break;
+
+	        case 18:
+	          _context19.prev = 18;
+	          _context19.t0 = _context19['catch'](7);
+
+	          console.error(_context19.t0);
+	          _utils.notification.basic({ title: 'Error', message: 'Couldn\'t create the issue' });
+
+	        case 22:
+	        case 'end':
+	          return _context19.stop();
+	      }
+	    }
+	  }, _marked[17], this, [[7, 18]]);
+	}
+
+	function _callee2() {
+	  return regeneratorRuntime.wrap(function _callee2$(_context20) {
+	    while (1) {
+	      switch (_context20.prev = _context20.next) {
+	        case 0:
+	          _context20.next = 2;
+	          return [(0, _effects.takeEvery)(actions.load, handleLoad), (0, _effects.takeEvery)(actions.requestUser, handleRequestUser), (0, _effects.takeEvery)(actions.requestUserSuccess, handleRequestUserSuccess), (0, _effects.takeEvery)(actions.removeToken, handleRemoveToken), (0, _effects.takeEvery)(actions.getPersonalToken, handleGetPersonalToken), (0, _effects.takeEvery)(actions.loadProjects, handleRequestProjects), (0, _effects.takeEvery)(actions.requestProjects, handleRequestProjects), (0, _effects.takeEvery)(actions.openProfile, handleOpenProfile), (0, _effects.takeEvery)(actions.openSettings, handleOpenSettings), (0, _effects.takeEvery)(actions.requestTodos, handleRequestTodos), (0, _effects.takeEvery)(actions.openTab, handleOpenTab), (0, _effects.takeEvery)(actions.loadSearchProjects, handleLoadSearchProjects), (0, _effects.takeLatest)(actions.searchProjects, handleSearchProjects), (0, _effects.takeEvery)(actions.pinProject, handlePinProject), (0, _effects.takeEvery)(actions.unpinProject, handleUnpinProject), (0, _effects.takeEvery)(actions.swapPinnedProjects, handleSwapPinnedProjects), (0, _effects.takeEvery)(actions.getOpenedTab, handleGetOpenedTab), (0, _effects.takeEvery)(actions.newIssue, handleNewIssue), (0, _effects.takeEvery)(actions.createIssue, handleCreateIssue)];
+
+	        case 2:
+	        case 'end':
+	          return _context20.stop();
+	      }
+	    }
+	  }, _marked[18], this);
 	}
 
 /***/ },
@@ -45301,6 +45385,12 @@
 	    var pathname = _ref.pathname;
 
 	    return _axios2.default.get(API_URL + '/' + resource + Pathname(pathname));
+	  },
+
+	  post: function post(resource, _ref2) {
+	    var pathname = _ref2.pathname;
+
+	    return _axios2.default.post(API_URL + '/' + resource + Pathname(pathname));
 	  }
 	};
 
@@ -45308,19 +45398,19 @@
 	  return gitlab.get('user', { pathname: { private_token: private_token } });
 	};
 
-	var fetchProjects = function fetchProjects(_ref2) {
-	  var accessToken = _ref2.accessToken;
-	  var page = _ref2.page;
+	var fetchProjects = function fetchProjects(_ref3) {
+	  var accessToken = _ref3.accessToken;
+	  var page = _ref3.page;
 
 	  return gitlab.get('projects', {
 	    pathname: { page: page, private_token: accessToken, per_page: 10 }
 	  });
 	};
 
-	var searchProjects = function searchProjects(_ref3) {
-	  var accessToken = _ref3.accessToken;
-	  var page = _ref3.page;
-	  var query = _ref3.query;
+	var searchProjects = function searchProjects(_ref4) {
+	  var accessToken = _ref4.accessToken;
+	  var page = _ref4.page;
+	  var query = _ref4.query;
 
 	  return gitlab.get('projects', {
 	    pathname: { page: page, private_token: accessToken, per_page: 10, search: query }
@@ -45333,11 +45423,24 @@
 	  });
 	};
 
+	var createIssue = function createIssue(_ref5) {
+	  var accessToken = _ref5.accessToken;
+	  var projectId = _ref5.projectId;
+	  var title = _ref5.title;
+	  var _ref5$description = _ref5.description;
+	  var description = _ref5$description === undefined ? '' : _ref5$description;
+
+	  return gitlab.post('projects/' + projectId + '/issues', {
+	    pathname: { private_token: accessToken, description: description, title: title }
+	  });
+	};
+
 	exports.default = {
 	  fetchUser: fetchUser,
 	  fetchProjects: fetchProjects,
 	  fetchTodos: fetchTodos,
-	  searchProjects: searchProjects
+	  searchProjects: searchProjects,
+	  createIssue: createIssue
 	};
 
 /***/ },
@@ -47049,7 +47152,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.getTodosCount = exports.getSearchProjects = exports.getLoadingSearch = exports.getSearchNextPage = exports.getSearchIds = exports.getQuery = exports.getIsProjectPinned = exports.getProjects = exports.getLoadingProjects = exports.getProjectsNextPage = exports.getProjectsIds = exports.getProjectById = exports.getAccessToken = exports.getUser = exports.getLoadingUser = exports.getHasTokenError = exports.getIsValidatingToken = exports.getIssueMessage = exports.getSelectedPage = exports.getEntityById = undefined;
+	exports.getTodosCount = exports.getSearchProjects = exports.getLoadingSearch = exports.getSearchNextPage = exports.getSearchIds = exports.getQuery = exports.getIsCreatingIssue = exports.getNewIssueProjectNameSpace = exports.getNewIssueProject = exports.getIsProjectPinned = exports.getProjects = exports.getLoadingProjects = exports.getProjectsNextPage = exports.getProjectsIds = exports.getProjectById = exports.getAccessToken = exports.getUser = exports.getLoadingUser = exports.getHasTokenError = exports.getIsValidatingToken = exports.getIssueMessage = exports.getSelectedPage = exports.getEntityById = undefined;
 
 	var _2 = __webpack_require__(824);
 
@@ -47079,14 +47182,14 @@
 
 	var getIssueMessage = exports.getIssueMessage = (0, _get2.default)('issueMessage');
 
-	// user
+	// USER
 	var getIsValidatingToken = exports.getIsValidatingToken = (0, _get2.default)('page.accessToken.loading');
 	var getHasTokenError = exports.getHasTokenError = (0, _get2.default)('page.accessToken.error');
 	var getLoadingUser = exports.getLoadingUser = (0, _get2.default)('page.user.loading');
 	var getUser = exports.getUser = (0, _get2.default)('user.data');
 	var getAccessToken = exports.getAccessToken = (0, _get2.default)('user.data.accessToken');
 
-	// projects
+	// PROJECTS
 	var getProjectById = exports.getProjectById = getEntityById(_3.default, 'projects');
 	var getProjectsIds = exports.getProjectsIds = (0, _getOr2.default)([], 'projects.ids');
 	var getProjectsNextPage = exports.getProjectsNextPage = (0, _get2.default)('projects.nextPage');
@@ -47103,7 +47206,22 @@
 	  return (0, _getOr2.default)(false, 'pinnedProjects.' + id, state);
 	};
 
-	// search
+	// ISSUES
+	var getNewIssueProject = exports.getNewIssueProject = function getNewIssueProject(state) {
+	  var projectId = (0, _get2.default)('newIssue.projectId', state);
+
+	  return getProjectById(state, projectId);
+	};
+	var getNewIssueProjectNameSpace = exports.getNewIssueProjectNameSpace = function getNewIssueProjectNameSpace(state) {
+	  var project = getNewIssueProject(state);
+	  var name = (0, _get2.default)('name', project);
+	  var group = (0, _get2.default)('namespace.name', project);
+
+	  return group + '/' + name;
+	};
+	var getIsCreatingIssue = exports.getIsCreatingIssue = (0, _get2.default)('newIssue.loading');
+
+	// SEARCH
 	var getQuery = exports.getQuery = (0, _get2.default)('search.query');
 	var getSearchIds = exports.getSearchIds = (0, _getOr2.default)([], 'search.ids');
 	var getSearchNextPage = exports.getSearchNextPage = (0, _get2.default)('search.nextPage');
@@ -48112,6 +48230,7 @@
 	          return _react2.default.createElement(_components.Landing, null);
 	        case _constants.Pages.accessToken:
 	          return _react2.default.createElement(_AccessToken2.default, null);
+	        case _constants.Pages.NEW_ISSUE:
 	        case _constants.Pages.search:
 	        case _constants.Pages.main:
 	          return _react2.default.createElement(_Main2.default, null);
@@ -48162,7 +48281,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.FadeTransition = exports.IssueMessage = exports.FlexItem = exports.FlexContainer = exports.Projects = exports.TopBar = exports.AccessToken = exports.Error = exports.Landing = exports.AppWrapper = undefined;
+	exports.NewIssue = exports.FadeTransition = exports.IssueMessage = exports.FlexItem = exports.FlexContainer = exports.Projects = exports.TopBar = exports.AccessToken = exports.Error = exports.Landing = exports.AppWrapper = undefined;
 
 	var _AppWrapper2 = __webpack_require__(835);
 
@@ -48204,6 +48323,10 @@
 
 	var _FadeTransition3 = _interopRequireDefault(_FadeTransition2);
 
+	var _NewIssue2 = __webpack_require__(1397);
+
+	var _NewIssue3 = _interopRequireDefault(_NewIssue2);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.AppWrapper = _AppWrapper3.default;
@@ -48216,6 +48339,7 @@
 	exports.FlexItem = _FlexItem3.default;
 	exports.IssueMessage = _IssueMessage3.default;
 	exports.FadeTransition = _FadeTransition3.default;
+	exports.NewIssue = _NewIssue3.default;
 
 /***/ },
 /* 835 */
@@ -78816,9 +78940,14 @@
 	    key: 'render',
 	    value: function render() {
 	      var _props = this.props;
+	      var back = _props.back;
+	      var description = _props.description;
 	      var imageUrl = _props.imageUrl;
+	      var search = _props.search;
+	      var title = _props.title;
 	      var searching = _props.searching;
 	      var todosCount = _props.todosCount;
+	      var onBack = _props.onBack;
 	      var onDropdownClick = _props.onDropdownClick;
 	      var onNewProjectClick = _props.onNewProjectClick;
 	      var onTodosClick = _props.onTodosClick;
@@ -78839,7 +78968,23 @@
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'App__TopBar_Content' },
-	          _react2.default.createElement(_Search2.default, {
+	          back && _react2.default.createElement(_semanticUiReact.Icon, {
+	            name: 'chevron left',
+	            link: true,
+	            style: { marginRight: 10 },
+	            onClick: onBack
+	          }),
+	          !!title && _react2.default.createElement(
+	            'div',
+	            { className: 'App__TopBar_Content_Title' },
+	            title,
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'NewIssue_Project' },
+	              description
+	            )
+	          ),
+	          search && _react2.default.createElement(_Search2.default, {
 	            loading: searching,
 	            onSearch: this.props.onSearch
 	          }),
@@ -78880,7 +79025,11 @@
 	}(_react.PureComponent);
 
 	TopBar.propTypes = {
+	  back: _react.PropTypes.bool,
+	  description: _react.PropTypes.string,
 	  imageUrl: _react.PropTypes.string,
+	  title: _react.PropTypes.string,
+	  search: _react.PropTypes.bool,
 	  searching: _react.PropTypes.bool,
 	  todosCount: _react.PropTypes.number,
 	  onDropdownClick: _react.PropTypes.func,
@@ -79109,7 +79258,7 @@
 
 
 	// module
-	exports.push([module.id, ".App__TopBar {\n  padding: 10px;\n  background-color: #fafafa;\n  border-bottom: 1px solid #e5e5e5;\n}\n.App__TopBar_Content {\n  display: flex;\n  align-items: center;\n}\n.App__TopBar_Content .icon {\n  color: rgba(0,0,0,0.55);\n}\n.App__TopBar_Content .input {\n  flex: 1;\n  margin-right: 10px;\n}\n.App__TopBar_Content .plus {\n  margin-right: 10px;\n}\n.App__TopBar_Content .ui.dropdown > .dropdown.icon {\n  margin: 0;\n}\n.App__TopBar_Content .menu {\n  top: 35px !important;\n  left: -87px !important;\n  padding: 3px !important;\n}\n", ""]);
+	exports.push([module.id, ".App__TopBar {\n  display: flex;\n  height: 58px;\n  padding: 10px;\n  background-color: #fafafa;\n  border-bottom: 1px solid #e5e5e5;\n}\n.App__TopBar_Content {\n  display: flex;\n  flex: 1;\n  align-items: center;\n}\n.App__TopBar_Content .icon {\n  color: rgba(0,0,0,0.55);\n}\n.App__TopBar_Content .input {\n  flex: 1;\n  margin-right: 10px;\n}\n.App__TopBar_Content .plus {\n  margin-right: 10px;\n}\n.App__TopBar_Content .ui.dropdown > .dropdown.icon {\n  margin: 0;\n}\n.App__TopBar_Content .menu {\n  top: 35px !important;\n  left: -87px !important;\n  padding: 3px !important;\n}\n.App__TopBar_Content_Title {\n  flex: 1;\n  font-size: 1.2em;\n  font-weight: bold;\n  margin-right: 10px;\n}\n", ""]);
 
 	// exports
 
@@ -86181,6 +86330,10 @@
 
 	var _Search2 = _interopRequireDefault(_Search);
 
+	var _NewIssue = __webpack_require__(1396);
+
+	var _NewIssue2 = _interopRequireDefault(_NewIssue);
+
 	var _constants = __webpack_require__(775);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -86214,6 +86367,8 @@
 	          return _react2.default.createElement(_Search2.default, null);
 	        case _constants.Pages.main:
 	          return _react2.default.createElement(_Projects2.default, null);
+	        case _constants.Pages.NEW_ISSUE:
+	          return _react2.default.createElement(_NewIssue2.default, null);
 	      }
 	    }, _this.handleNewProjectClick = function () {
 	      _this.props.onOpenTab(_constants.GITLAB_URL + '/projects/new');
@@ -86240,6 +86395,8 @@
 	      }
 	    }, _this.handleSearch = function (query) {
 	      _this.props.onSearch(query);
+	    }, _this.handleBack = function () {
+	      _this.props.onSetPage(_constants.Pages.main);
 	    }, _temp), _possibleConstructorReturn(_this, _ret);
 	  }
 
@@ -86251,17 +86408,23 @@
 	      var searching = _props.searching;
 	      var page = _props.page;
 	      var todosCount = _props.todosCount;
+	      var newIssueProjectNameSpace = _props.newIssueProjectNameSpace;
 
 
 	      return _react2.default.createElement(
 	        _components.FadeTransition,
 	        { style: { display: 'flex', flex: 1, flexDirection: 'column' } },
 	        _react2.default.createElement(_components.TopBar, {
+	          title: this.isNewIssuePage ? 'New Issue' : '',
+	          description: newIssueProjectNameSpace,
 	          imageUrl: user.avatar_url,
 	          searching: searching && page !== _constants.Pages.search,
 	          todosCount: todosCount,
 	          onDropdownClick: this.handleDropdown,
+	          back: this.isNewIssuePage,
+	          search: !this.isNewIssuePage,
 	          onSearch: this.handleSearch,
+	          onBack: this.handleBack,
 	          onTodosClick: this.handleTodosClick,
 	          onNewProjectClick: this.handleNewProjectClick
 	        }),
@@ -86271,6 +86434,11 @@
 	          this.renderPage()
 	        )
 	      );
+	    }
+	  }, {
+	    key: 'isNewIssuePage',
+	    get: function get() {
+	      return this.props.page === _constants.Pages.NEW_ISSUE;
 	    }
 	  }]);
 
@@ -86287,7 +86455,8 @@
 	    user: (0, _selectors.getUser)(state),
 	    searching: (0, _selectors.getLoadingSearch)(state),
 	    page: (0, _selectors.getSelectedPage)(state),
-	    todosCount: (0, _selectors.getTodosCount)(state)
+	    todosCount: (0, _selectors.getTodosCount)(state),
+	    newIssueProjectNameSpace: (0, _selectors.getNewIssueProjectNameSpace)(state)
 	  };
 	};
 
@@ -86296,7 +86465,8 @@
 	  onOpenProfile: _store.actions.openProfile,
 	  onOpenSettings: _store.actions.openSettings,
 	  onSearch: _store.actions.loadSearchProjects,
-	  onOpenTab: _store.actions.openTab
+	  onOpenTab: _store.actions.openTab,
+	  onSetPage: _store.actions.setPage
 	};
 
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(MainContainer);
@@ -86761,7 +86931,9 @@
 	        _this.handleAction(project, 'open');
 	      };
 	    }, _this.handleAction = (0, _curry2.default)(function (project, action) {
-	      var onOpenTab = _this.props.onOpenTab;
+	      var _this$props = _this.props;
+	      var onOpenTab = _this$props.onOpenTab;
+	      var onNewIssue = _this$props.onNewIssue;
 	      var web_url = project.web_url;
 	      var default_branch = project.default_branch;
 
@@ -86770,7 +86942,7 @@
 	        case 'open':
 	          return onOpenTab('' + web_url);
 	        case 'newIssue':
-	          return onOpenTab(web_url + '/issues/new?issue');
+	          return onNewIssue(project);
 	        case 'code':
 	          return onOpenTab(web_url + '/tree/' + default_branch);
 	        case 'branches':
@@ -86834,6 +87006,7 @@
 
 	var mapDispatchToProps = {
 	  onOpenTab: _store.actions.openTab,
+	  onNewIssue: _store.actions.newIssue,
 	  onPin: _store.actions.pinProject,
 	  onUnpin: _store.actions.unpinProject
 	};
@@ -89150,6 +89323,208 @@
 
 	// module
 	exports.push([module.id, ".fade-appear {\n  opacity: 0.01;\n}\n.fade-appear.fade-appear-active {\n  opacity: 1;\n  transition: opacity 0.5s ease-in;\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 1396 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(299);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(475);
+
+	var _components = __webpack_require__(834);
+
+	var _actions = __webpack_require__(774);
+
+	var actions = _interopRequireWildcard(_actions);
+
+	var _selectors = __webpack_require__(823);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var NewIssueContainer = function NewIssueContainer(_ref) {
+	  var loading = _ref.loading;
+	  var onCreateIssue = _ref.onCreateIssue;
+	  return _react2.default.createElement(_components.NewIssue, { loading: loading, onSubmit: onCreateIssue });
+	};
+
+	NewIssueContainer.propTypes = {
+	  onCreateIssue: _react.PropTypes.func
+	};
+
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    loading: (0, _selectors.getIsCreatingIssue)(state)
+	  };
+	};
+
+	var mapDispatchToProps = {
+	  onCreateIssue: actions.createIssue
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(NewIssueContainer);
+
+/***/ },
+/* 1397 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(299);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _semanticUiReact = __webpack_require__(841);
+
+	__webpack_require__(1398);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var NewIssue = function (_PureComponent) {
+	  _inherits(NewIssue, _PureComponent);
+
+	  function NewIssue() {
+	    var _ref;
+
+	    var _temp, _this, _ret;
+
+	    _classCallCheck(this, NewIssue);
+
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+
+	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = NewIssue.__proto__ || Object.getPrototypeOf(NewIssue)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+	      title: '',
+	      description: ''
+	    }, _this.handleChange = function (key) {
+	      return function (_ref2) {
+	        var value = _ref2.target.value;
+
+	        _this.setState(_defineProperty({}, key, value));
+	      };
+	    }, _this.handleSubmit = function () {
+	      _this.props.onSubmit(_this.state);
+	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	  }
+
+	  _createClass(NewIssue, [{
+	    key: 'render',
+	    value: function render() {
+	      var _state = this.state;
+	      var title = _state.title;
+	      var description = _state.description;
+	      var loading = this.props.loading;
+
+
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'NewIssue' },
+	        _react2.default.createElement(
+	          _semanticUiReact.Form,
+	          { className: 'NewIssue_Form' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'NewIssue_Form_Description' },
+	            'Title'
+	          ),
+	          _react2.default.createElement(_semanticUiReact.Input, {
+	            autoFocus: true,
+	            value: title,
+	            disabled: loading,
+	            onChange: this.handleChange('title')
+	          }),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'NewIssue_Form_Description' },
+	            'Description'
+	          ),
+	          _react2.default.createElement(_semanticUiReact.TextArea, {
+	            disabled: loading,
+	            placeholder: 'Write a comment',
+	            onChange: this.handleChange('description')
+	          })
+	        ),
+	        _react2.default.createElement(_semanticUiReact.Button, {
+	          positive: true,
+	          disabled: !title.trim() || loading,
+	          content: 'Submit issue',
+	          onClick: this.handleSubmit
+	        })
+	      );
+	    }
+	  }]);
+
+	  return NewIssue;
+	}(_react.PureComponent);
+
+	NewIssue.propTypes = {};
+
+	exports.default = NewIssue;
+
+/***/ },
+/* 1398 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(1399);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(839)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/stylus-loader/index.js!./NewIssue.styl", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/stylus-loader/index.js!./NewIssue.styl");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 1399 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(838)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".NewIssue {\n  display: flex;\n  flex: 1;\n  flex-direction: column;\n  padding: 10px;\n}\n.NewIssue_Project {\n  color: #808080;\n  font-size: 0.8em;\n}\n.NewIssue_Form {\n  display: flex;\n  flex: 1;\n  flex-direction: column;\n}\n.NewIssue_Form .input {\n  margin-bottom: 10px;\n}\n.NewIssue_Form_Description {\n  margin-bottom: 5px;\n}\n", ""]);
 
 	// exports
 

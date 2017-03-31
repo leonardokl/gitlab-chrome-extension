@@ -20,6 +20,7 @@ class AppContainer extends PureComponent {
         return <Landing />
       case Pages.accessToken:
         return <AccessToken />
+      case Pages.NEW_ISSUE:
       case Pages.search:
       case Pages.main:
         return <Main />

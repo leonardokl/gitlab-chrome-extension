@@ -6,7 +6,19 @@ import './TopBar.styl'
 
 class TopBar extends PureComponent {
   render () {
-    const { imageUrl, searching, todosCount, onDropdownClick, onNewProjectClick, onTodosClick } = this.props
+    const {
+      back,
+      description,
+      imageUrl,
+      search,
+      title,
+      searching,
+      todosCount,
+      onBack,
+      onDropdownClick,
+      onNewProjectClick,
+      onTodosClick
+    } = this.props
     const DropdownTrigger = (
       <span>
         <Image
@@ -23,10 +35,28 @@ class TopBar extends PureComponent {
     return (
       <div className='App__TopBar'>
         <div className='App__TopBar_Content'>
-          <Search
-            loading={searching}
-            onSearch={this.props.onSearch}
-          />
+          {back &&
+            <Icon
+              name='chevron left'
+              link
+              style={{ marginRight: 10 }}
+              onClick={onBack}
+            />
+          }
+          {!!title &&
+            <div className='App__TopBar_Content_Title'>
+              {title}
+              <div className='NewIssue_Project'>
+                {description}
+              </div>
+            </div>
+          }
+          {search &&
+            <Search
+              loading={searching}
+              onSearch={this.props.onSearch}
+            />
+          }
           <TodosCounter count={todosCount} onClick={onTodosClick}/>
           <Icon
             name='plus'
@@ -59,7 +89,11 @@ class TopBar extends PureComponent {
 }
 
 TopBar.propTypes = {
+  back: PropTypes.bool,
+  description: PropTypes.string,
   imageUrl: PropTypes.string,
+  title: PropTypes.string,
+  search: PropTypes.bool,
   searching: PropTypes.bool,
   todosCount: PropTypes.number,
   onDropdownClick: PropTypes.func,

@@ -12,7 +12,8 @@ import {
   getProjectsNextPage,
   getUser,
   getQuery,
-  getSearchNextPage
+  getSearchNextPage,
+  getNewIssueProject
 } from './selectors'
 import { projectsSchema, todosSchema } from './schemas'
 
@@ -209,6 +210,30 @@ function* handleGetOpenedTab () {
   }
 }
 
+function* handleNewIssue () {
+  yield put(actions.setPage(Pages.NEW_ISSUE))
+}
+
+function* handleCreateIssue ({ payload }) {
+  const [accessToken, project] = yield [
+    select(getAccessToken),
+    select(getNewIssueProject)
+  ]
+  const form = { ...payload, id: project.id }
+
+  try {
+    const response = yield gitlab.createIssue({ ...form, projectId: project.id, accessToken })
+
+    notification.basic({ title: 'Success', message: 'Issue created!'})
+
+    yield put(actions.createIssueSuccess(response))
+    yield put(actions.setPage(Pages.main))
+  } catch (err) {
+    console.error(err)
+    notification.basic({ title: 'Error', message: `Couldn't create the issue`})
+  }
+}
+
 export default function* () {
   yield [
     takeEvery(actions.load, handleLoad),
@@ -227,6 +252,8 @@ export default function* () {
     takeEvery(actions.pinProject, handlePinProject),
     takeEvery(actions.unpinProject, handleUnpinProject),
     takeEvery(actions.swapPinnedProjects, handleSwapPinnedProjects),
-    takeEvery(actions.getOpenedTab, handleGetOpenedTab)
+    takeEvery(actions.getOpenedTab, handleGetOpenedTab),
+    takeEvery(actions.newIssue, handleNewIssue),
+    takeEvery(actions.createIssue, handleCreateIssue)
   ]
 }
