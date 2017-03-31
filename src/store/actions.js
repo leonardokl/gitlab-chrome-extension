@@ -5,11 +5,9 @@ export const setPage = createAction('SET_PAGE', page => ({ page }))
 export const updateEntity = createAction('UPDATE_ENTITY')
 export const openProfile = createAction('OPEN_PROFILE')
 export const openSettings = createAction('OPEN_SETTINGS')
-export const openNewIssue = createAction('OPEN_NEW_ISSUE')
-export const newIssue = createAction('NEW_ISSUE')
+
 export const openTab = createAction('OPEN_TAB', url => ({ url }))
 export const getOpenedTab = createAction('GET_OPENED_TAB')
-export const setIssueMessage = createAction('SET_ISSUE_MESSAGE')
 
 // TOKEN
 export const getPersonalToken = createAction('GET_PERSONAL_TOKEN')
@@ -40,5 +38,8 @@ export const requestTodos = createAction('REQUEST_TODOS')
 export const requestTodosSuccess = createAction('REQUEST_TODOS_SUCCESS')
 
 // ISSUES
+export const openExternalNewIssue = createAction('OPEN_EXTERNAL_NEW_ISSUE')
+export const newIssue = createAction('NEW_ISSUE')
+export const setIssueMessage = createAction('SET_ISSUE_MESSAGE')
 export const createIssue = createAction('CREATE_ISSUE')
 export const createIssueSuccess = createAction('CREATE_ISSUE_SUCCESS')

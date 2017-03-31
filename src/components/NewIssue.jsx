@@ -1,5 +1,7 @@
 import React, { PropTypes, PureComponent } from 'react'
-import { Button, Input, Form, TextArea } from 'semantic-ui-react'
+import { Button, Input, Icon, Form, TextArea } from 'semantic-ui-react'
+import FadeTransition from './FadeTransition'
+import { preventDefault } from 'utils'
 import './NewIssue.styl'
 
 class NewIssue extends PureComponent {
@@ -12,24 +14,34 @@ class NewIssue extends PureComponent {
     this.setState({ [key]: value})
   }
 
-  handleSubmit = () => {
+  handleSubmit = preventDefault(() => {
     this.props.onSubmit(this.state)
-  }
+  })
 
   render () {
     const { title, description } = this.state
-    const { loading } = this.props
+    const { loading, onExternal } = this.props
 
     return (
-      <div className='NewIssue'>
-        <Form className='NewIssue_Form'>
-          <div className='NewIssue_Form_Description'>Title</div>
+      <FadeTransition className='NewIssue'>
+        <Form className='NewIssue_Form' onSubmit={this.handleSubmit}>
+          <div className='NewIssue_Form_Description'>
+            <div style={{ flex: 1 }}>Title</div>
+            <Icon
+              name='external'
+              link
+              color='blue'
+              title='Open on Gitlab'
+              onClick={onExternal}
+            />
+          </div>
           <Input
             autoFocus
             value={title}
             disabled={loading}
             onChange={this.handleChange('title')}
           />
+
           <div className='NewIssue_Form_Description'>Description</div>
           <TextArea
             disabled={loading}
@@ -37,19 +49,27 @@ class NewIssue extends PureComponent {
             onChange={this.handleChange('description')}
           />
         </Form>
+
         <Button
           positive
           disabled={!title.trim() || loading}
+          loading={loading}
           content='Submit issue'
           onClick={this.handleSubmit}
         />
-      </div>
+      </FadeTransition>
     )
   }
 }
 
 NewIssue.propTypes = {
+  loading: PropTypes.bool,
+  onExternal: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired
+}
 
+NewIssue.propTypes = {
+  loading: false
 }
 
 export default NewIssue

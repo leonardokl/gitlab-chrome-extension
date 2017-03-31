@@ -234,6 +234,12 @@ function* handleCreateIssue ({ payload }) {
   }
 }
 
+function* handleOpenExternalNewIssue () {
+  const { web_url } = yield select(getNewIssueProject)
+
+  yield put(actions.openTab(`${web_url}/issues/new?issue`))
+}
+
 export default function* () {
   yield [
     takeEvery(actions.load, handleLoad),
@@ -254,6 +260,7 @@ export default function* () {
     takeEvery(actions.swapPinnedProjects, handleSwapPinnedProjects),
     takeEvery(actions.getOpenedTab, handleGetOpenedTab),
     takeEvery(actions.newIssue, handleNewIssue),
-    takeEvery(actions.createIssue, handleCreateIssue)
+    takeEvery(actions.createIssue, handleCreateIssue),
+    takeEvery(actions.openExternalNewIssue, handleOpenExternalNewIssue)
   ]
 }

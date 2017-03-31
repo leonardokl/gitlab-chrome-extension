@@ -45,8 +45,8 @@ class TopBar extends PureComponent {
           }
           {!!title &&
             <div className='App__TopBar_Content_Title'>
-              {title}
-              <div className='NewIssue_Project'>
+              <div>{title}</div>
+              <div className='NewIssue_Project' title={description}>
                 {description}
               </div>
             </div>

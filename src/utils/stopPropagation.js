@@ -1,8 +1,8 @@
 import curry from 'lodash/fp/curry'
 
-const stopPropagation = curry((callback, evt) => {
+const stopPropagation = curry((callback, evt, ...args) => {
   evt.stopPropagation()
-  callback(evt)
+  callback(evt, ...args)
 })
 
 export default stopPropagation
