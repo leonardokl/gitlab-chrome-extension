@@ -6,7 +6,6 @@ import { getSelectedPage } from 'store/selectors'
 import { Pages } from 'constants'
 import AccessToken from './AccessToken'
 import Main from './Main'
-import IssueBranchName from './IssueBranchName'
 
 class AppContainer extends PureComponent {
   componentDidMount () {
@@ -21,8 +20,6 @@ class AppContainer extends PureComponent {
         return <Landing />
       case Pages.accessToken:
         return <AccessToken />
-      case Pages.issueBranchName:
-        return <IssueBranchName />
       case Pages.search:
       case Pages.main:
         return <Main />

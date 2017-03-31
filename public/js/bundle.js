@@ -48079,10 +48079,6 @@
 
 	var _Main2 = _interopRequireDefault(_Main);
 
-	var _IssueBranchName = __webpack_require__(1378);
-
-	var _IssueBranchName2 = _interopRequireDefault(_IssueBranchName);
-
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -48116,8 +48112,6 @@
 	          return _react2.default.createElement(_components.Landing, null);
 	        case _constants.Pages.accessToken:
 	          return _react2.default.createElement(_AccessToken2.default, null);
-	        case _constants.Pages.issueBranchName:
-	          return _react2.default.createElement(_IssueBranchName2.default, null);
 	        case _constants.Pages.search:
 	        case _constants.Pages.main:
 	          return _react2.default.createElement(_Main2.default, null);
@@ -77139,6 +77133,10 @@
 
 	var _FlexContainer2 = _interopRequireDefault(_FlexContainer);
 
+	var _FadeTransition = __webpack_require__(1393);
+
+	var _FadeTransition2 = _interopRequireDefault(_FadeTransition);
+
 	__webpack_require__(1269);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -77164,12 +77162,15 @@
 	    }
 
 	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = AccessToken.__proto__ || Object.getPrototypeOf(AccessToken)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-	      value: ''
+	      value: '',
+	      loginViaCookie: false
 	    }, _this.handleSave = function () {
 	      var value = _this.state.value;
 
 
 	      if (value.trim()) _this.props.onSave(value);
+	    }, _this.handleLoginViaCookie = function () {
+	      _this.setState({ loginViaCookie: true }, _this.props.onSave);
 	    }, _this.handleInputChange = function (_ref2) {
 	      var value = _ref2.target.value;
 
@@ -77184,6 +77185,7 @@
 	  _createClass(AccessToken, [{
 	    key: 'render',
 	    value: function render() {
+	      var loginViaCookie = this.state.loginViaCookie;
 	      var _props = this.props;
 	      var loading = _props.loading;
 	      var error = _props.error;
@@ -77195,12 +77197,12 @@
 	        _FlexContainer2.default,
 	        { fluid: true, className: 'App__AccessToken' },
 	        _react2.default.createElement(
-	          'div',
+	          _FadeTransition2.default,
 	          { className: 'App__AccessToken_Content' },
-	          _react2.default.createElement(_semanticUiReact.Icon, { name: 'gitlab', size: 'huge' }),
+	          _react2.default.createElement(_semanticUiReact.Image, { src: '/public/images/logo.png', size: 'tiny', disabled: loading }),
 	          _react2.default.createElement(
 	            _semanticUiReact.Segment,
-	            null,
+	            { disabled: loading },
 	            _react2.default.createElement(
 	              _semanticUiReact.Header,
 	              {
@@ -77214,7 +77216,6 @@
 	              { className: 'App__AccessToken_Form' },
 	              _react2.default.createElement(_semanticUiReact.Input, {
 	                autoFocus: true,
-	                disabled: loading,
 	                fluid: true,
 	                placeholder: 'Personal Access Token',
 	                error: error,
@@ -77223,7 +77224,7 @@
 	              }),
 	              _react2.default.createElement(_semanticUiReact.Button, {
 	                disabled: loading,
-	                loading: loading,
+	                loading: loading && !loginViaCookie,
 	                primary: true,
 	                fluid: true,
 	                icon: 'save',
@@ -77240,6 +77241,17 @@
 	                )
 	              )
 	            )
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            null,
+	            _react2.default.createElement(_semanticUiReact.Button, {
+	              disabled: loading,
+	              loading: loginViaCookie,
+	              content: 'Log in via Cookie',
+	              size: 'small',
+	              onClick: this.handleLoginViaCookie
+	            })
 	          )
 	        )
 	      );
@@ -78748,7 +78760,7 @@
 
 
 	// module
-	exports.push([module.id, ".App__AccessToken {\n  background-color: #f3f3f3;\n}\n.App__AccessToken_Content {\n  flex: 1;\n  align-self: center;\n  margin: 10px;\n  text-align: center;\n}\n.App__AccessToken_Form {\n  text-align: center;\n}\n.App__AccessToken_Form div:nth-child(1),\n.App__AccessToken_Form button {\n  margin-bottom: 10px !important;\n}\n", ""]);
+	exports.push([module.id, ".App__AccessToken {\n  background-color: #f3f3f3;\n}\n.App__AccessToken .image {\n  flex: 1;\n  align-self: center;\n}\n.App__AccessToken_Content {\n  display: flex;\n  flex: 1;\n  flex-direction: column;\n  align-self: center;\n  margin: 10px;\n  text-align: center;\n}\n.App__AccessToken_Form {\n  text-align: center;\n}\n.App__AccessToken_Form div:nth-child(1),\n.App__AccessToken_Form button {\n  margin-bottom: 10px !important;\n}\n", ""]);
 
 	// exports
 
@@ -85049,7 +85061,7 @@
 
 
 	// module
-	exports.push([module.id, ".App__Projects_NotFound {\n  display: flex;\n  justify-content: center;\n  flex: 1;\n  height: 100%;\n  align-items: center;\n  flex-direction: column;\n  color: #808080;\n  text-align: center;\n}\n.App__Projects_NotFound .icon {\n  margin-bottom: 10px;\n}\n.App__Projects_NotFound .query {\n  color: #c7254e;\n  background-color: #f9f2f4;\n  radius: 3px;\n  padding: 2px 4px;\n}\n", ""]);
+	exports.push([module.id, ".App__Projects_NotFound {\n  position: absolute;\n  display: flex;\n  justify-content: center;\n  flex: 1;\n  width: 100%;\n  height: 100%;\n  align-items: center;\n  flex-direction: column;\n  color: #808080;\n  text-align: center;\n}\n.App__Projects_NotFound .icon {\n  margin-bottom: 10px;\n}\n.App__Projects_NotFound .query {\n  color: #c7254e;\n  background-color: #f9f2f4;\n  radius: 3px;\n  padding: 2px 4px;\n}\n", ""]);
 
 	// exports
 
@@ -86935,34 +86947,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(SearchContainer);
 
 /***/ },
-/* 1378 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(299);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var IssueBranchName = function IssueBranchName() {
-	  return _react2.default.createElement(
-	    'div',
-	    null,
-	    'IssueBranchName'
-	  );
-	};
-
-	IssueBranchName.propTypes = {};
-
-	exports.default = IssueBranchName;
-
-/***/ },
+/* 1378 */,
 /* 1379 */,
 /* 1380 */
 /***/ function(module, exports, __webpack_require__) {
@@ -89101,9 +89086,11 @@
 	var FadeTransition = function FadeTransition(_ref) {
 	  var children = _ref.children;
 	  var style = _ref.style;
+	  var className = _ref.className;
 	  return _react2.default.createElement(
 	    _reactAddonsCssTransitionGroup2.default,
 	    {
+	      className: className,
 	      style: style,
 	      transitionName: 'fade',
 	      transitionAppear: true,
@@ -89117,7 +89104,8 @@
 
 	FadeTransition.propTypes = {
 	  children: _react.PropTypes.any.isRequired,
-	  style: _react.PropTypes.object
+	  style: _react.PropTypes.object,
+	  className: _react.PropTypes.string
 	};
 
 	FadeTransition.defaultProps = {

@@ -2,8 +2,9 @@ import React, { PropTypes } from 'react'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import './FadeTransition.styl'
 
-const FadeTransition = ({ children, style }) => (
+const FadeTransition = ({ children, style, className }) => (
   <ReactCSSTransitionGroup
+    className={className}
     style={style}
     transitionName="fade"
     transitionAppear={true}
@@ -17,7 +18,8 @@ const FadeTransition = ({ children, style }) => (
 
 FadeTransition.propTypes = {
   children: PropTypes.any.isRequired,
-  style: PropTypes.object
+  style: PropTypes.object,
+  className: PropTypes.string
 }
 
 FadeTransition.defaultProps = {
