@@ -1,3 +1,8 @@
+<a name="0.11.0"></a>
+# [0.11.0](https://github.com/leonardokl/gitlab-chrome-extension/compare/v0.10.0...v0.11.0) (2017-04-01)
+
+
+
 <a name="0.10.0"></a>
 # [0.10.0](https://github.com/leonardokl/gitlab-chrome-extension/compare/v0.9.1...v0.10.0) (2017-03-30)
 
