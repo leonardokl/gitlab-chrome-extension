@@ -11,14 +11,14 @@ class ProjectContainer extends PureComponent {
   }
 
   handleAction = curry((project, action) => {
-    const { onOpenTab } = this.props
+    const { onOpenTab, onNewIssue } = this.props
     const { web_url, default_branch } = project
 
     switch (action) {
       case 'open':
         return onOpenTab(`${web_url}`)
       case 'newIssue':
-        return onOpenTab(`${web_url}/issues/new?issue`)
+        return onNewIssue(project)
       case 'code':
         return onOpenTab(`${web_url}/tree/${default_branch}`)
       case 'branches':
@@ -64,10 +64,10 @@ const mapStateToProps = (state, props) => ({
 
 const mapDispatchToProps = ({
   onOpenTab: actions.openTab,
+  onNewIssue: actions.newIssue,
   onPin: actions.pinProject,
   onUnpin: actions.unpinProject
 })
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectContainer)
 

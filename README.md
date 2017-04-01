@@ -7,12 +7,15 @@ Quickly access all of your projects
 
 ## Features
   - Projects search
+  - Create issues
   - Todos counter
   - Pin projects to quickly access then
   - Open this pages of a project: code, new issue, branches, issues
   - Copy to clipboard the recommended branch name of an issue
 
 ![alt text](src/assets/main.png)
+
+![alt text](src/assets/new-issue.png)
 
 ![alt text](src/assets/main-fullscreen.png)
 

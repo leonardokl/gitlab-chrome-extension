@@ -110,6 +110,18 @@ const entities = handleAction(actions.updateEntity, (state, { payload: { entitie
   return merge(state, entities)
 }, {})
 
+const newIssue = combineReducers({
+  projectId: handleActions({
+    [actions.newIssue]: flip(get('payload.id')),
+  }, null),
+
+  loading: handleActions({
+    [actions.createIssue]: T,
+    [actions.createIssueSuccess]: F,
+    [actions.createIssueError]: F
+  }, false)
+})
+
 export default combineReducers({
   user,
   page,
@@ -118,6 +130,7 @@ export default combineReducers({
   todos,
   entities,
   issueMessage,
+  newIssue,
 
   pinnedProjects: handleActions({
     [actions.loadProjects]: (state, { payload }) => payload.reduce((acc, currValue) => ({

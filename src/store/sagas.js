@@ -1,4 +1,4 @@
-import { put, select, takeEvery } from 'redux-saga/effects'
+import { put, select, takeEvery, takeLatest } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
 import get from 'lodash/fp/get'
 import compose from 'lodash/fp/compose'
@@ -6,13 +6,23 @@ import equals from 'lodash/fp/equals'
 import { normalize, schema, arrayOf } from 'normalizr'
 import * as actions from './actions'
 import { Pages, Gitlab, GITLAB_URL } from 'constants'
-import { chrome, gitlab, isGitlabUrl, isIssueUrl, gitlabTab, getIssueId, notification } from 'utils'
+import {
+  chrome,
+  gitlab,
+  isGitlabUrl,
+  isIssueUrl,
+  gitlabTab,
+  getIssueId,
+  notification,
+  createBranchName
+} from 'utils'
 import {
   getAccessToken,
   getProjectsNextPage,
   getUser,
   getQuery,
-  getSearchNextPage
+  getSearchNextPage,
+  getNewIssueProject
 } from './selectors'
 import { projectsSchema, todosSchema } from './schemas'
 
@@ -103,7 +113,6 @@ function* handleSearchProjects () {
     const nextPage = response.headers['x-next-page']
     const normalizedData = normalize(response.data, projectsSchema)
 
-    console.log('response', response);
     yield put(actions.updateEntity(normalizedData))
     yield put(actions.searchProjectsSuccess({ ...normalizedData, nextPage }))
   } catch (err) {
@@ -210,6 +219,49 @@ function* handleGetOpenedTab () {
   }
 }
 
+function* handleNewIssue () {
+  yield put(actions.setPage(Pages.NEW_ISSUE))
+}
+
+function* handleCreateIssue ({ payload: { title, description, assignToMe } }) {
+  const [user, accessToken, project] = yield [
+    select(getUser),
+    select(getAccessToken),
+    select(getNewIssueProject)
+  ]
+  const form = {
+    title,
+    description,
+    id: project.id,
+    assignee_id: assignToMe
+      ? user.id
+      : undefined
+  }
+
+  try {
+    const response = yield gitlab.createIssue({ ...form, accessToken })
+
+    yield put(actions.createIssueSuccess(response))
+    yield put(actions.setPage(Pages.main))
+  } catch (err) {
+    console.error(err)
+    notification.basic({ title: 'Error', message: err.message})
+    yield put(actions.createIssueError())
+  }
+}
+
+function* handleOpenExternalNewIssue () {
+  const { web_url } = yield select(getNewIssueProject)
+
+  yield put(actions.openTab(`${project.web_url}/issues/new?issue`))
+}
+
+function* handleCreateIssueSuccess ({ payload: { data: { iid, title } } }) {
+   const branchName = createBranchName(iid, title)
+
+   yield put(actions.setIssueMessage({ id: iid, branchName}))
+}
+
 export default function* () {
   yield [
     takeEvery(actions.load, handleLoad),
@@ -224,10 +276,14 @@ export default function* () {
     takeEvery(actions.requestTodos, handleRequestTodos),
     takeEvery(actions.openTab, handleOpenTab),
     takeEvery(actions.loadSearchProjects, handleLoadSearchProjects),
-    takeEvery(actions.searchProjects, handleSearchProjects),
+    takeLatest(actions.searchProjects, handleSearchProjects),
     takeEvery(actions.pinProject, handlePinProject),
     takeEvery(actions.unpinProject, handleUnpinProject),
     takeEvery(actions.swapPinnedProjects, handleSwapPinnedProjects),
-    takeEvery(actions.getOpenedTab, handleGetOpenedTab)
+    takeEvery(actions.getOpenedTab, handleGetOpenedTab),
+    takeEvery(actions.newIssue, handleNewIssue),
+    takeEvery(actions.createIssue, handleCreateIssue),
+    takeEvery(actions.openExternalNewIssue, handleOpenExternalNewIssue),
+    takeEvery(actions.createIssueSuccess, handleCreateIssueSuccess)
   ]
 }
