@@ -6,7 +6,16 @@ import equals from 'lodash/fp/equals'
 import { normalize, schema, arrayOf } from 'normalizr'
 import * as actions from './actions'
 import { Pages, Gitlab, GITLAB_URL } from 'constants'
-import { chrome, gitlab, isGitlabUrl, isIssueUrl, gitlabTab, getIssueId, notification } from 'utils'
+import {
+  chrome,
+  gitlab,
+  isGitlabUrl,
+  isIssueUrl,
+  gitlabTab,
+  getIssueId,
+  notification,
+  createBranchName
+} from 'utils'
 import {
   getAccessToken,
   getProjectsNextPage,
@@ -232,8 +241,6 @@ function* handleCreateIssue ({ payload: { title, description, assignToMe } }) {
   try {
     const response = yield gitlab.createIssue({ ...form, accessToken })
 
-    notification.basic({ title: 'Success', message: 'Issue created!'})
-
     yield put(actions.createIssueSuccess(response))
     yield put(actions.setPage(Pages.main))
   } catch (err) {
@@ -246,7 +253,13 @@ function* handleCreateIssue ({ payload: { title, description, assignToMe } }) {
 function* handleOpenExternalNewIssue () {
   const { web_url } = yield select(getNewIssueProject)
 
-  yield put(actions.openTab(`${web_url}/issues/new?issue`))
+  yield put(actions.openTab(`${project.web_url}/issues/new?issue`))
+}
+
+function* handleCreateIssueSuccess ({ payload: { data: { iid, title } } }) {
+   const branchName = createBranchName(iid, title)
+
+   yield put(actions.setIssueMessage({ id: iid, branchName}))
 }
 
 export default function* () {
@@ -270,6 +283,7 @@ export default function* () {
     takeEvery(actions.getOpenedTab, handleGetOpenedTab),
     takeEvery(actions.newIssue, handleNewIssue),
     takeEvery(actions.createIssue, handleCreateIssue),
-    takeEvery(actions.openExternalNewIssue, handleOpenExternalNewIssue)
+    takeEvery(actions.openExternalNewIssue, handleOpenExternalNewIssue),
+    takeEvery(actions.createIssueSuccess, handleCreateIssueSuccess)
   ]
 }
