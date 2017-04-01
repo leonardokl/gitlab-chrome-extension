@@ -245,7 +245,7 @@ function* handleCreateIssue ({ payload: { title, description, assignToMe } }) {
     yield put(actions.setPage(Pages.main))
   } catch (err) {
     console.error(err)
-    notification.basic({ title: 'Error', message: `Couldn't create the issue`})
+    notification.basic({ title: 'Error', message: err.message})
     yield put(actions.createIssueError())
   }
 }

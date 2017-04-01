@@ -44403,7 +44403,7 @@
 	          _context19.t0 = _context19['catch'](8);
 
 	          console.error(_context19.t0);
-	          _utils.notification.basic({ title: 'Error', message: 'Couldn\'t create the issue' });
+	          _utils.notification.basic({ title: 'Error', message: _context19.t0.message });
 	          _context19.next = 24;
 	          return (0, _effects.put)(actions.createIssueError());
 
