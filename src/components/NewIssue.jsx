@@ -1,5 +1,5 @@
 import React, { PropTypes, PureComponent } from 'react'
-import { Button, Input, Icon, Form, TextArea } from 'semantic-ui-react'
+import { Button, Checkbox, Input, Icon, Form, TextArea } from 'semantic-ui-react'
 import FadeTransition from './FadeTransition'
 import { preventDefault } from 'utils'
 import './NewIssue.styl'
@@ -7,7 +7,8 @@ import './NewIssue.styl'
 class NewIssue extends PureComponent {
   state = {
     title: '',
-    description: ''
+    description: '',
+    assignToMe: false
   }
 
   handleChange = (key) => ({ target: { value } }) => {
@@ -17,6 +18,12 @@ class NewIssue extends PureComponent {
   handleSubmit = preventDefault(() => {
     this.props.onSubmit(this.state)
   })
+
+  toggleAssignToMe = () => {
+    const { assignToMe } = this.state
+
+    this.setState({ assignToMe: !assignToMe })
+  }
 
   render () {
     const { title, description } = this.state
@@ -47,6 +54,13 @@ class NewIssue extends PureComponent {
             disabled={loading}
             placeholder='Write a comment'
             onChange={this.handleChange('description')}
+          />
+
+          <Checkbox
+            disabled={loading}
+            style={{ marginTop: 5 }}
+            label={<label>Assign to me</label>}
+            onClick={this.toggleAssignToMe}
           />
         </Form>
 

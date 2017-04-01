@@ -117,7 +117,8 @@ const newIssue = combineReducers({
 
   loading: handleActions({
     [actions.createIssue]: T,
-    [actions.createIssueSuccess]: F
+    [actions.createIssueSuccess]: F,
+    [actions.createIssueError]: F
   }, false)
 })
 

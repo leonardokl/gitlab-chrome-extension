@@ -47,10 +47,17 @@ const fetchTodos = (private_token) => {
   })
 }
 
-const createIssue = ({ accessToken, projectId, title, description = '' }) => {
-  return gitlab.post(`projects/${projectId}/issues`, {
-    pathname: { private_token: accessToken, description, title }
-  })
+const createIssue = ({ assignee_id, accessToken, id, title, description = '' }) => {
+  const defaultPathname = {
+    private_token: accessToken,
+    description: encodeURI(description),
+    title: encodeURI(title)
+  }
+  const pathname = assignee_id
+    ? ({ ...defaultPathname, assignee_id })
+    : defaultPathname
+
+  return gitlab.post(`projects/${id}/issues`, { pathname })
 }
 
 export default {

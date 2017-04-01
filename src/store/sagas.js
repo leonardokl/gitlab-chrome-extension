@@ -214,15 +214,23 @@ function* handleNewIssue () {
   yield put(actions.setPage(Pages.NEW_ISSUE))
 }
 
-function* handleCreateIssue ({ payload }) {
-  const [accessToken, project] = yield [
+function* handleCreateIssue ({ payload: { title, description, assignToMe } }) {
+  const [user, accessToken, project] = yield [
+    select(getUser),
     select(getAccessToken),
     select(getNewIssueProject)
   ]
-  const form = { ...payload, id: project.id }
+  const form = {
+    title,
+    description,
+    id: project.id,
+    assignee_id: assignToMe
+      ? user.id
+      : undefined
+  }
 
   try {
-    const response = yield gitlab.createIssue({ ...form, projectId: project.id, accessToken })
+    const response = yield gitlab.createIssue({ ...form, accessToken })
 
     notification.basic({ title: 'Success', message: 'Issue created!'})
 
@@ -231,6 +239,7 @@ function* handleCreateIssue ({ payload }) {
   } catch (err) {
     console.error(err)
     notification.basic({ title: 'Error', message: `Couldn't create the issue`})
+    yield put(actions.createIssueError())
   }
 }
 

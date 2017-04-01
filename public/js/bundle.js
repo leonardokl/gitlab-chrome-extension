@@ -33711,7 +33711,7 @@
 	var newIssue = (0, _redux.combineReducers)({
 	  projectId: (0, _reduxActions.handleActions)(_defineProperty({}, actions.newIssue, (0, _flip2.default)((0, _get2.default)('payload.id'))), null),
 
-	  loading: (0, _reduxActions.handleActions)((_handleActions15 = {}, _defineProperty(_handleActions15, actions.createIssue, _T2.default), _defineProperty(_handleActions15, actions.createIssueSuccess, _F2.default), _handleActions15), false)
+	  loading: (0, _reduxActions.handleActions)((_handleActions15 = {}, _defineProperty(_handleActions15, actions.createIssue, _T2.default), _defineProperty(_handleActions15, actions.createIssueSuccess, _F2.default), _defineProperty(_handleActions15, actions.createIssueError, _F2.default), _handleActions15), false)
 	});
 
 	exports.default = (0, _redux.combineReducers)({
@@ -43596,7 +43596,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.createIssueSuccess = exports.createIssue = exports.setIssueMessage = exports.newIssue = exports.openExternalNewIssue = exports.requestTodosSuccess = exports.requestTodos = exports.searchProjectsSuccess = exports.searchProjectsError = exports.searchProjects = exports.loadSearchProjects = exports.requestProjectsSuccess = exports.requestProjectsError = exports.requestProjects = exports.loadProjects = exports.unpinProject = exports.swapPinnedProjects = exports.pinProject = exports.requestUserSuccess = exports.requestUserError = exports.requestUser = exports.removeTokenSuccess = exports.removeToken = exports.getPersonalToken = exports.getOpenedTab = exports.openTab = exports.openSettings = exports.openProfile = exports.updateEntity = exports.setPage = exports.load = undefined;
+	exports.createIssueError = exports.createIssueSuccess = exports.createIssue = exports.setIssueMessage = exports.newIssue = exports.openExternalNewIssue = exports.requestTodosSuccess = exports.requestTodos = exports.searchProjectsSuccess = exports.searchProjectsError = exports.searchProjects = exports.loadSearchProjects = exports.requestProjectsSuccess = exports.requestProjectsError = exports.requestProjects = exports.loadProjects = exports.unpinProject = exports.swapPinnedProjects = exports.pinProject = exports.requestUserSuccess = exports.requestUserError = exports.requestUser = exports.removeTokenSuccess = exports.removeToken = exports.getPersonalToken = exports.getOpenedTab = exports.openTab = exports.openSettings = exports.openProfile = exports.updateEntity = exports.setPage = exports.load = undefined;
 
 	var _reduxActions = __webpack_require__(518);
 
@@ -43649,6 +43649,7 @@
 	var setIssueMessage = exports.setIssueMessage = (0, _reduxActions.createAction)('SET_ISSUE_MESSAGE');
 	var createIssue = exports.createIssue = (0, _reduxActions.createAction)('CREATE_ISSUE');
 	var createIssueSuccess = exports.createIssueSuccess = (0, _reduxActions.createAction)('CREATE_ISSUE_SUCCESS');
+	var createIssueError = exports.createIssueError = (0, _reduxActions.createAction)('CREATE_ISSUE_ERROR');
 
 /***/ },
 /* 775 */
@@ -44354,57 +44355,68 @@
 	}
 
 	function handleCreateIssue(_ref13) {
-	  var payload = _ref13.payload;
+	  var _ref13$payload = _ref13.payload;
+	  var title = _ref13$payload.title;
+	  var description = _ref13$payload.description;
+	  var assignToMe = _ref13$payload.assignToMe;
 
-	  var _ref14, _ref15, accessToken, project, form, response;
+	  var _ref14, _ref15, user, accessToken, project, form, response;
 
 	  return regeneratorRuntime.wrap(function handleCreateIssue$(_context19) {
 	    while (1) {
 	      switch (_context19.prev = _context19.next) {
 	        case 0:
 	          _context19.next = 2;
-	          return [(0, _effects.select)(_selectors.getAccessToken), (0, _effects.select)(_selectors.getNewIssueProject)];
+	          return [(0, _effects.select)(_selectors.getUser), (0, _effects.select)(_selectors.getAccessToken), (0, _effects.select)(_selectors.getNewIssueProject)];
 
 	        case 2:
 	          _ref14 = _context19.sent;
-	          _ref15 = _slicedToArray(_ref14, 2);
-	          accessToken = _ref15[0];
-	          project = _ref15[1];
-	          form = _extends({}, payload, { id: project.id });
-	          _context19.prev = 7;
-	          _context19.next = 10;
-	          return _utils.gitlab.createIssue(_extends({}, form, { projectId: project.id, accessToken: accessToken }));
+	          _ref15 = _slicedToArray(_ref14, 3);
+	          user = _ref15[0];
+	          accessToken = _ref15[1];
+	          project = _ref15[2];
+	          form = {
+	            title: title,
+	            description: description,
+	            id: project.id,
+	            assignee_id: assignToMe ? user.id : undefined
+	          };
+	          _context19.prev = 8;
+	          _context19.next = 11;
+	          return _utils.gitlab.createIssue(_extends({}, form, { accessToken: accessToken }));
 
-	        case 10:
+	        case 11:
 	          response = _context19.sent;
 
 
 	          _utils.notification.basic({ title: 'Success', message: 'Issue created!' });
 
-	          _context19.next = 14;
+	          _context19.next = 15;
 	          return (0, _effects.put)(actions.createIssueSuccess(response));
 
-	        case 14:
-	          _context19.next = 16;
+	        case 15:
+	          _context19.next = 17;
 	          return (0, _effects.put)(actions.setPage(_constants.Pages.main));
 
-	        case 16:
-	          _context19.next = 22;
+	        case 17:
+	          _context19.next = 25;
 	          break;
 
-	        case 18:
-	          _context19.prev = 18;
-	          _context19.t0 = _context19['catch'](7);
+	        case 19:
+	          _context19.prev = 19;
+	          _context19.t0 = _context19['catch'](8);
 
 	          console.error(_context19.t0);
 	          _utils.notification.basic({ title: 'Error', message: 'Couldn\'t create the issue' });
+	          _context19.next = 25;
+	          return (0, _effects.put)(actions.createIssueError());
 
-	        case 22:
+	        case 25:
 	        case 'end':
 	          return _context19.stop();
 	      }
 	    }
-	  }, _marked[17], this, [[7, 18]]);
+	  }, _marked[17], this, [[8, 19]]);
 	}
 
 	function handleOpenExternalNewIssue() {
@@ -45389,6 +45401,8 @@
 	  value: true
 	});
 
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 	var _axios = __webpack_require__(792);
 
 	var _axios2 = _interopRequireDefault(_axios);
@@ -45454,15 +45468,21 @@
 	};
 
 	var createIssue = function createIssue(_ref5) {
+	  var assignee_id = _ref5.assignee_id;
 	  var accessToken = _ref5.accessToken;
-	  var projectId = _ref5.projectId;
+	  var id = _ref5.id;
 	  var title = _ref5.title;
 	  var _ref5$description = _ref5.description;
 	  var description = _ref5$description === undefined ? '' : _ref5$description;
 
-	  return gitlab.post('projects/' + projectId + '/issues', {
-	    pathname: { private_token: accessToken, description: description, title: title }
-	  });
+	  var defaultPathname = {
+	    private_token: accessToken,
+	    description: encodeURI(description),
+	    title: encodeURI(title)
+	  };
+	  var pathname = assignee_id ? _extends({}, defaultPathname, { assignee_id: assignee_id }) : defaultPathname;
+
+	  return gitlab.post('projects/' + id + '/issues', { pathname: pathname });
 	};
 
 	exports.default = {
@@ -88524,7 +88544,8 @@
 
 	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = NewIssue.__proto__ || Object.getPrototypeOf(NewIssue)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
 	      title: '',
-	      description: ''
+	      description: '',
+	      assignToMe: false
 	    }, _this.handleChange = function (key) {
 	      return function (_ref2) {
 	        var value = _ref2.target.value;
@@ -88533,7 +88554,12 @@
 	      };
 	    }, _this.handleSubmit = (0, _utils.preventDefault)(function () {
 	      _this.props.onSubmit(_this.state);
-	    }), _temp), _possibleConstructorReturn(_this, _ret);
+	    }), _this.toggleAssignToMe = function () {
+	      var assignToMe = _this.state.assignToMe;
+
+
+	      _this.setState({ assignToMe: !assignToMe });
+	    }, _temp), _possibleConstructorReturn(_this, _ret);
 	  }
 
 	  _createClass(NewIssue, [{
@@ -88584,6 +88610,16 @@
 	            disabled: loading,
 	            placeholder: 'Write a comment',
 	            onChange: this.handleChange('description')
+	          }),
+	          _react2.default.createElement(_semanticUiReact.Checkbox, {
+	            disabled: loading,
+	            style: { marginTop: 5 },
+	            label: _react2.default.createElement(
+	              'label',
+	              null,
+	              'Assign to me'
+	            ),
+	            onClick: this.toggleAssignToMe
 	          })
 	        ),
 	        _react2.default.createElement(_semanticUiReact.Button, {
@@ -88647,7 +88683,7 @@
 
 
 	// module
-	exports.push([module.id, ".NewIssue {\n  display: flex;\n  flex: 1;\n  flex-direction: column;\n  padding: 10px;\n}\n.NewIssue_Project {\n  color: #808080;\n  font-size: 0.8em;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.NewIssue_Form {\n  display: flex;\n  flex: 1;\n  flex-direction: column;\n}\n.NewIssue_Form .input {\n  margin-bottom: 10px;\n}\n.NewIssue_Form_Description {\n  display: flex;\n  margin-bottom: 5px;\n  align-items: center;\n}\n", ""]);
+	exports.push([module.id, ".NewIssue {\n  display: flex;\n  flex: 1;\n  flex-direction: column;\n  padding: 10px;\n}\n.NewIssue_Project {\n  color: #808080;\n  font-size: 0.8em;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.NewIssue_Form {\n  display: flex;\n  flex: 1;\n  flex-direction: column;\n}\n.NewIssue_Form .input,\n.NewIssue_Form textarea {\n  margin-bottom: 10px !important;\n}\n.NewIssue_Form_Description {\n  display: flex;\n  margin-bottom: 5px;\n  align-items: center;\n}\n", ""]);
 
 	// exports
 
