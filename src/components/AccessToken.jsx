@@ -1,17 +1,23 @@
 import React, { PropTypes, PureComponent } from 'react'
-import { Button, Header, Input, Segment, Icon, Reveal } from 'semantic-ui-react'
+import { Button, Header, Input, Segment, Image } from 'semantic-ui-react'
 import FlexContainer from './FlexContainer'
+import FadeTransition from './FadeTransition'
 import './AccessToken.styl'
 
 class AccessToken extends PureComponent {
   state = {
-    value: ''
+    value: '',
+    loginViaCookie: false
   }
 
   handleSave = () => {
     const { value } = this.state
 
     if (value.trim()) this.props.onSave(value)
+  }
+
+  handleLoginViaCookie = () => {
+    this.setState({ loginViaCookie: true }, this.props.onSave)
   }
 
   handleInputChange = ({ target: { value }}) => {
@@ -23,13 +29,14 @@ class AccessToken extends PureComponent {
   }
 
   render () {
+    const { loginViaCookie } = this.state;
     const { loading, error, onSave, onGetPersonalToken } = this.props
 
     return (
       <FlexContainer fluid className='App__AccessToken'>
-        <div className='App__AccessToken_Content'>
-          <Icon name='gitlab' size='huge'/>
-          <Segment>
+        <FadeTransition className='App__AccessToken_Content'>
+          <Image src='/public/images/logo.png' size='tiny' disabled={loading}/>
+          <Segment disabled={loading}>
             <Header
               as='h4'
               textAlign='center'
@@ -39,7 +46,6 @@ class AccessToken extends PureComponent {
             <div className='App__AccessToken_Form'>
               <Input
                 autoFocus
-                disabled={loading}
                 fluid
                 placeholder='Personal Access Token'
                 error={error}
@@ -48,7 +54,7 @@ class AccessToken extends PureComponent {
               />
               <Button
                 disabled={loading}
-                loading={loading}
+                loading={loading && !loginViaCookie}
                 primary
                 fluid
                 icon='save'
@@ -62,7 +68,16 @@ class AccessToken extends PureComponent {
               </div>
             </div>
           </Segment>
-        </div>
+          <div>
+            <Button
+              disabled={loading}
+              loading={loginViaCookie}
+              content='Log in via Cookie'
+              size='small'
+              onClick={this.handleLoginViaCookie}
+            />
+          </div>
+        </FadeTransition>
       </FlexContainer>
     )
   }

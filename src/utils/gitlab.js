@@ -18,6 +18,10 @@ const Pathname = (params) => {
 const gitlab = {
   get: (resource, { pathname }) => {
     return axios.get(`${API_URL}/${resource}${Pathname(pathname)}`)
+  },
+
+  post: (resource, { pathname }) => {
+    return axios.post(`${API_URL}/${resource}${Pathname(pathname)}`)
   }
 }
 
@@ -43,9 +47,23 @@ const fetchTodos = (private_token) => {
   })
 }
 
+const createIssue = ({ assignee_id, accessToken, id, title, description = '' }) => {
+  const defaultPathname = {
+    private_token: accessToken,
+    description: encodeURI(description),
+    title: encodeURI(title)
+  }
+  const pathname = assignee_id
+    ? ({ ...defaultPathname, assignee_id })
+    : defaultPathname
+
+  return gitlab.post(`projects/${id}/issues`, { pathname })
+}
+
 export default {
   fetchUser,
   fetchProjects,
   fetchTodos,
-  searchProjects
+  searchProjects,
+  createIssue
 }

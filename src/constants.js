@@ -4,7 +4,8 @@ export const Pages = {
   issueBranchName: 'ISSUE_BRANCH_NAME',
   main: 'MAIN',
   error: 'ERROR',
-  search: 'SEARCH'
+  search: 'SEARCH',
+  NEW_ISSUE: 'newIssue'
 }
 
 export const Gitlab = {
