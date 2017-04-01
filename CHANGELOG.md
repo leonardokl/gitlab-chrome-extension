@@ -1,3 +1,17 @@
+<a name="0.12.0"></a>
+# [0.12.0](https://github.com/leonardokl/gitlab-chrome-extension/compare/v0.11.0...v0.12.0) (2017-04-01)
+
+
+### Features
+
+* Add login via cookie ([dfbd0d4](https://github.com/leonardokl/gitlab-chrome-extension/commit/dfbd0d4))
+* Create issues ([a5f3ebe](https://github.com/leonardokl/gitlab-chrome-extension/commit/a5f3ebe))
+* Search projects while the user is typing ([149ef87](https://github.com/leonardokl/gitlab-chrome-extension/commit/149ef87))
+* **New Issue:** Add Assign to me option ([7ad46ab](https://github.com/leonardokl/gitlab-chrome-extension/commit/7ad46ab))
+* **New Issue:** Generate branch name when an issue is created ([83673fd](https://github.com/leonardokl/gitlab-chrome-extension/commit/83673fd))
+
+
+
 <a name="0.11.0"></a>
 # [0.11.0](https://github.com/leonardokl/gitlab-chrome-extension/compare/v0.10.0...v0.11.0) (2017-04-01)
 
