@@ -9,7 +9,13 @@
    "default_popup": "public/index.html"
   },
 
+  "background": {
+    "scripts": ["public/js/event.js"],
+    "persistent": false
+  },
+
   "permissions": [
+    "alarms",
     "notifications",
     "storage",
     "activeTab",

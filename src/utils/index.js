@@ -12,3 +12,7 @@ export createBranchName from './createBranchName'
 export const isGitlabUrl = url => !!url.match(GITLAB_URL)
 export const isIssueUrl = url => !!url.match(/\/issues\/\d+$/)
 export const getIssueId = url => url.replace(/.*\/issues\/(\d+)$/, '$1')
+
+export const toBadge = value => value
+    ? value > 9 ? '+9' : String(value)
+    : ''

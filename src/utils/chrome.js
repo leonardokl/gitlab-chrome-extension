@@ -50,11 +50,19 @@ const executeScript = curry((tabId, options) => {
   })
 })
 
+const createAlarm = (name, options) => {
+  return chrome.alarms.create(name, options)
+}
+
+const onAlarm = callback => chrome.alarms.onAlarm.addListener(callback)
+
 export default {
   storage,
   openTab,
   setBadge,
   clearBadge,
   getSelectedTab,
-  executeScript
+  executeScript,
+  createAlarm,
+  onAlarm
 }
