@@ -8236,35 +8236,40 @@
 
 	var handleAlarm = function () {
 	  var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-	    var todos;
+	    var user, todos;
 	    return regeneratorRuntime.wrap(function _callee$(_context) {
 	      while (1) {
 	        switch (_context.prev = _context.next) {
 	          case 0:
 	            _context.prev = 0;
 	            _context.next = 3;
-	            return _utils.gitlab.fetchTodos();
+	            return _utils.chrome.storage.get('user');
 
 	          case 3:
+	            user = _context.sent;
+	            _context.next = 6;
+	            return _utils.gitlab.fetchTodos(user.accessToken);
+
+	          case 6:
 	            todos = _context.sent;
 
 
 	            (0, _pipe2.default)((0, _get2.default)('data.length'), _utils.toBadge, _utils.chrome.setBadge)(todos);
-	            _context.next = 10;
+	            _context.next = 13;
 	            break;
 
-	          case 7:
-	            _context.prev = 7;
+	          case 10:
+	            _context.prev = 10;
 	            _context.t0 = _context['catch'](0);
 
 	            console.error(_context.t0);
 
-	          case 10:
+	          case 13:
 	          case 'end':
 	            return _context.stop();
 	        }
 	      }
-	    }, _callee, this, [[0, 7]]);
+	    }, _callee, this, [[0, 10]]);
 	  }));
 
 	  return function handleAlarm() {

@@ -4,7 +4,8 @@ import { chrome, gitlab, toBadge } from 'utils'
 
 async function handleAlarm() {
   try {
-    const todos = await gitlab.fetchTodos()
+    const user = await chrome.storage.get('user')
+    const todos = await gitlab.fetchTodos(user.accessToken)
 
     pipe(get('data.length'), toBadge, chrome.setBadge)(todos)
   } catch (err) {
