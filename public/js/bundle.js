@@ -44416,8 +44416,7 @@
 	}
 
 	function handleOpenExternalNewIssue() {
-	  var _ref16, web_url;
-
+	  var project;
 	  return regeneratorRuntime.wrap(function handleOpenExternalNewIssue$(_context20) {
 	    while (1) {
 	      switch (_context20.prev = _context20.next) {
@@ -44426,12 +44425,11 @@
 	          return (0, _effects.select)(_selectors.getNewIssueProject);
 
 	        case 2:
-	          _ref16 = _context20.sent;
-	          web_url = _ref16.web_url;
-	          _context20.next = 6;
+	          project = _context20.sent;
+	          _context20.next = 5;
 	          return (0, _effects.put)(actions.openTab(project.web_url + '/issues/new?issue'));
 
-	        case 6:
+	        case 5:
 	        case 'end':
 	          return _context20.stop();
 	      }
@@ -44439,10 +44437,10 @@
 	  }, _marked[18], this);
 	}
 
-	function handleCreateIssueSuccess(_ref17) {
-	  var _ref17$payload$data = _ref17.payload.data;
-	  var iid = _ref17$payload$data.iid;
-	  var title = _ref17$payload$data.title;
+	function handleCreateIssueSuccess(_ref16) {
+	  var _ref16$payload$data = _ref16.payload.data;
+	  var iid = _ref16$payload$data.iid;
+	  var title = _ref16$payload$data.title;
 	  var branchName;
 	  return regeneratorRuntime.wrap(function handleCreateIssueSuccess$(_context21) {
 	    while (1) {
@@ -45355,9 +45353,9 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
-	exports.getIssueId = exports.isIssueUrl = exports.isGitlabUrl = exports.createBranchName = exports.notification = exports.gitlabTab = exports.preventDefault = exports.stopPropagation = exports.when = exports.chrome = exports.gitlab = undefined;
+	exports.toBadge = exports.getIssueId = exports.isIssueUrl = exports.isGitlabUrl = exports.createBranchName = exports.notification = exports.gitlabTab = exports.preventDefault = exports.stopPropagation = exports.when = exports.chrome = exports.gitlab = undefined;
 
 	var _constants = __webpack_require__(775);
 
@@ -45404,13 +45402,17 @@
 	exports.notification = _notification3.default;
 	exports.createBranchName = _createBranchName3.default;
 	var isGitlabUrl = exports.isGitlabUrl = function isGitlabUrl(url) {
-	  return !!url.match(_constants.GITLAB_URL);
+	    return !!url.match(_constants.GITLAB_URL);
 	};
 	var isIssueUrl = exports.isIssueUrl = function isIssueUrl(url) {
-	  return !!url.match(/\/issues\/\d+$/);
+	    return !!url.match(/\/issues\/\d+$/);
 	};
 	var getIssueId = exports.getIssueId = function getIssueId(url) {
-	  return url.replace(/.*\/issues\/(\d+)$/, '$1');
+	    return url.replace(/.*\/issues\/(\d+)$/, '$1');
+	};
+
+	var toBadge = exports.toBadge = function toBadge(value) {
+	    return value ? value > 9 ? '+9' : String(value) : '';
 	};
 
 /***/ },
@@ -89104,7 +89106,9 @@
 	              link: true,
 	              color: 'blue',
 	              title: 'Open on Gitlab',
-	              onClick: onExternal
+	              onClick: function onClick() {
+	                return onExternal();
+	              }
 	            })
 	          ),
 	          _react2.default.createElement(_semanticUiReact.Input, {

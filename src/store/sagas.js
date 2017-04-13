@@ -251,7 +251,7 @@ function* handleCreateIssue ({ payload: { title, description, assignToMe } }) {
 }
 
 function* handleOpenExternalNewIssue () {
-  const { web_url } = yield select(getNewIssueProject)
+  const project = yield select(getNewIssueProject)
 
   yield put(actions.openTab(`${project.web_url}/issues/new?issue`))
 }
