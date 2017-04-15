@@ -1,9 +1,13 @@
 import React, { PropTypes } from 'react'
 import { Icon } from 'semantic-ui-react'
 import './TodosCounter.styl'
+import { toBadge } from 'utils'
 
 const TodosCounter = ({ count, onClick }) => (
-  <Icon.Group className='App__TopBar_Todos' title={!!count ? `Todos (${count})` : 'Todos'}>
+  <Icon.Group
+    className='App__TopBar_Todos'
+    title={!!count ? `Todos (${toBadge(count)})` : 'Todos'}
+  >
     <Icon
       className='todos'
       name='bell outline'

@@ -82257,6 +82257,8 @@
 
 	__webpack_require__(1300);
 
+	var _utils = __webpack_require__(790);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var TodosCounter = function TodosCounter(_ref) {
@@ -82264,7 +82266,10 @@
 	  var onClick = _ref.onClick;
 	  return _react2.default.createElement(
 	    _semanticUiReact.Icon.Group,
-	    { className: 'App__TopBar_Todos', title: !!count ? 'Todos (' + count + ')' : 'Todos' },
+	    {
+	      className: 'App__TopBar_Todos',
+	      title: !!count ? 'Todos (' + (0, _utils.toBadge)(count) + ')' : 'Todos'
+	    },
 	    _react2.default.createElement(_semanticUiReact.Icon, {
 	      className: 'todos',
 	      name: 'bell outline',
