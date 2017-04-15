@@ -14,7 +14,8 @@ import {
   gitlabTab,
   getIssueId,
   notification,
-  createBranchName
+  createBranchName,
+  toBadge
 } from 'utils'
 import {
   getAccessToken,
@@ -148,9 +149,6 @@ function* handleRequestTodos () {
     const { data } = yield gitlab.fetchTodos(accessToken)
     const normalizedData = normalize(data, todosSchema)
     const count = data.length
-    const toBadge = number => number
-      ? String(number)
-      : ''
 
     chrome.setBadge(toBadge(count))
     yield put(actions.updateEntity(normalizedData))

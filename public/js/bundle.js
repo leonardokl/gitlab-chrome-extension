@@ -43679,6 +43679,21 @@
 	var GITLAB_URL = exports.GITLAB_URL = 'https://gitlab.com';
 	var PROJECT_DROPDOWN_OPTIONS = exports.PROJECT_DROPDOWN_OPTIONS = [{ id: 'code', text: 'Code', icon: 'code' }, { id: 'branches', text: 'Branches', icon: 'fork' }, { id: 'issues', text: 'Issues', icon: 'warning circle' }];
 
+	var GITLAB_TODO_ACTIONS = exports.GITLAB_TODO_ACTIONS = {
+	  ASSIGNED: 'assigned',
+	  MENTIONED: 'mentioned',
+	  BUILD_FAILED: 'build_failed',
+	  MARKED: 'marked',
+	  APPROVAL_REQUIRED: 'approval_required'
+	};
+
+	var GITLAB_TODO_TYPES = exports.GITLAB_TODO_TYPES = {
+	  ISSUE: 'Issue',
+	  MERGE_REQUEST: 'MergeRequest'
+	};
+
+	var NOTIFICATION_IMAGE = exports.NOTIFICATION_IMAGE = '/public/images/logo-and-name.png';
+
 	exports.default = {
 	  Pages: Pages,
 	  Gitlab: Gitlab
@@ -44090,7 +44105,7 @@
 	}
 
 	function handleRequestTodos() {
-	  var accessToken, _ref8, data, normalizedData, count, toBadge;
+	  var accessToken, _ref8, data, normalizedData, count;
 
 	  return regeneratorRuntime.wrap(function handleRequestTodos$(_context11) {
 	    while (1) {
@@ -44111,34 +44126,31 @@
 	          normalizedData = (0, _normalizr.normalize)(data, _schemas.todosSchema);
 	          count = data.length;
 
-	          toBadge = function toBadge(number) {
-	            return number ? String(number) : '';
-	          };
 
-	          _utils.chrome.setBadge(toBadge(count));
-	          _context11.next = 14;
+	          _utils.chrome.setBadge((0, _utils.toBadge)(count));
+	          _context11.next = 13;
 	          return (0, _effects.put)(actions.updateEntity(normalizedData));
 
-	        case 14:
-	          _context11.next = 16;
+	        case 13:
+	          _context11.next = 15;
 	          return (0, _effects.put)(actions.requestTodosSuccess(normalizedData));
 
-	        case 16:
-	          _context11.next = 21;
+	        case 15:
+	          _context11.next = 20;
 	          break;
 
-	        case 18:
-	          _context11.prev = 18;
+	        case 17:
+	          _context11.prev = 17;
 	          _context11.t0 = _context11['catch'](3);
 
 	          console.error(_context11.t0);
 
-	        case 21:
+	        case 20:
 	        case 'end':
 	          return _context11.stop();
 	      }
 	    }
-	  }, _marked[10], this, [[3, 18]]);
+	  }, _marked[10], this, [[3, 17]]);
 	}
 
 	function handleOpenTab(_ref9) {
@@ -47030,7 +47042,7 @@
 	      chrome.storage.sync.get(key, function (response) {
 	        var data = response[key];
 
-	        if (!data) reject(new Error('Key ' + key + ' not found on storage'));
+	        if (!data && data !== null) reject(new Error('Key ' + key + ' not found on storage'));
 
 	        return resolve(data);
 	      });
@@ -47080,8 +47092,12 @@
 	  return chrome.alarms.create(name, options);
 	};
 
+	var createNotification = chrome.notifications.create;
 	var onAlarm = function onAlarm(callback) {
 	  return chrome.alarms.onAlarm.addListener(callback);
+	};
+	var onNotificationClick = function onNotificationClick(callback) {
+	  return chrome.notifications.onClicked.addListener(callback);
 	};
 
 	exports.default = {
@@ -47092,7 +47108,9 @@
 	  getSelectedTab: getSelectedTab,
 	  executeScript: executeScript,
 	  createAlarm: createAlarm,
-	  onAlarm: onAlarm
+	  createNotification: createNotification,
+	  onAlarm: onAlarm,
+	  onNotificationClick: onNotificationClick
 	};
 
 /***/ },
@@ -47254,8 +47272,18 @@
 	  chrome.notifications.create(null, notificationOptions);
 	};
 
+	var todo = exports.todo = function todo(options) {
+	  var notificationOptions = _extends({
+	    iconUrl: NOTIFICATION_IMAGE,
+	    type: 'basic'
+	  }, options);
+
+	  chrome.notifications.create('new-todo', notificationOptions);
+	};
+
 	exports.default = {
-	  basic: basic
+	  basic: basic,
+	  todo: todo
 	};
 
 /***/ },

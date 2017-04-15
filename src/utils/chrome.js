@@ -8,7 +8,7 @@ const storage = ({
       chrome.storage.sync.get(key, (response) => {
         const data = response[key]
 
-        if (!data) reject(new Error(`Key ${key} not found on storage`))
+        if (!data && data !== null ) reject(new Error(`Key ${key} not found on storage`))
 
         return resolve(data)
       })
@@ -54,7 +54,9 @@ const createAlarm = (name, options) => {
   return chrome.alarms.create(name, options)
 }
 
+const createNotification = chrome.notifications.create
 const onAlarm = callback => chrome.alarms.onAlarm.addListener(callback)
+const onNotificationClick = callback => chrome.notifications.onClicked.addListener(callback)
 
 export default {
   storage,
@@ -64,5 +66,7 @@ export default {
   getSelectedTab,
   executeScript,
   createAlarm,
-  onAlarm
+  createNotification,
+  onAlarm,
+  onNotificationClick
 }

@@ -8234,46 +8234,214 @@
 
 	'use strict';
 
-	var handleAlarm = function () {
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+	var handleTodoNotificationClick = function () {
 	  var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-	    var user, todos;
+	    var todo;
 	    return regeneratorRuntime.wrap(function _callee$(_context) {
 	      while (1) {
 	        switch (_context.prev = _context.next) {
 	          case 0:
 	            _context.prev = 0;
 	            _context.next = 3;
-	            return _utils.chrome.storage.get('user');
+	            return _utils.chrome.storage.get('recentTodo');
 
 	          case 3:
-	            user = _context.sent;
-	            _context.next = 6;
-	            return _utils.gitlab.fetchTodos(user.accessToken);
-
-	          case 6:
-	            todos = _context.sent;
+	            todo = _context.sent;
 
 
-	            (0, _pipe2.default)((0, _get2.default)('data.length'), _utils.toBadge, _utils.chrome.setBadge)(todos);
-	            _context.next = 13;
+	            _utils.chrome.openTab(todo.target.web_url);
+	            _context.next = 10;
 	            break;
 
-	          case 10:
-	            _context.prev = 10;
+	          case 7:
+	            _context.prev = 7;
 	            _context.t0 = _context['catch'](0);
 
 	            console.error(_context.t0);
 
-	          case 13:
+	          case 10:
 	          case 'end':
 	            return _context.stop();
 	        }
 	      }
-	    }, _callee, this, [[0, 10]]);
+	    }, _callee, this, [[0, 7]]);
+	  }));
+
+	  return function handleTodoNotificationClick() {
+	    return _ref.apply(this, arguments);
+	  };
+	}();
+
+	var handleNewRecentTodo = function () {
+	  var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(todo) {
+	    var user;
+	    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+	      while (1) {
+	        switch (_context2.prev = _context2.next) {
+	          case 0:
+	            _context2.prev = 0;
+	            _context2.next = 3;
+	            return _utils.chrome.storage.get('user');
+
+	          case 3:
+	            user = _context2.sent;
+	            _context2.next = 6;
+	            return _utils.chrome.storage.set('recentTodo', todo);
+
+	          case 6:
+
+	            if (user.id !== todo.author.id) notifyNewRecentTodo(todo);
+	            _context2.next = 12;
+	            break;
+
+	          case 9:
+	            _context2.prev = 9;
+	            _context2.t0 = _context2['catch'](0);
+
+	            console.error(_context2.t0);
+
+	          case 12:
+	          case 'end':
+	            return _context2.stop();
+	        }
+	      }
+	    }, _callee2, this, [[0, 9]]);
+	  }));
+
+	  return function handleNewRecentTodo(_x) {
+	    return _ref2.apply(this, arguments);
+	  };
+	}();
+
+	var handleInitialRecentTodo = function () {
+	  var _ref3 = _asyncToGenerator(regeneratorRuntime.mark(function _callee3() {
+	    return regeneratorRuntime.wrap(function _callee3$(_context3) {
+	      while (1) {
+	        switch (_context3.prev = _context3.next) {
+	          case 0:
+	            _context3.prev = 0;
+	            _context3.next = 3;
+	            return _utils.chrome.storage.get('recentTodo');
+
+	          case 3:
+	            _context3.next = 9;
+	            break;
+
+	          case 5:
+	            _context3.prev = 5;
+	            _context3.t0 = _context3['catch'](0);
+	            _context3.next = 9;
+	            return _utils.chrome.storage.set('recentTodo', null);
+
+	          case 9:
+	          case 'end':
+	            return _context3.stop();
+	        }
+	      }
+	    }, _callee3, this, [[0, 5]]);
+	  }));
+
+	  return function handleInitialRecentTodo() {
+	    return _ref3.apply(this, arguments);
+	  };
+	}();
+
+	var handleLastTodo = function () {
+	  var _ref4 = _asyncToGenerator(regeneratorRuntime.mark(function _callee4(lastTodo) {
+	    var recentTodo;
+	    return regeneratorRuntime.wrap(function _callee4$(_context4) {
+	      while (1) {
+	        switch (_context4.prev = _context4.next) {
+	          case 0:
+	            _context4.prev = 0;
+	            _context4.next = 3;
+	            return _utils.chrome.storage.get('recentTodo');
+
+	          case 3:
+	            recentTodo = _context4.sent;
+
+	            if (!(!recentTodo || new Date(recentTodo.created_at) < new Date(lastTodo.created_at))) {
+	              _context4.next = 6;
+	              break;
+	            }
+
+	            return _context4.abrupt('return', handleNewRecentTodo(lastTodo));
+
+	          case 6:
+	            _context4.next = 11;
+	            break;
+
+	          case 8:
+	            _context4.prev = 8;
+	            _context4.t0 = _context4['catch'](0);
+
+	            console.error(_context4.t0);
+
+	          case 11:
+	          case 'end':
+	            return _context4.stop();
+	        }
+	      }
+	    }, _callee4, this, [[0, 8]]);
+	  }));
+
+	  return function handleLastTodo(_x2) {
+	    return _ref4.apply(this, arguments);
+	  };
+	}();
+
+	var handleAlarm = function () {
+	  var _ref5 = _asyncToGenerator(regeneratorRuntime.mark(function _callee5() {
+	    var user, recentTodo, todos, _todos$data, lastTodo;
+
+	    return regeneratorRuntime.wrap(function _callee5$(_context5) {
+	      while (1) {
+	        switch (_context5.prev = _context5.next) {
+	          case 0:
+	            _context5.prev = 0;
+	            _context5.next = 3;
+	            return _utils.chrome.storage.get('user');
+
+	          case 3:
+	            user = _context5.sent;
+	            _context5.next = 6;
+	            return _utils.chrome.storage.get('recentTodo');
+
+	          case 6:
+	            recentTodo = _context5.sent;
+	            _context5.next = 9;
+	            return _utils.gitlab.fetchTodos(user.accessToken);
+
+	          case 9:
+	            todos = _context5.sent;
+	            _todos$data = _slicedToArray(todos.data, 1);
+	            lastTodo = _todos$data[0];
+
+
+	            handleTodosBadge(todos.data);
+
+	            if (lastTodo) handleLastTodo(lastTodo);
+	            _context5.next = 19;
+	            break;
+
+	          case 16:
+	            _context5.prev = 16;
+	            _context5.t0 = _context5['catch'](0);
+
+	            console.error(_context5.t0);
+
+	          case 19:
+	          case 'end':
+	            return _context5.stop();
+	        }
+	      }
+	    }, _callee5, this, [[0, 16]]);
 	  }));
 
 	  return function handleAlarm() {
-	    return _ref.apply(this, arguments);
+	    return _ref5.apply(this, arguments);
 	  };
 	}();
 
@@ -8287,15 +8455,85 @@
 
 	var _utils = __webpack_require__(511);
 
+	var _constants = __webpack_require__(512);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
 
-	_utils.chrome.createAlarm('todos', {
-	  delayInMinutes: 1
-	});
+	var createTodosAlarm = function createTodosAlarm() {
+	  return _utils.chrome.createAlarm('todos', { periodInMinutes: 1 });
+	};
+
+	var handleTodosBadge = (0, _pipe2.default)((0, _get2.default)('length'), _utils.toBadge, _utils.chrome.setBadge);
+
+	var getTodoActionName = function getTodoActionName(todo) {
+	  var actionName = todo.action_name;
+
+	  switch (actionName) {
+	    case _constants.GITLAB_TODO_ACTIONS.ASSIGNED:
+	      return 'assign you';
+	    case _constants.GITLAB_TODO_ACTIONS.MENTIONED:
+	      return 'mentioned you on';
+	    case _constants.GITLAB_TODO_ACTIONS.APPROVAL_REQUIRED:
+	      return 'set you as an approver for';
+	    case _constants.GITLAB_TODO_ACTIONS.MARKED:
+	      return 'marked you on';
+	    case _constants.GITLAB_TODO_ACTIONS.BUILD_FAILED:
+	      return 'failed build on';
+
+	    default:
+	      return actionName.toLowerCase();
+	  }
+	};
+
+	var getTodoTargetType = function getTodoTargetType(todo) {
+	  var targetType = todo.target_type;
+
+	  switch (targetType) {
+	    case _constants.GITLAB_TODO_TYPES.ISSUE:
+	      return 'issue';
+	    case _constants.GITLAB_TODO_TYPES.MERGE_REQUEST:
+	      return 'merge request';
+
+	    default:
+	      return targetType.toLowerCase();
+	  }
+	};
+
+	var getTodoTargetIID = function getTodoTargetIID(todo) {
+	  var targetType = todo.target_type;
+	  var iid = todo.target.iid;
+
+
+	  switch (targetType) {
+	    case _constants.GITLAB_TODO_TYPES.ISSUE:
+	      return '#' + iid;
+	    case _constants.GITLAB_TODO_TYPES.MERGE_REQUEST:
+	      return '!' + iid;
+
+	    default:
+	      return '/' + iid;
+	  }
+	};
+
+	var notifyNewRecentTodo = function notifyNewRecentTodo(todo) {
+	  var authorName = todo.author.name;
+	  var actionName = getTodoActionName(todo);
+	  var label = getTodoTargetType(todo) + ' ' + todo.project.path_with_namespace + getTodoTargetIID(todo);
+	  var title = authorName + ' ' + actionName + ' ' + label;
+	  var message = todo.body;
+
+	  _utils.notification.todo({ title: title, message: message });
+	};
 
 	_utils.chrome.onAlarm(handleAlarm);
+	_utils.chrome.onNotificationClick(function (id) {
+	  if (id === 'new-todo') handleTodoNotificationClick();
+	});
+
+	handleInitialRecentTodo();
+	createTodosAlarm();
 
 /***/ },
 /* 299 */
@@ -16514,6 +16752,21 @@
 	var GITLAB_URL = exports.GITLAB_URL = 'https://gitlab.com';
 	var PROJECT_DROPDOWN_OPTIONS = exports.PROJECT_DROPDOWN_OPTIONS = [{ id: 'code', text: 'Code', icon: 'code' }, { id: 'branches', text: 'Branches', icon: 'fork' }, { id: 'issues', text: 'Issues', icon: 'warning circle' }];
 
+	var GITLAB_TODO_ACTIONS = exports.GITLAB_TODO_ACTIONS = {
+	  ASSIGNED: 'assigned',
+	  MENTIONED: 'mentioned',
+	  BUILD_FAILED: 'build_failed',
+	  MARKED: 'marked',
+	  APPROVAL_REQUIRED: 'approval_required'
+	};
+
+	var GITLAB_TODO_TYPES = exports.GITLAB_TODO_TYPES = {
+	  ISSUE: 'Issue',
+	  MERGE_REQUEST: 'MergeRequest'
+	};
+
+	var NOTIFICATION_IMAGE = exports.NOTIFICATION_IMAGE = '/public/images/logo-and-name.png';
+
 	exports.default = {
 	  Pages: Pages,
 	  Gitlab: Gitlab
@@ -18134,7 +18387,7 @@
 	      chrome.storage.sync.get(key, function (response) {
 	        var data = response[key];
 
-	        if (!data) reject(new Error('Key ' + key + ' not found on storage'));
+	        if (!data && data !== null) reject(new Error('Key ' + key + ' not found on storage'));
 
 	        return resolve(data);
 	      });
@@ -18184,8 +18437,12 @@
 	  return chrome.alarms.create(name, options);
 	};
 
+	var createNotification = chrome.notifications.create;
 	var onAlarm = function onAlarm(callback) {
 	  return chrome.alarms.onAlarm.addListener(callback);
+	};
+	var onNotificationClick = function onNotificationClick(callback) {
+	  return chrome.notifications.onClicked.addListener(callback);
 	};
 
 	exports.default = {
@@ -18196,7 +18453,9 @@
 	  getSelectedTab: getSelectedTab,
 	  executeScript: executeScript,
 	  createAlarm: createAlarm,
-	  onAlarm: onAlarm
+	  createNotification: createNotification,
+	  onAlarm: onAlarm,
+	  onNotificationClick: onNotificationClick
 	};
 
 /***/ },
@@ -18358,8 +18617,18 @@
 	  chrome.notifications.create(null, notificationOptions);
 	};
 
+	var todo = exports.todo = function todo(options) {
+	  var notificationOptions = _extends({
+	    iconUrl: NOTIFICATION_IMAGE,
+	    type: 'basic'
+	  }, options);
+
+	  chrome.notifications.create('new-todo', notificationOptions);
+	};
+
 	exports.default = {
-	  basic: basic
+	  basic: basic,
+	  todo: todo
 	};
 
 /***/ },

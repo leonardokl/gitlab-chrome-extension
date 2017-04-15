@@ -21,6 +21,21 @@ export const PROJECT_DROPDOWN_OPTIONS = [
   { id: 'issues', text: 'Issues', icon: 'warning circle' }
 ]
 
+export const GITLAB_TODO_ACTIONS = {
+  ASSIGNED: 'assigned',
+  MENTIONED: 'mentioned',
+  BUILD_FAILED: 'build_failed',
+  MARKED: 'marked',
+  APPROVAL_REQUIRED: 'approval_required',
+}
+
+export const GITLAB_TODO_TYPES = {
+  ISSUE: 'Issue',
+  MERGE_REQUEST: 'MergeRequest',
+}
+
+export const NOTIFICATION_IMAGE = '/public/images/logo-and-name.png'
+
 export default {
   Pages,
   Gitlab

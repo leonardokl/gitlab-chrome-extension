@@ -12,6 +12,17 @@ export const basic = (options) => {
   chrome.notifications.create(null, notificationOptions)
 }
 
+export const todo = (options) => {
+  const notificationOptions = {
+    iconUrl: NOTIFICATION_IMAGE,
+    type: 'basic',
+    ...options
+  }
+
+  chrome.notifications.create('new-todo', notificationOptions)
+}
+
 export default {
-  basic
+  basic,
+  todo
 }
