@@ -2,9 +2,17 @@ import _ from 'lodash/fp/__'
 import get from 'lodash/fp/get'
 import getOr from 'lodash/fp/getOr'
 import curry from 'lodash/fp/curry'
+import pipe from 'lodash/fp/pipe'
 import { Pages } from 'constants'
 
 export const getEntityById = curry((state, entity, id) => get(`entities.${entity}.${id}`, state))
+
+export const mapIdsToEntities = curry((entity, getIdsSelector, state) => {
+  const ids = getIdsSelector(state)
+  const list = ids.map(getEntityById(state, entity))
+
+  return list
+})
 
 export const getSelectedPage = get('page.selected')
 
@@ -22,13 +30,7 @@ export const getProjectById = getEntityById(_, 'projects')
 export const getProjectsIds = getOr([], 'projects.ids')
 export const getProjectsNextPage = get('projects.nextPage')
 export const getLoadingProjects = get('projects.loading')
-export const getProjects = state => {
-  const ids = getProjectsIds(state)
-  const getProjectById = getEntityById(state, 'projects')
-  const projects = ids.map(getProjectById)
-
-  return projects
-}
+export const getProjects = mapIdsToEntities('projects', getProjectsIds)
 export const getIsProjectPinned = (state, { id }) => getOr(false, `pinnedProjects.${id}`, state)
 
 // ISSUES
@@ -37,13 +39,7 @@ export const getNewIssueProject = (state) => {
 
   return getProjectById(state, projectId)
 }
-export const getNewIssueProjectNameSpace = (state) => {
-  const project = getNewIssueProject(state)
-  const name = get('name', project)
-  const group = get('namespace.name', project)
-
-  return `${group}/${name}`
-}
+export const getNewIssueProjectNameSpace = pipe(getNewIssueProject, get('path_with_namespace'))
 export const getIsCreatingIssue = get('newIssue.loading')
 
 // SEARCH
@@ -51,13 +47,12 @@ export const getQuery = get('search.query')
 export const getSearchIds = getOr([], 'search.ids')
 export const getSearchNextPage = get('search.nextPage')
 export const getLoadingSearch = get('search.loading')
-export const getSearchProjects = state => {
-  const ids = getSearchIds(state)
-  const getProjectById = getEntityById(state, 'projects')
-  const projects = ids.map(getProjectById)
+export const getSearchProjects = mapIdsToEntities('projects', getSearchIds)
 
-  return projects
-}
-
-// todos
-export const getTodosCount = state => state.todos.ids.length
+// TODOS
+export const getTodosCount = state => state.todos.total
+export const getTodosIds = getOr([], 'todos.ids')
+export const getTodosNextPage = get('todos.nextPage')
+export const getLoadingTodos = get('todos.loading')
+export const getTodos = mapIdsToEntities('todos', getTodosIds)
+export const getTodosMarkingAsDone = get('todos.markingAsDone')

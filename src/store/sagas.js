@@ -14,7 +14,8 @@ import {
   gitlabTab,
   getIssueId,
   notification,
-  createBranchName
+  createBranchName,
+  toBadge
 } from 'utils'
 import {
   getAccessToken,
@@ -22,7 +23,9 @@ import {
   getUser,
   getQuery,
   getSearchNextPage,
-  getNewIssueProject
+  getNewIssueProject,
+  getTodosNextPage,
+  getTodosCount
 } from './selectors'
 import { projectsSchema, todosSchema } from './schemas'
 
@@ -47,8 +50,8 @@ function* handleRequestUser ({ payload: { accessToken } }) {
     yield put(actions.requestUserSuccess(user))
   } catch (err) {
     console.error(err)
-    notification.basic({ title: 'Error', message: 'Invalid token' })
     yield put(actions.requestUserError())
+    notification.basic({ title: 'Error', message: err.message})
   }
 }
 
@@ -65,7 +68,7 @@ function* handleRequestUserSuccess () {
   } finally {
     yield [
       put(actions.setPage(Pages.main)),
-      put(actions.requestTodos()),
+      put(actions.loadTodos()),
       put(actions.getOpenedTab())
     ]
   }
@@ -98,6 +101,7 @@ function* handleRequestProjects () {
   } catch (err) {
     console.error(err)
     yield put(actions.requestProjectsError())
+    notification.basic({ title: 'Error', message: err.message})
   }
 }
 
@@ -118,6 +122,7 @@ function* handleSearchProjects () {
   } catch (err) {
     console.error(err)
     yield put(actions.searchProjectsError())
+    notification.basic({ title: 'Error', message: err.message})
   } finally {
     yield put(actions.setPage(Pages.search))
   }
@@ -142,21 +147,24 @@ function* handleOpenSettings () {
 }
 
 function* handleRequestTodos () {
-  const accessToken = yield select(getAccessToken)
+  const [accessToken, page] = yield [
+    select(getAccessToken),
+    select(getTodosNextPage)
+  ]
 
   try {
-    const { data } = yield gitlab.fetchTodos(accessToken)
-    const normalizedData = normalize(data, todosSchema)
-    const count = data.length
-    const toBadge = number => number
-      ? String(number)
-      : ''
+    const response = yield gitlab.fetchTodos({ accessToken, page })
+    const nextPage = response.headers['x-next-page']
+    const total = Number(response.headers['x-total'])
+    const normalizedData = normalize(response.data, todosSchema)
 
-    chrome.setBadge(toBadge(count))
+    chrome.setBadge(toBadge(total))
     yield put(actions.updateEntity(normalizedData))
-    yield put(actions.requestTodosSuccess(normalizedData))
+    yield put(actions.requestTodosSuccess({ ...normalizedData, nextPage, total }))
   } catch (err) {
     console.error(err)
+    yield put(actions.requestTodosError())
+    notification.basic({ title: 'Error', message: err.message})
   }
 }
 
@@ -251,7 +259,7 @@ function* handleCreateIssue ({ payload: { title, description, assignToMe } }) {
 }
 
 function* handleOpenExternalNewIssue () {
-  const { web_url } = yield select(getNewIssueProject)
+  const project = yield select(getNewIssueProject)
 
   yield put(actions.openTab(`${project.web_url}/issues/new?issue`))
 }
@@ -260,6 +268,24 @@ function* handleCreateIssueSuccess ({ payload: { data: { iid, title } } }) {
    const branchName = createBranchName(iid, title)
 
    yield put(actions.setIssueMessage({ id: iid, branchName}))
+}
+
+function* handleMarkTodoAsDone ({ payload: { id }}) {
+  const accessToken = yield select(getAccessToken)
+
+  try {
+    yield gitlab.markAsDone({ id, accessToken })
+    yield put(actions.requestMarkTodoAsDoneSuccess({ id }))
+  } catch (err) {
+    yield put(actions.requestMarkTodoAsDoneError({ id }))
+    notification.basic({ title: 'Error', message: err.message })
+  }
+}
+
+function* handleMarkTodoAsDoneSuccess () {
+  const todosCount = yield select(getTodosCount)
+
+  chrome.setBadge(toBadge(todosCount))
 }
 
 export default function* () {
@@ -273,7 +299,8 @@ export default function* () {
     takeEvery(actions.requestProjects, handleRequestProjects),
     takeEvery(actions.openProfile, handleOpenProfile),
     takeEvery(actions.openSettings, handleOpenSettings),
-    takeEvery(actions.requestTodos, handleRequestTodos),
+    takeEvery(actions.loadTodos, handleRequestTodos),
+    takeLatest(actions.requestTodos, handleRequestTodos),
     takeEvery(actions.openTab, handleOpenTab),
     takeEvery(actions.loadSearchProjects, handleLoadSearchProjects),
     takeLatest(actions.searchProjects, handleSearchProjects),
@@ -284,6 +311,8 @@ export default function* () {
     takeEvery(actions.newIssue, handleNewIssue),
     takeEvery(actions.createIssue, handleCreateIssue),
     takeEvery(actions.openExternalNewIssue, handleOpenExternalNewIssue),
-    takeEvery(actions.createIssueSuccess, handleCreateIssueSuccess)
+    takeEvery(actions.createIssueSuccess, handleCreateIssueSuccess),
+    takeEvery(actions.requestMarkTodoAsDone, handleMarkTodoAsDone),
+    takeEvery(actions.requestMarkTodoAsDoneSuccess, handleMarkTodoAsDoneSuccess)
   ]
 }

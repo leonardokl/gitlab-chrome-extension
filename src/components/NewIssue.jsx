@@ -39,7 +39,7 @@ class NewIssue extends PureComponent {
               link
               color='blue'
               title='Open on Gitlab'
-              onClick={onExternal}
+              onClick={() => onExternal()}
             />
           </div>
           <Input
