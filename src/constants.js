@@ -5,7 +5,8 @@ export const Pages = {
   main: 'MAIN',
   error: 'ERROR',
   search: 'SEARCH',
-  NEW_ISSUE: 'newIssue'
+  NEW_ISSUE: 'newIssue',
+  TODOS: 'todos'
 }
 
 export const Gitlab = {

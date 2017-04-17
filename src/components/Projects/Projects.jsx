@@ -29,6 +29,7 @@ class Projects extends PureComponent {
       loading,
       loadingMessage,
       nextPage,
+      notFoundMessage,
       query,
       onNextPage
     } = this.props
@@ -44,7 +45,7 @@ class Projects extends PureComponent {
           </List>
         }
         {!this.hasChildren && !loading &&
-          <NotFound query={query}/>
+          <NotFound message={notFoundMessage} query={query}/>
         }
         {!!nextPage && this.hasChildren &&
           <div className='App__Projects_More'>
@@ -66,6 +67,7 @@ Projects.propTypes = {
   children: PropTypes.any,
   loading: PropTypes.bool,
   loadingMessage: PropTypes.string,
+  notFoundMessage: PropTypes.string,
   nextPage: PropTypes.bool,
   query: PropTypes.string,
   customScroll: PropTypes.bool,

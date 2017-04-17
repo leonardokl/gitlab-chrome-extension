@@ -34,8 +34,14 @@ export const searchProjectsError = createAction('SEARCH_PROJECTS_ERROR')
 export const searchProjectsSuccess = createAction('SEARCH_PROJECTS_SUCCESS')
 
 // TODOS
+export const loadTodos = createAction('LOAD_TODOS')
 export const requestTodos = createAction('REQUEST_TODOS')
+export const requestTodosError = createAction('REQUEST_TODOS_ERROR')
 export const requestTodosSuccess = createAction('REQUEST_TODOS_SUCCESS')
+export const markAllTodosAsDone = createAction('MARK_ALL_TODOS_AS_DONE')
+export const requestMarkTodoAsDone = createAction('REQUEST_MARK_TODO_AS_DONE')
+export const requestMarkTodoAsDoneError = createAction('REQUEST_MARK_TODO_AS_DONE_ERROR')
+export const requestMarkTodoAsDoneSuccess = createAction('REQUEST_MARK_TODO_AS_DONE_SUCCESS')
 
 // ISSUES
 export const openExternalNewIssue = createAction('OPEN_EXTERNAL_NEW_ISSUE')

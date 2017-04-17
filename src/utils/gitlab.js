@@ -22,6 +22,10 @@ const gitlab = {
 
   post: (resource, { pathname }) => {
     return axios.post(`${API_URL}/${resource}${Pathname(pathname)}`)
+  },
+
+  delete: (resource, { pathname }) => {
+    return axios.delete(`${API_URL}/${resource}${Pathname(pathname)}`)
   }
 }
 
@@ -41,9 +45,15 @@ const searchProjects = ({ accessToken, page, query }) => {
   })
 }
 
-const fetchTodos = (private_token) => {
+const fetchTodos = ({ accessToken, page }) => {
   return gitlab.get('todos', {
-    pathname: { private_token, per_page: 10 }
+    pathname: { page, private_token: accessToken, per_page: 10 }
+  })
+}
+
+const markAsDone = ({ accessToken, id }) => {
+  return gitlab.delete(`todos/${id}`, {
+    pathname: { private_token: accessToken }
   })
 }
 
@@ -65,5 +75,6 @@ export default {
   fetchProjects,
   fetchTodos,
   searchProjects,
-  createIssue
+  createIssue,
+  markAsDone
 }

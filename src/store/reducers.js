@@ -9,6 +9,8 @@ import concat from 'lodash/fp/concat'
 import uniq from 'lodash/uniq'
 import omit from 'lodash/fp/omit'
 import equals from 'lodash/fp/equals'
+import filter from 'lodash/fp/filter'
+import negate from 'lodash/fp/negate'
 import * as actions from './actions'
 import { Pages } from 'constants'
 
@@ -102,8 +104,36 @@ const search = combineReducers({
 
 const todos = combineReducers({
   ids: handleActions({
-    [actions.requestTodosSuccess]: flip(get('payload.result')),
-  }, [])
+    [actions.loadTodos]: () => [],
+    [actions.requestTodosSuccess]: (state, { payload: { result } }) => concat(state, result),
+    [actions.requestMarkTodoAsDoneSuccess]: (state, { payload: { id } }) => filter(negate(equals(id)), state)
+  }, []),
+
+  loading: handleActions({
+    [actions.loadTodos]: T,
+    [actions.requestTodos]: T,
+    [actions.requestTodosError]: F,
+    [actions.requestTodosSuccess]: F
+  }, false),
+
+  markingAsDone: handleActions({
+    [actions.requestTodosSuccess]: (state, { payload: { result } }) =>
+      result.reduce((acc, currValue) => ({
+        ...acc,
+        [currValue]: false
+      }), state),
+    [actions.requestMarkTodoAsDone]: (state, { payload: { id } }) =>
+      ({ ...state, [id]: true }),
+    [actions.requestMarkTodoAsDoneError]:  (state, { payload: { id } }) =>
+      ({ ...state, [id]: false }),
+  }, {}),
+
+  nextPage: handleActions({
+    [actions.loadTodos]: () => 1,
+    [actions.requestTodosSuccess]: flip(get('payload.nextPage'))
+  }, 1),
+
+  total: handleAction(actions.requestTodosSuccess, flip(get('payload.total')), '')
 })
 
 const entities = handleAction(actions.updateEntity, (state, { payload: { entities } }) => {

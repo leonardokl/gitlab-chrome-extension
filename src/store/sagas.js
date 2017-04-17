@@ -23,7 +23,8 @@ import {
   getUser,
   getQuery,
   getSearchNextPage,
-  getNewIssueProject
+  getNewIssueProject,
+  getTodosNextPage
 } from './selectors'
 import { projectsSchema, todosSchema } from './schemas'
 
@@ -66,7 +67,7 @@ function* handleRequestUserSuccess () {
   } finally {
     yield [
       put(actions.setPage(Pages.main)),
-      put(actions.requestTodos()),
+      put(actions.loadTodos()),
       put(actions.getOpenedTab())
     ]
   }
@@ -143,18 +144,23 @@ function* handleOpenSettings () {
 }
 
 function* handleRequestTodos () {
-  const accessToken = yield select(getAccessToken)
+  const [accessToken, page] = yield [
+    select(getAccessToken),
+    select(getTodosNextPage)
+  ]
 
   try {
-    const { data } = yield gitlab.fetchTodos(accessToken)
-    const normalizedData = normalize(data, todosSchema)
-    const count = data.length
+    const response = yield gitlab.fetchTodos({ accessToken, page })
+    const nextPage = response.headers['x-next-page']
+    const total = response.headers['x-total']
+    const normalizedData = normalize(response.data, todosSchema)
 
-    chrome.setBadge(toBadge(count))
+    chrome.setBadge(toBadge(Number(total)))
     yield put(actions.updateEntity(normalizedData))
-    yield put(actions.requestTodosSuccess(normalizedData))
+    yield put(actions.requestTodosSuccess({ ...normalizedData, nextPage, total }))
   } catch (err) {
     console.error(err)
+    yield put(actions.requestTodosError())
   }
 }
 
@@ -260,6 +266,18 @@ function* handleCreateIssueSuccess ({ payload: { data: { iid, title } } }) {
    yield put(actions.setIssueMessage({ id: iid, branchName}))
 }
 
+function* handleMarkTodoAsDone ({ payload: { id }}) {
+  const accessToken = yield select(getAccessToken)
+
+  try {
+    yield gitlab.markAsDone({ id, accessToken })
+    yield put(actions.requestMarkTodoAsDoneSuccess({ id }))
+  } catch (err) {
+    yield put(actions.requestMarkTodoAsDoneError({ id }))
+    notification.basic({ title: 'Error', message: err.message })
+  }
+}
+
 export default function* () {
   yield [
     takeEvery(actions.load, handleLoad),
@@ -271,7 +289,8 @@ export default function* () {
     takeEvery(actions.requestProjects, handleRequestProjects),
     takeEvery(actions.openProfile, handleOpenProfile),
     takeEvery(actions.openSettings, handleOpenSettings),
-    takeEvery(actions.requestTodos, handleRequestTodos),
+    takeEvery(actions.loadTodos, handleRequestTodos),
+    takeLatest(actions.requestTodos, handleRequestTodos),
     takeEvery(actions.openTab, handleOpenTab),
     takeEvery(actions.loadSearchProjects, handleLoadSearchProjects),
     takeLatest(actions.searchProjects, handleSearchProjects),
@@ -282,6 +301,7 @@ export default function* () {
     takeEvery(actions.newIssue, handleNewIssue),
     takeEvery(actions.createIssue, handleCreateIssue),
     takeEvery(actions.openExternalNewIssue, handleOpenExternalNewIssue),
-    takeEvery(actions.createIssueSuccess, handleCreateIssueSuccess)
+    takeEvery(actions.createIssueSuccess, handleCreateIssueSuccess),
+    takeEvery(actions.requestMarkTodoAsDone, handleMarkTodoAsDone)
   ]
 }

@@ -23,8 +23,8 @@ class AppContainer extends PureComponent {
       case Pages.NEW_ISSUE:
       case Pages.search:
       case Pages.main:
+      case Pages.TODOS:
         return <Main />
-
       default:
         return <Landing />;
     }
