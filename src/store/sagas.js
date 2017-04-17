@@ -49,8 +49,8 @@ function* handleRequestUser ({ payload: { accessToken } }) {
     yield put(actions.requestUserSuccess(user))
   } catch (err) {
     console.error(err)
-    notification.basic({ title: 'Error', message: 'Invalid token' })
     yield put(actions.requestUserError())
+    notification.basic({ title: 'Error', message: err.message})
   }
 }
 
@@ -100,6 +100,7 @@ function* handleRequestProjects () {
   } catch (err) {
     console.error(err)
     yield put(actions.requestProjectsError())
+    notification.basic({ title: 'Error', message: err.message})
   }
 }
 
@@ -120,6 +121,7 @@ function* handleSearchProjects () {
   } catch (err) {
     console.error(err)
     yield put(actions.searchProjectsError())
+    notification.basic({ title: 'Error', message: err.message})
   } finally {
     yield put(actions.setPage(Pages.search))
   }
@@ -161,6 +163,7 @@ function* handleRequestTodos () {
   } catch (err) {
     console.error(err)
     yield put(actions.requestTodosError())
+    notification.basic({ title: 'Error', message: err.message})
   }
 }
 
