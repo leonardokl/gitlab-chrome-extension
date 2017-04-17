@@ -112,7 +112,7 @@ async function handleAlarm() {
   try {
     const user = await chrome.storage.get('user')
     const recentTodo = await chrome.storage.get('recentTodo')
-    const todos = await gitlab.fetchTodos(user.accessToken)
+    const todos = await gitlab.fetchTodos({ accessToken: user.accessToken, page: 1 })
     const [lastTodo] = todos.data
 
     handleTodosBadge(todos.data)

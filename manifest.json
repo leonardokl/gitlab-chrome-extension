@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
   "name": "Gitlab Manager",
-  "description": "Quickly access all of your projects",
-  "version": "0.10.0",
+  "description": "Manage your gitlab projects and todos",
+  "version": "0.13.0",
 
   "browser_action": {
    "default_icon": "public/images/logo.png",
