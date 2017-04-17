@@ -1,4 +1,4 @@
-# Gitlab Chrome Extension
+# GitLab Chrome Extension
 
 Quickly access all of your projects
 
