@@ -1,3 +1,21 @@
+<a name="0.13.0"></a>
+# [0.13.0](https://github.com/leonardokl/gitlab-chrome-extension/compare/v0.12.0...v0.13.0) (2017-04-17)
+
+
+### Bug Fixes
+
+* Add max value to the todo title ([bf9e87b](https://github.com/leonardokl/gitlab-chrome-extension/commit/bf9e87b))
+* Open the gitlab new issue page when the external link is clicked ([d04480a](https://github.com/leonardokl/gitlab-chrome-extension/commit/d04480a))
+
+
+### Features
+
+* Add todo list ([7819375](https://github.com/leonardokl/gitlab-chrome-extension/commit/7819375))
+* Notify your last todo created by other user ([8c886fd](https://github.com/leonardokl/gitlab-chrome-extension/commit/8c886fd))
+* Update todos count on background ([98fa279](https://github.com/leonardokl/gitlab-chrome-extension/commit/98fa279))
+
+
+
 <a name="0.12.0"></a>
 # [0.12.0](https://github.com/leonardokl/gitlab-chrome-extension/compare/v0.11.0...v0.12.0) (2017-04-01)
 
