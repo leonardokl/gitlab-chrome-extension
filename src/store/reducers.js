@@ -133,7 +133,10 @@ const todos = combineReducers({
     [actions.requestTodosSuccess]: flip(get('payload.nextPage'))
   }, 1),
 
-  total: handleAction(actions.requestTodosSuccess, flip(get('payload.total')), '')
+  total: handleActions({
+    [actions.requestTodosSuccess]: flip(get('payload.total')),
+    [actions.requestMarkTodoAsDoneSuccess]: state => state - 1
+  }, 0)
 })
 
 const entities = handleAction(actions.updateEntity, (state, { payload: { entities } }) => {

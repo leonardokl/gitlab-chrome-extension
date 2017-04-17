@@ -24,7 +24,8 @@ import {
   getQuery,
   getSearchNextPage,
   getNewIssueProject,
-  getTodosNextPage
+  getTodosNextPage,
+  getTodosCount
 } from './selectors'
 import { projectsSchema, todosSchema } from './schemas'
 
@@ -154,10 +155,10 @@ function* handleRequestTodos () {
   try {
     const response = yield gitlab.fetchTodos({ accessToken, page })
     const nextPage = response.headers['x-next-page']
-    const total = response.headers['x-total']
+    const total = Number(response.headers['x-total'])
     const normalizedData = normalize(response.data, todosSchema)
 
-    chrome.setBadge(toBadge(Number(total)))
+    chrome.setBadge(toBadge(total))
     yield put(actions.updateEntity(normalizedData))
     yield put(actions.requestTodosSuccess({ ...normalizedData, nextPage, total }))
   } catch (err) {
@@ -281,6 +282,12 @@ function* handleMarkTodoAsDone ({ payload: { id }}) {
   }
 }
 
+function* handleMarkTodoAsDoneSuccess () {
+  const todosCount = yield select(getTodosCount)
+
+  chrome.setBadge(toBadge(todosCount))
+}
+
 export default function* () {
   yield [
     takeEvery(actions.load, handleLoad),
@@ -305,6 +312,7 @@ export default function* () {
     takeEvery(actions.createIssue, handleCreateIssue),
     takeEvery(actions.openExternalNewIssue, handleOpenExternalNewIssue),
     takeEvery(actions.createIssueSuccess, handleCreateIssueSuccess),
-    takeEvery(actions.requestMarkTodoAsDone, handleMarkTodoAsDone)
+    takeEvery(actions.requestMarkTodoAsDone, handleMarkTodoAsDone),
+    takeEvery(actions.requestMarkTodoAsDoneSuccess, handleMarkTodoAsDoneSuccess)
   ]
 }

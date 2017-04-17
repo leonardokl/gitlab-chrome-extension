@@ -33567,7 +33567,7 @@
 
 	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
-	var _handleActions, _handleActions2, _handleActions3, _handleActions4, _handleActions6, _handleActions7, _handleActions8, _handleActions10, _handleActions11, _handleActions12, _handleActions13, _handleActions14, _handleActions15, _handleActions16, _handleActions18, _handleActions19;
+	var _handleActions, _handleActions2, _handleActions3, _handleActions4, _handleActions6, _handleActions7, _handleActions8, _handleActions10, _handleActions11, _handleActions12, _handleActions13, _handleActions14, _handleActions15, _handleActions16, _handleActions17, _handleActions19, _handleActions20;
 
 	var _redux = __webpack_require__(482);
 
@@ -33736,7 +33736,9 @@
 	    return 1;
 	  }), _defineProperty(_handleActions16, actions.requestTodosSuccess, (0, _flip2.default)((0, _get2.default)('payload.nextPage'))), _handleActions16), 1),
 
-	  total: (0, _reduxActions.handleAction)(actions.requestTodosSuccess, (0, _flip2.default)((0, _get2.default)('payload.total')), '')
+	  total: (0, _reduxActions.handleActions)((_handleActions17 = {}, _defineProperty(_handleActions17, actions.requestTodosSuccess, (0, _flip2.default)((0, _get2.default)('payload.total'))), _defineProperty(_handleActions17, actions.requestMarkTodoAsDoneSuccess, function (state) {
+	    return state - 1;
+	  }), _handleActions17), 0)
 	});
 
 	var entities = (0, _reduxActions.handleAction)(actions.updateEntity, function (state, _ref11) {
@@ -33748,7 +33750,7 @@
 	var newIssue = (0, _redux.combineReducers)({
 	  projectId: (0, _reduxActions.handleActions)(_defineProperty({}, actions.newIssue, (0, _flip2.default)((0, _get2.default)('payload.id'))), null),
 
-	  loading: (0, _reduxActions.handleActions)((_handleActions18 = {}, _defineProperty(_handleActions18, actions.createIssue, _T2.default), _defineProperty(_handleActions18, actions.createIssueSuccess, _F2.default), _defineProperty(_handleActions18, actions.createIssueError, _F2.default), _handleActions18), false)
+	  loading: (0, _reduxActions.handleActions)((_handleActions19 = {}, _defineProperty(_handleActions19, actions.createIssue, _T2.default), _defineProperty(_handleActions19, actions.createIssueSuccess, _F2.default), _defineProperty(_handleActions19, actions.createIssueError, _F2.default), _handleActions19), false)
 	});
 
 	exports.default = (0, _redux.combineReducers)({
@@ -33761,18 +33763,18 @@
 	  issueMessage: issueMessage,
 	  newIssue: newIssue,
 
-	  pinnedProjects: (0, _reduxActions.handleActions)((_handleActions19 = {}, _defineProperty(_handleActions19, actions.loadProjects, function (state, _ref12) {
+	  pinnedProjects: (0, _reduxActions.handleActions)((_handleActions20 = {}, _defineProperty(_handleActions20, actions.loadProjects, function (state, _ref12) {
 	    var payload = _ref12.payload;
 	    return payload.reduce(function (acc, currValue) {
 	      return _extends({}, acc, _defineProperty({}, currValue, true));
 	    }, {});
-	  }), _defineProperty(_handleActions19, actions.pinProject, function (state, _ref13) {
+	  }), _defineProperty(_handleActions20, actions.pinProject, function (state, _ref13) {
 	    var id = _ref13.payload.id;
 	    return (0, _merge3.default)(state, _defineProperty({}, id, true));
-	  }), _defineProperty(_handleActions19, actions.unpinProject, function (state, _ref14) {
+	  }), _defineProperty(_handleActions20, actions.unpinProject, function (state, _ref14) {
 	    var id = _ref14.payload.id;
 	    return (0, _omit2.default)([id], state);
-	  }), _handleActions19), {}),
+	  }), _handleActions20), {}),
 
 	  loading: (0, _reduxActions.handleAction)(actions.load, _T2.default, false),
 
@@ -44024,7 +44026,7 @@
 
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-	var _marked = [handleLoad, handleRequestUser, handleRequestUserSuccess, handleRemoveToken, handleGetPersonalToken, handleRequestProjects, handleSearchProjects, handleLoadSearchProjects, handleOpenProfile, handleOpenSettings, handleRequestTodos, handleOpenTab, handlePinProject, handleUnpinProject, handleSwapPinnedProjects, handleGetOpenedTab, handleNewIssue, handleCreateIssue, handleOpenExternalNewIssue, handleCreateIssueSuccess, handleMarkTodoAsDone, _callee2].map(regeneratorRuntime.mark);
+	var _marked = [handleLoad, handleRequestUser, handleRequestUserSuccess, handleRemoveToken, handleGetPersonalToken, handleRequestProjects, handleSearchProjects, handleLoadSearchProjects, handleOpenProfile, handleOpenSettings, handleRequestTodos, handleOpenTab, handlePinProject, handleUnpinProject, handleSwapPinnedProjects, handleGetOpenedTab, handleNewIssue, handleCreateIssue, handleOpenExternalNewIssue, handleCreateIssueSuccess, handleMarkTodoAsDone, handleMarkTodoAsDoneSuccess, _callee2].map(regeneratorRuntime.mark);
 
 	function handleLoad() {
 	  var user;
@@ -44098,9 +44100,11 @@
 	          _context2.t0 = _context2['catch'](0);
 
 	          console.error(_context2.t0);
-	          _utils.notification.basic({ title: 'Error', message: 'Invalid token' });
-	          _context2.next = 20;
+	          _context2.next = 19;
 	          return (0, _effects.put)(actions.requestUserError());
+
+	        case 19:
+	          _utils.notification.basic({ title: 'Error', message: _context2.t0.message });
 
 	        case 20:
 	        case 'end':
@@ -44231,7 +44235,7 @@
 	          return (0, _effects.put)(actions.requestProjectsSuccess(_extends({}, normalizedData, { nextPage: nextPage })));
 
 	        case 16:
-	          _context6.next = 23;
+	          _context6.next = 24;
 	          break;
 
 	        case 18:
@@ -44243,6 +44247,9 @@
 	          return (0, _effects.put)(actions.requestProjectsError());
 
 	        case 23:
+	          _utils.notification.basic({ title: 'Error', message: _context6.t0.message });
+
+	        case 24:
 	        case 'end':
 	          return _context6.stop();
 	      }
@@ -44282,7 +44289,7 @@
 	          return (0, _effects.put)(actions.searchProjectsSuccess(_extends({}, normalizedData, { nextPage: nextPage })));
 
 	        case 17:
-	          _context7.next = 24;
+	          _context7.next = 25;
 	          break;
 
 	        case 19:
@@ -44294,19 +44301,22 @@
 	          return (0, _effects.put)(actions.searchProjectsError());
 
 	        case 24:
-	          _context7.prev = 24;
-	          _context7.next = 27;
+	          _utils.notification.basic({ title: 'Error', message: _context7.t0.message });
+
+	        case 25:
+	          _context7.prev = 25;
+	          _context7.next = 28;
 	          return (0, _effects.put)(actions.setPage(_constants.Pages.search));
 
-	        case 27:
-	          return _context7.finish(24);
-
 	        case 28:
+	          return _context7.finish(25);
+
+	        case 29:
 	        case 'end':
 	          return _context7.stop();
 	      }
 	    }
-	  }, _marked[6], this, [[7, 19, 24, 28]]);
+	  }, _marked[6], this, [[7, 19, 25, 29]]);
 	}
 
 	function handleLoadSearchProjects(_ref7) {
@@ -44399,11 +44409,11 @@
 	        case 9:
 	          response = _context11.sent;
 	          nextPage = response.headers['x-next-page'];
-	          total = response.headers['x-total'];
+	          total = Number(response.headers['x-total']);
 	          normalizedData = (0, _normalizr.normalize)(response.data, _schemas.todosSchema);
 
 
-	          _utils.chrome.setBadge((0, _utils.toBadge)(Number(total)));
+	          _utils.chrome.setBadge((0, _utils.toBadge)(total));
 	          _context11.next = 16;
 	          return (0, _effects.put)(actions.updateEntity(normalizedData));
 
@@ -44412,7 +44422,7 @@
 	          return (0, _effects.put)(actions.requestTodosSuccess(_extends({}, normalizedData, { nextPage: nextPage, total: total })));
 
 	        case 18:
-	          _context11.next = 25;
+	          _context11.next = 26;
 	          break;
 
 	        case 20:
@@ -44424,6 +44434,9 @@
 	          return (0, _effects.put)(actions.requestTodosError());
 
 	        case 25:
+	          _utils.notification.basic({ title: 'Error', message: _context11.t0.message });
+
+	        case 26:
 	        case 'end':
 	          return _context11.stop();
 	      }
@@ -44789,20 +44802,43 @@
 	  }, _marked[20], this, [[3, 10]]);
 	}
 
-	function _callee2() {
-	  return regeneratorRuntime.wrap(function _callee2$(_context23) {
+	function handleMarkTodoAsDoneSuccess() {
+	  var todosCount;
+	  return regeneratorRuntime.wrap(function handleMarkTodoAsDoneSuccess$(_context23) {
 	    while (1) {
 	      switch (_context23.prev = _context23.next) {
 	        case 0:
 	          _context23.next = 2;
-	          return [(0, _effects.takeEvery)(actions.load, handleLoad), (0, _effects.takeEvery)(actions.requestUser, handleRequestUser), (0, _effects.takeEvery)(actions.requestUserSuccess, handleRequestUserSuccess), (0, _effects.takeEvery)(actions.removeToken, handleRemoveToken), (0, _effects.takeEvery)(actions.getPersonalToken, handleGetPersonalToken), (0, _effects.takeEvery)(actions.loadProjects, handleRequestProjects), (0, _effects.takeEvery)(actions.requestProjects, handleRequestProjects), (0, _effects.takeEvery)(actions.openProfile, handleOpenProfile), (0, _effects.takeEvery)(actions.openSettings, handleOpenSettings), (0, _effects.takeEvery)(actions.loadTodos, handleRequestTodos), (0, _effects.takeLatest)(actions.requestTodos, handleRequestTodos), (0, _effects.takeEvery)(actions.openTab, handleOpenTab), (0, _effects.takeEvery)(actions.loadSearchProjects, handleLoadSearchProjects), (0, _effects.takeLatest)(actions.searchProjects, handleSearchProjects), (0, _effects.takeEvery)(actions.pinProject, handlePinProject), (0, _effects.takeEvery)(actions.unpinProject, handleUnpinProject), (0, _effects.takeEvery)(actions.swapPinnedProjects, handleSwapPinnedProjects), (0, _effects.takeEvery)(actions.getOpenedTab, handleGetOpenedTab), (0, _effects.takeEvery)(actions.newIssue, handleNewIssue), (0, _effects.takeEvery)(actions.createIssue, handleCreateIssue), (0, _effects.takeEvery)(actions.openExternalNewIssue, handleOpenExternalNewIssue), (0, _effects.takeEvery)(actions.createIssueSuccess, handleCreateIssueSuccess), (0, _effects.takeEvery)(actions.requestMarkTodoAsDone, handleMarkTodoAsDone)];
+	          return (0, _effects.select)(_selectors.getTodosCount);
 
 	        case 2:
+	          todosCount = _context23.sent;
+
+
+	          _utils.chrome.setBadge((0, _utils.toBadge)(todosCount));
+
+	        case 4:
 	        case 'end':
 	          return _context23.stop();
 	      }
 	    }
 	  }, _marked[21], this);
+	}
+
+	function _callee2() {
+	  return regeneratorRuntime.wrap(function _callee2$(_context24) {
+	    while (1) {
+	      switch (_context24.prev = _context24.next) {
+	        case 0:
+	          _context24.next = 2;
+	          return [(0, _effects.takeEvery)(actions.load, handleLoad), (0, _effects.takeEvery)(actions.requestUser, handleRequestUser), (0, _effects.takeEvery)(actions.requestUserSuccess, handleRequestUserSuccess), (0, _effects.takeEvery)(actions.removeToken, handleRemoveToken), (0, _effects.takeEvery)(actions.getPersonalToken, handleGetPersonalToken), (0, _effects.takeEvery)(actions.loadProjects, handleRequestProjects), (0, _effects.takeEvery)(actions.requestProjects, handleRequestProjects), (0, _effects.takeEvery)(actions.openProfile, handleOpenProfile), (0, _effects.takeEvery)(actions.openSettings, handleOpenSettings), (0, _effects.takeEvery)(actions.loadTodos, handleRequestTodos), (0, _effects.takeLatest)(actions.requestTodos, handleRequestTodos), (0, _effects.takeEvery)(actions.openTab, handleOpenTab), (0, _effects.takeEvery)(actions.loadSearchProjects, handleLoadSearchProjects), (0, _effects.takeLatest)(actions.searchProjects, handleSearchProjects), (0, _effects.takeEvery)(actions.pinProject, handlePinProject), (0, _effects.takeEvery)(actions.unpinProject, handleUnpinProject), (0, _effects.takeEvery)(actions.swapPinnedProjects, handleSwapPinnedProjects), (0, _effects.takeEvery)(actions.getOpenedTab, handleGetOpenedTab), (0, _effects.takeEvery)(actions.newIssue, handleNewIssue), (0, _effects.takeEvery)(actions.createIssue, handleCreateIssue), (0, _effects.takeEvery)(actions.openExternalNewIssue, handleOpenExternalNewIssue), (0, _effects.takeEvery)(actions.createIssueSuccess, handleCreateIssueSuccess), (0, _effects.takeEvery)(actions.requestMarkTodoAsDone, handleMarkTodoAsDone), (0, _effects.takeEvery)(actions.requestMarkTodoAsDoneSuccess, handleMarkTodoAsDoneSuccess)];
+
+	        case 2:
+	        case 'end':
+	          return _context24.stop();
+	      }
+	    }
+	  }, _marked[22], this);
 	}
 
 /***/ },
