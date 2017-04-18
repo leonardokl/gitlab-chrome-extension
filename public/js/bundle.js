@@ -44476,7 +44476,7 @@
 
 
 	          _utils.chrome.storage.set('pinnedProjects', [payload].concat(_toConsumableArray(pinnedProjects)));
-	          _context13.next = 10;
+	          _context13.next = 11;
 	          break;
 
 	        case 7:
@@ -44484,8 +44484,9 @@
 	          _context13.t0 = _context13['catch'](0);
 
 	          console.error(_context13.t0);
+	          _utils.notification.basic({ title: 'Error', message: _context13.t0.message });
 
-	        case 10:
+	        case 11:
 	        case 'end':
 	          return _context13.stop();
 	      }

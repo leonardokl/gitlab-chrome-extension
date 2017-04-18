@@ -179,6 +179,7 @@ function* handlePinProject ({ payload }) {
     chrome.storage.set('pinnedProjects', [payload, ...pinnedProjects])
   } catch (err) {
     console.error(err)
+    notification.basic({ title: 'Error', message: err.message})
   }
 }
 
