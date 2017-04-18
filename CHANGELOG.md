@@ -1,3 +1,13 @@
+<a name="0.14.0"></a>
+# [0.14.0](https://github.com/leonardokl/gitlab-chrome-extension/compare/v0.13.0...v0.14.0) (2017-04-18)
+
+
+### Features
+
+* Swap pinned projects on hover ([82ab43c](https://github.com/leonardokl/gitlab-chrome-extension/commit/82ab43c))
+
+
+
 <a name="0.13.0"></a>
 # [0.13.0](https://github.com/leonardokl/gitlab-chrome-extension/compare/v0.12.0...v0.13.0) (2017-04-17)
 
