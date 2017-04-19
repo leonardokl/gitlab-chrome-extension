@@ -45,6 +45,7 @@ function* handleRequestUser ({ payload: { accessToken } }) {
     const { data } = yield gitlab.fetchUser(accessToken)
     const user = { ...data, accessToken }
 
+    yield chrome.storage.setPersonalAccessToken(accessToken)
     yield chrome.storage.set('user', user)
     yield chrome.storage.set('pinnedProjects', [])
     yield put(actions.requestUserSuccess(user))

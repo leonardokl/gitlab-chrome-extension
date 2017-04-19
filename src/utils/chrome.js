@@ -3,9 +3,25 @@
 import curry from 'lodash/fp/curry'
 
 const storage = ({
+  getPersonalAccessToken: () => {
+    return new Promise((resolve, reject) => {
+      chrome.storage.sync.get('personalAccessToken', (response) => {
+        const { personalAccessToken } = response
+
+        if (!personalAccessToken && personalAccessToken !== null ) reject(new Error(`personalAccessToken not found on storage`))
+
+        return resolve(personalAccessToken)
+      })
+    })
+  },
+  setPersonalAccessToken: (personalAccessToken) => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ personalAccessToken }, resolve)
+    })
+  },
   get: (key) => {
     return new Promise((resolve, reject) => {
-      chrome.storage.sync.get(key, (response) => {
+      chrome.storage.local.get(key, (response) => {
         const data = response[key]
 
         if (!data && data !== null ) reject(new Error(`Key ${key} not found on storage`))
@@ -17,12 +33,13 @@ const storage = ({
 
   set: (key, data) => {
     return new Promise((resolve) => {
-      chrome.storage.sync.set({ [key]: data }, resolve)
+      chrome.storage.local.set({ [key]: data }, resolve)
     })
   },
 
   clear: () => {
-    return chrome.storage.sync.clear()
+    chrome.storage.local.clear()
+    chrome.storage.sync.clear()
   },
 })
 

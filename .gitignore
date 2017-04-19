@@ -1,2 +1,5 @@
 node_modules
 coverage
+pack
+pack.zip
+public/js
