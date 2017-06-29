@@ -29,16 +29,31 @@ import {
 } from './selectors'
 import { projectsSchema, todosSchema } from './schemas'
 
+function* updateUser () {
+  const accessToken = yield select(getAccessToken)
+
+  try {
+    const { data } = yield gitlab.fetchUser(accessToken)
+    const user = { ...data, accessToken }
+
+    yield chrome.storage.set('user', user)
+  } catch (err) {
+    console.error(err)
+  }
+}
+
 function* handleLoad () {
   try {
     const user = yield chrome.storage.get('user')
 
     yield put(actions.requestUserSuccess(user))
+    yield updateUser()
   } catch (err) {
     console.warn(err)
     yield put(actions.setPage(Pages.accessToken))
   }
 }
+
 
 function* handleRequestUser ({ payload: { accessToken } }) {
   try {
