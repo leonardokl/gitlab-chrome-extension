@@ -38,7 +38,7 @@ class ProjectContainer extends PureComponent {
       <Projects.Item
         style={style}
         name={data.name}
-        group={data.namespace.name}
+        group={data.namespace.full_path}
         pinned={pinned}
         onClick={this.handleProjectClick(data)}
         onActionClick={this.handleAction(data)}

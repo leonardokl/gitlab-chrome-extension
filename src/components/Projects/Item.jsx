@@ -24,9 +24,9 @@ class Item extends PureComponent {
           <IssueButton onAction={onActionClick}/>
         </List.Content>
         <List.Header>
-          {name} <PinIcon active={pinned} onClick={this.handlePinClick}/>
+          <span title={name}>{name}</span> <PinIcon active={pinned} onClick={this.handlePinClick}/>
         </List.Header>
-        <List.Description>{group}</List.Description>
+        <List.Description title={group}>{group}</List.Description>
       </List.Item>
     )
   }
