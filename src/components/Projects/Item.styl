@@ -21,9 +21,15 @@
   .header > .PinIcon
       display none
 
+  &:focus,
   &:hover
+    outline: 0
     .App__Projects_Item_Actions
       display block
     .header > .PinIcon
       display inline-block!important
 
+.ui.selection.list.list>.item:focus, .ui.selection.list>.item:focus {
+    background: rgba(0,0,0,.03);
+    color: rgba(0,0,0,.8);
+}

@@ -3,6 +3,8 @@ import { Icon } from 'semantic-ui-react'
 import './TodosCounter.styl'
 import { toBadge } from 'utils'
 
+const SPACE = 32;
+
 const TodosCounter = ({ count, onClick }) => (
   <Icon.Group
     className='App__TopBar_Todos'
@@ -13,6 +15,10 @@ const TodosCounter = ({ count, onClick }) => (
       name='bell outline'
       size='large'
       link
+      role="button"
+      tabIndex="0"
+      aria-label="see your todos"
+      onKeyDown={(evt) => evt.keyCode === SPACE ? onClick(evt) : null}
       onClick={onClick}
     />
     {!!count &&

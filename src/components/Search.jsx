@@ -38,9 +38,11 @@ class Search extends PureComponent {
         value={value}
         autoFocus
         fluid
+        role="search"
         icon={value ? CloseIcon : SearchIcon}
         loading={loading}
-        placeholder='Filter by name...'
+        aria-label="search for projects"
+        placeholder='Filter by name'
         onChange={this.handleChange}
         onKeyPress={this.handleOnKeyPress}
       />

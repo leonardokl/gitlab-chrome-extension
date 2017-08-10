@@ -1,8 +1,11 @@
 import React, { PropTypes, PureComponent } from 'react'
 import { Dropdown, Icon, Image, Input } from 'semantic-ui-react'
+import { KEY_CODE } from 'constants';
 import Search from './Search'
 import TodosCounter from './TodosCounter'
 import './TopBar.styl'
+
+const ESCAPE = 27;
 
 class TopBar extends PureComponent {
   render () {
@@ -23,6 +26,7 @@ class TopBar extends PureComponent {
       <span>
         <Image
           avatar
+          alt="your picture"
           src={imageUrl}
         />
       </span>
@@ -33,13 +37,29 @@ class TopBar extends PureComponent {
     ]
 
     return (
-      <div className='App__TopBar'>
+      <div
+        className='App__TopBar'
+        onKeyDown={(evt) => {
+          if (evt.keyCode === KEY_CODE.ESCAPE && back) {
+            evt.preventDefault();
+            onBack(evt);
+          }
+        }}
+      >
         <div className='App__TopBar_Content'>
           {back &&
             <Icon
               name='chevron left'
               link
               style={{ marginRight: 10 }}
+              tabIndex="0"
+              aria-label="back to projects list"
+              onKeyDown={(evt) => {
+                if (evt.keyCode === KEY_CODE.SPACE) {
+                  evt.preventDefault();
+                  onBack(evt);
+                }
+              }}
               onClick={onBack}
             />
           }
@@ -63,6 +83,15 @@ class TopBar extends PureComponent {
             size='large'
             title='New project'
             link
+            aria-label="New project"
+            role="button"
+            tabIndex="0"
+            onKeyDown={(evt) => {
+              if (evt.keyCode === KEY_CODE.SPACE) {
+                evt.preventDefault();
+                onNewProjectClick(evt);
+              }
+            }}
             onClick={onNewProjectClick}
           />
           <Dropdown trigger={DropdownTrigger}>

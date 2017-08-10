@@ -17,9 +17,10 @@ export const Gitlab = {
 
 export const GITLAB_URL = 'https://gitlab.com'
 export const PROJECT_DROPDOWN_OPTIONS = [
-  { id: 'code', text: 'Code', icon: 'code' },
-  { id: 'branches', text: 'Branches', icon: 'fork' },
-  { id: 'issues', text: 'Issues', icon: 'warning circle' }
+  { value: 'code', text: 'Code', icon: 'code' },
+  { value: 'branches', text: 'Branches', icon: 'fork' },
+  { value: 'issues', text: 'Issues', icon: 'warning circle' },
+  // { value: 'pipelines', text: 'Pipelines', icon: 'tasks' }
 ]
 
 export const GITLAB_TODO_ACTIONS = {
@@ -36,6 +37,10 @@ export const GITLAB_TODO_TYPES = {
 }
 
 export const NOTIFICATION_IMAGE = '/public/images/logo-and-name.png'
+
+export const KEY_CODE = {
+  SPACE: 32, ESCAPE: 27
+}
 
 export default {
   Pages,
