@@ -15,6 +15,7 @@ Manage your GitLab projects and todos
   - Pin your projects to quickly access
   - Open this pages of a project: code, branches, issues
   - Copy to clipboard the recommended branch name of an issue
+  - Configurable GitLab endpoint
 
 ![alt text](src/assets/main.png)
 
