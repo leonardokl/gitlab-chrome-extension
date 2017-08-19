@@ -1,3 +1,21 @@
+<a name="0.16.0"></a>
+# [0.16.0](https://github.com/leonardokl/gitlab-chrome-extension/compare/v0.15.0...v0.16.0) (2017-08-19)
+
+
+### Bug Fixes
+
+* Add max-width to .NewIssue_Project ([21d1e33](https://github.com/leonardokl/gitlab-chrome-extension/commit/21d1e33))
+* Always updating the user info ([98f8663](https://github.com/leonardokl/gitlab-chrome-extension/commit/98f8663))
+
+
+### Features
+
+* Add option page to configure the GitLab URL ([8f608be](https://github.com/leonardokl/gitlab-chrome-extension/commit/8f608be))
+* Improving the accessibility ([14e93a1](https://github.com/leonardokl/gitlab-chrome-extension/commit/14e93a1))
+* Show the subgroups of a project ([d659c5f](https://github.com/leonardokl/gitlab-chrome-extension/commit/d659c5f))
+
+
+
 <a name="0.15.0"></a>
 # [0.15.0](https://github.com/leonardokl/gitlab-chrome-extension/compare/v0.14.0...v0.15.0) (2017-04-19)
 
