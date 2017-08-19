@@ -20,7 +20,6 @@ class Item extends PureComponent {
 
     return (
       <List.Item
-        tabIndex="0"
         style={style}
         className='App__Projects_Item'
         onKeyDown={(evt) => {
