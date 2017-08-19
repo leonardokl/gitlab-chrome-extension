@@ -56,12 +56,11 @@ class MainContainer extends PureComponent {
   }
 
   handleNewProjectClick = () => {
-    this.props.onOpenTab(`${GITLAB_URL}/projects/new`)
+    this.props.onOpenTab(`projects/new`)
   }
 
   handleTodosClick = () => {
     this.props.onSetPage(Pages.TODOS)
-    // this.props.onOpenTab(`${GITLAB_URL}/dashboard/todos`)
   }
 
   handleDropdown = (evt, { id }) => {

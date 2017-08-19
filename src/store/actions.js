@@ -1,12 +1,14 @@
 import { createAction } from 'redux-actions'
 
 export const load = createAction('LOAD')
+export const setGitlabUrl = createAction('SET_GITLAB_URL')
 export const setPage = createAction('SET_PAGE', page => ({ page }))
 export const updateEntity = createAction('UPDATE_ENTITY')
 export const openProfile = createAction('OPEN_PROFILE')
 export const openSettings = createAction('OPEN_SETTINGS')
 
 export const openTab = createAction('OPEN_TAB', url => ({ url }))
+export const openGitlabTab = createAction('OPEN_GITLAB_TAB')
 export const getOpenedTab = createAction('GET_OPENED_TAB')
 
 // TOKEN

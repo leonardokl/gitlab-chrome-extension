@@ -11,7 +11,6 @@ import {
   gitlab,
   isGitlabUrl,
   isIssueUrl,
-  gitlabTab,
   getIssueId,
   notification,
   createBranchName,
@@ -25,15 +24,18 @@ import {
   getSearchNextPage,
   getNewIssueProject,
   getTodosNextPage,
-  getTodosCount
+  getTodosCount,
+  getGitlabUrl,
+  getGitlabApiUrl
 } from './selectors'
 import { projectsSchema, todosSchema } from './schemas'
 
 function* updateUser () {
+  const apiUrl = yield select(getGitlabApiUrl)
   const accessToken = yield select(getAccessToken)
 
   try {
-    const { data } = yield gitlab.fetchUser(accessToken)
+    const { data } = yield gitlab.fetchUser(apiUrl, accessToken)
     const user = { ...data, accessToken }
 
     yield chrome.storage.set('user', user)
@@ -43,6 +45,18 @@ function* updateUser () {
 }
 
 function* handleLoad () {
+  try {
+    const gitlabUrl = yield chrome.storage.get('gitlabUrl')
+
+    yield put(actions.setGitlabUrl(gitlabUrl))
+  } catch (err) {
+    console.error(err)
+    notification.basic({
+      title: 'Error',
+      message: 'An error ocurred trying to get the GitLab URL'
+    })
+  }
+
   try {
     const user = yield chrome.storage.get('user')
 
@@ -57,7 +71,8 @@ function* handleLoad () {
 
 function* handleRequestUser ({ payload: { accessToken } }) {
   try {
-    const { data } = yield gitlab.fetchUser(accessToken)
+    const apiUrl = yield select(getGitlabApiUrl)
+    const { data } = yield gitlab.fetchUser(apiUrl, accessToken)
     const user = { ...data, accessToken }
 
     yield chrome.storage.setPersonalAccessToken(accessToken)
@@ -92,23 +107,28 @@ function* handleRequestUserSuccess () {
 
 function* handleRemoveToken () {
   yield chrome.storage.clear()
+  yield chrome.storage.set('gitlabUrl', GITLAB_URL)
   yield put(actions.setPage(Pages.accessToken))
   yield put(actions.removeTokenSuccess())
   chrome.clearBadge()
 }
 
 function* handleGetPersonalToken () {
-  chrome.openTab(Gitlab.personalTokenUrl)
+  const gitlabUrl = yield select(getGitlabUrl)
+  const personalTokenUrl = `${gitlabUrl}/profile/personal_access_tokens`
+
+  chrome.openTab(personalTokenUrl)
 }
 
 function* handleRequestProjects () {
-  const [accessToken, page] = yield [
+  const [apiUrl, accessToken, page] = yield [
+    select(getGitlabApiUrl),
     select(getAccessToken),
-    select(getProjectsNextPage)
+    select(getProjectsNextPage),
   ]
 
   try {
-    const response = yield gitlab.fetchProjects({ accessToken, page })
+    const response = yield gitlab.fetchProjects({ apiUrl, accessToken, page })
     const nextPage = response.headers['x-next-page']
     const normalizedData = normalize(response.data, projectsSchema)
 
@@ -122,14 +142,15 @@ function* handleRequestProjects () {
 }
 
 function* handleSearchProjects () {
-  const [accessToken, page, query] = yield [
+  const [apiUrl, accessToken, page, query] = yield [
+    select(getGitlabApiUrl),
     select(getAccessToken),
     select(getSearchNextPage),
     select(getQuery)
   ]
 
   try {
-    const response = yield gitlab.searchProjects({ accessToken, page, query })
+    const response = yield gitlab.searchProjects({ apiUrl, accessToken, page, query })
     const nextPage = response.headers['x-next-page']
     const normalizedData = normalize(response.data, projectsSchema)
 
@@ -154,22 +175,26 @@ function* handleLoadSearchProjects ({ payload: { query } }) {
 
 function* handleOpenProfile () {
   const user = yield select(getUser)
+  const gitlabUrl = yield select(getGitlabUrl)
 
-  chrome.openTab(`${Gitlab.url}/${user.username}`)
+  chrome.openTab(`${gitlabUrl}/${user.username}`)
 }
 
 function* handleOpenSettings () {
-  chrome.openTab(`${Gitlab.url}/profile`)
+  const gitlabUrl = yield select(getGitlabUrl)
+
+  chrome.openTab(`${gitlabUrl}/profile`)
 }
 
 function* handleRequestTodos () {
-  const [accessToken, page] = yield [
+  const [apiUrl, accessToken, page] = yield [
+    select(getGitlabApiUrl),
     select(getAccessToken),
     select(getTodosNextPage)
   ]
 
   try {
-    const response = yield gitlab.fetchTodos({ accessToken, page })
+    const response = yield gitlab.fetchTodos({ apiUrl, accessToken, page })
     const nextPage = response.headers['x-next-page']
     const total = Number(response.headers['x-total'])
     const normalizedData = normalize(response.data, todosSchema)
@@ -186,6 +211,12 @@ function* handleRequestTodos () {
 
 function* handleOpenTab ({ payload: { url } }) {
   chrome.openTab(url)
+}
+
+function* handleOpenGitlabTab (payload) {
+  const gitlabUrl = yield select(getGitlabUrl)
+
+  chrome.openTab(`${gitlabUrl}/${payload}`)
 }
 
 function* handlePinProject ({ payload }) {
@@ -228,28 +259,13 @@ function* handleSwapPinnedProjects ({ payload }) {
   }
 }
 
-function* handleGetOpenedTab () {
-  try {
-    const tab = yield chrome.getSelectedTab()
-    const { url } = tab
-
-    if (isGitlabUrl(url) && isIssueUrl(url)) {
-      const issueId = getIssueId(url)
-      const branchName = yield gitlabTab.getIssueNewBranchName()
-
-      yield put(actions.setIssueMessage({ id: issueId, branchName}))
-    }
-  } catch (err) {
-    console.error(err)
-  }
-}
-
 function* handleNewIssue () {
   yield put(actions.setPage(Pages.NEW_ISSUE))
 }
 
 function* handleCreateIssue ({ payload: { title, description, assignToMe } }) {
-  const [user, accessToken, project] = yield [
+  const [apiUrl, user, accessToken, project] = yield [
+    select(getGitlabApiUrl),
     select(getUser),
     select(getAccessToken),
     select(getNewIssueProject)
@@ -264,7 +280,7 @@ function* handleCreateIssue ({ payload: { title, description, assignToMe } }) {
   }
 
   try {
-    const response = yield gitlab.createIssue({ ...form, accessToken })
+    const response = yield gitlab.createIssue({ ...form, apiUrl, accessToken })
 
     yield put(actions.createIssueSuccess(response))
     yield put(actions.setPage(Pages.main))
@@ -289,9 +305,10 @@ function* handleCreateIssueSuccess ({ payload: { data: { iid, title } } }) {
 
 function* handleMarkTodoAsDone ({ payload: { id }}) {
   const accessToken = yield select(getAccessToken)
+  const apiUrl = yield select(getGitlabApiUrl)
 
   try {
-    yield gitlab.markAsDone({ id, accessToken })
+    yield gitlab.markAsDone({ apiUrl, id, accessToken })
     yield put(actions.requestMarkTodoAsDoneSuccess({ id }))
   } catch (err) {
     yield put(actions.requestMarkTodoAsDoneError({ id }))
@@ -319,12 +336,12 @@ export default function* () {
     takeEvery(actions.loadTodos, handleRequestTodos),
     takeLatest(actions.requestTodos, handleRequestTodos),
     takeEvery(actions.openTab, handleOpenTab),
+    takeEvery(actions.openGitlabTab, handleOpenGitlabTab),
     takeEvery(actions.loadSearchProjects, handleLoadSearchProjects),
     takeLatest(actions.searchProjects, handleSearchProjects),
     takeEvery(actions.pinProject, handlePinProject),
     takeEvery(actions.unpinProject, handleUnpinProject),
     takeEvery(actions.swapPinnedProjects, handleSwapPinnedProjects),
-    takeEvery(actions.getOpenedTab, handleGetOpenedTab),
     takeEvery(actions.newIssue, handleNewIssue),
     takeEvery(actions.createIssue, handleCreateIssue),
     takeEvery(actions.openExternalNewIssue, handleOpenExternalNewIssue),

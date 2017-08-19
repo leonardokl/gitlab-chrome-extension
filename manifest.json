@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "name": "GitLab Manager β",
+  "name": "GitLab Manager",
   "description": "Manage your GitLab projects and todos",
   "version": "0.16.0",
 
@@ -14,12 +14,18 @@
     "persistent": false
   },
 
+  "options_ui": {
+    "page": "src/options/index.html",
+    "chrome_style": true
+  },
+
   "permissions": [
     "alarms",
     "notifications",
     "storage",
     "activeTab",
     "tabs",
-    "https://gitlab.com/*"
+    "http://*/",
+    "https://*/"
   ]
 }

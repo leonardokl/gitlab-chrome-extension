@@ -1,7 +1,13 @@
 import pipe from 'lodash/fp/pipe'
 import get from 'lodash/fp/get'
 import { chrome, gitlab, notification, toBadge } from 'utils'
-import { GITLAB_TODO_ACTIONS, GITLAB_TODO_TYPES, NOTIFICATION_IMAGE } from 'constants'
+import {
+  GITLAB_URL,
+  GITLAB_TODO_ACTIONS,
+  GITLAB_TODO_TYPES,
+  NOTIFICATION_IMAGE,
+  GITLAB_API_ENDPOINT
+} from 'constants'
 
 const createTodosAlarm = () => chrome.createAlarm('todos', { periodInMinutes: 1 })
 
@@ -88,11 +94,20 @@ async function handleNewRecentTodo(todo) {
   }
 }
 
-async function handleInitialRecentTodo() {
+async function handleStorageInitialKey(key, value) {
+  console.log(`handleStorageInitialKey(${key}, ${value})`)
+
   try {
-    await chrome.storage.get('recentTodo')
+    await chrome.storage.get(key)
   } catch (err) {
-    await chrome.storage.set('recentTodo', null)
+    console.error(err)
+    console.log('setting initial state')
+
+    try {
+      await chrome.storage.set(key, value)
+    } catch (ex) {
+      console.error(ex)
+    }
   }
 }
 
@@ -111,8 +126,10 @@ async function handleLastTodo(lastTodo) {
 async function handleAlarm() {
   try {
     const user = await chrome.storage.get('user')
+    const gitlabUrl = await chrome.storage.get('gitlabUrl')
+    const apiUrl = `${gitlabUrl}/${GITLAB_API_ENDPOINT}`
     const recentTodo = await chrome.storage.get('recentTodo')
-    const todos = await gitlab.fetchTodos({ accessToken: user.accessToken, page: 1 })
+    const todos = await gitlab.fetchTodos({ apiUrl, accessToken: user.accessToken, page: 1 })
     const [lastTodo] = todos.data
 
     handleTodosBadge(todos.data)
@@ -128,6 +145,7 @@ chrome.onNotificationClick(id => {
   if (id === 'new-todo') handleTodoNotificationClick()
 })
 
-handleInitialRecentTodo()
+handleStorageInitialKey('recentTodo', null)
+handleStorageInitialKey('gitlabUrl', GITLAB_URL)
 createTodosAlarm()
 

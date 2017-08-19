@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Options - Gitlab Manager</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-type" content="text/html; charset=UTF-8">
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="./styles.css"
+    >
+  </head>
+  <body>
+    <h2>Configure your preferences</h2>
+
+    <form id="preferences-form">
+      <div class="field">
+        <label for="gitlab-url">GitLab URL</label>
+        <input
+          id="gitlab-url"
+          required
+        ></input>
+      </div>
+
+      <footer>
+        <span id="status-description"></span>
+        <button type="submit" disabled>Save</button>
+      </footer>
+    </form>
+
+    <script src="./script.js"></script>
+  </body>
+</html>

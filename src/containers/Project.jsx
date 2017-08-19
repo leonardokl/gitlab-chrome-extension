@@ -25,8 +25,6 @@ class ProjectContainer extends PureComponent {
         return onOpenTab(`${web_url}/branches`)
       case 'issues':
         return onOpenTab(`${web_url}/issues`)
-      // case 'pipelines':
-      //   return onOpenTab(`${web_url}/pipelines`)
       default:
         console.error(`Unhandled action ${action}`)
     }

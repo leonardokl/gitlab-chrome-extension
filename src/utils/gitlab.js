@@ -1,7 +1,4 @@
 import axios from 'axios'
-import constants from 'constants'
-
-const API_URL = constants.Gitlab.apiUrl
 
 // Pathname::Object -> String
 const Pathname = (params) => {
@@ -16,48 +13,48 @@ const Pathname = (params) => {
 }
 
 const gitlab = {
-  get: (resource, { pathname }) => {
-    return axios.get(`${API_URL}/${resource}${Pathname(pathname)}`)
+  get: (apiUrl, resource, { pathname }) => {
+    return axios.get(`${apiUrl}/${resource}${Pathname(pathname)}`)
   },
 
-  post: (resource, { pathname }) => {
-    return axios.post(`${API_URL}/${resource}${Pathname(pathname)}`)
+  post: (apiUrl, resource, { pathname }) => {
+    return axios.post(`${apiUrl}/${resource}${Pathname(pathname)}`)
   },
 
-  delete: (resource, { pathname }) => {
-    return axios.delete(`${API_URL}/${resource}${Pathname(pathname)}`)
+  delete: (apiUrl, resource, { pathname }) => {
+    return axios.delete(`${apiUrl}/${resource}${Pathname(pathname)}`)
   }
 }
 
-const fetchUser = (private_token) => {
-  return gitlab.get('user', { pathname: { private_token } })
+const fetchUser = (apiUrl, private_token) => {
+  return gitlab.get(apiUrl, 'user', { pathname: { private_token } })
 }
 
-const fetchProjects = ({ accessToken, page }) => {
-  return gitlab.get('projects', {
+const fetchProjects = ({ apiUrl, accessToken, page }) => {
+  return gitlab.get(apiUrl, 'projects', {
     pathname: { page, private_token: accessToken, per_page: 10 }
   })
 }
 
-const searchProjects = ({ accessToken, page, query }) => {
-  return gitlab.get('projects', {
+const searchProjects = ({ apiUrl, accessToken, page, query }) => {
+  return gitlab.get(apiUrl, 'projects', {
     pathname: { page, private_token: accessToken, per_page: 10, search: query }
   })
 }
 
-const fetchTodos = ({ accessToken, page }) => {
-  return gitlab.get('todos', {
+const fetchTodos = ({ apiUrl, accessToken, page }) => {
+  return gitlab.get(apiUrl, 'todos', {
     pathname: { page, private_token: accessToken, per_page: 10 }
   })
 }
 
-const markAsDone = ({ accessToken, id }) => {
-  return gitlab.delete(`todos/${id}`, {
+const markAsDone = ({ apiUrl, accessToken, id }) => {
+  return gitlab.delete(apiUrl, `todos/${id}`, {
     pathname: { private_token: accessToken }
   })
 }
 
-const createIssue = ({ assignee_id, accessToken, id, title, description = '' }) => {
+const createIssue = ({ apiUrl, assignee_id, accessToken, id, title, description = '' }) => {
   const defaultPathname = {
     private_token: accessToken,
     description: encodeURI(description),
@@ -67,7 +64,7 @@ const createIssue = ({ assignee_id, accessToken, id, title, description = '' }) 
     ? ({ ...defaultPathname, assignee_id })
     : defaultPathname
 
-  return gitlab.post(`projects/${id}/issues`, { pathname })
+  return gitlab.post(apiUrl, `projects/${id}/issues`, { pathname })
 }
 
 export default {

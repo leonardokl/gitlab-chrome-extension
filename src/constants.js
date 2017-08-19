@@ -9,18 +9,13 @@ export const Pages = {
   TODOS: 'todos'
 }
 
-export const Gitlab = {
-  url: 'https://gitlab.com',
-  apiUrl: 'https://gitlab.com/api/v3',
-  personalTokenUrl: 'https://gitlab.com/profile/personal_access_tokens'
-}
-
 export const GITLAB_URL = 'https://gitlab.com'
+export const GITLAB_API_ENDPOINT = 'api/v3'
+
 export const PROJECT_DROPDOWN_OPTIONS = [
   { value: 'code', text: 'Code', icon: 'code' },
   { value: 'branches', text: 'Branches', icon: 'fork' },
-  { value: 'issues', text: 'Issues', icon: 'warning circle' },
-  // { value: 'pipelines', text: 'Pipelines', icon: 'tasks' }
+  { value: 'issues', text: 'Issues', icon: 'warning circle' }
 ]
 
 export const GITLAB_TODO_ACTIONS = {
@@ -42,7 +37,4 @@ export const KEY_CODE = {
   SPACE: 32, ESCAPE: 27
 }
 
-export default {
-  Pages,
-  Gitlab
-}
+export default { Pages }

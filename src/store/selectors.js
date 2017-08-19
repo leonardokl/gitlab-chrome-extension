@@ -3,7 +3,7 @@ import get from 'lodash/fp/get'
 import getOr from 'lodash/fp/getOr'
 import curry from 'lodash/fp/curry'
 import pipe from 'lodash/fp/pipe'
-import { Pages } from 'constants'
+import { Pages, GITLAB_API_ENDPOINT } from 'constants'
 
 export const getEntityById = curry((state, entity, id) => get(`entities.${entity}.${id}`, state))
 
@@ -13,6 +13,12 @@ export const mapIdsToEntities = curry((entity, getIdsSelector, state) => {
 
   return list
 })
+
+export const getGitlabUrl = get('gitlabUrl')
+export const getGitlabApiUrl = pipe(
+  getGitlabUrl,
+  (url) => `${url}/${GITLAB_API_ENDPOINT}`
+)
 
 export const getSelectedPage = get('page.selected')
 

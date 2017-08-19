@@ -165,6 +165,8 @@ export default combineReducers({
   issueMessage,
   newIssue,
 
+  gitlabUrl: handleAction(actions.setGitlabUrl, (_, { payload }) => payload, null),
+
   pinnedProjects: handleActions({
     [actions.loadProjects]: (state, { payload }) => payload.reduce((acc, currValue) => ({
       ...acc,

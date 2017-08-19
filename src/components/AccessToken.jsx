@@ -1,5 +1,5 @@
 import React, { PropTypes, PureComponent } from 'react'
-import { Button, Header, Input, Segment, Image } from 'semantic-ui-react'
+import { Button, Header, Input, Segment, Image, Icon } from 'semantic-ui-react'
 import FlexContainer from './FlexContainer'
 import FadeTransition from './FadeTransition'
 import './AccessToken.styl'
@@ -31,10 +31,25 @@ class AccessToken extends PureComponent {
   render () {
     const { loginViaCookie } = this.state;
     const { loading, error, onSave, onGetPersonalToken } = this.props
+    const settingStyle = {
+      position: 'absolute',
+      top: 10,
+      right: 10,
+      fontSize: 16,
+      color: 'rgba(0, 0, 0, 0.6)'
+    }
 
     return (
       <FlexContainer fluid className='App__AccessToken'>
         <FadeTransition className='App__AccessToken_Content'>
+          <Icon
+            link
+            name="setting"
+            size="large"
+            title="Options"
+            style={settingStyle}
+            onClick={() => chrome.runtime.openOptionsPage()}
+          />
           <Image src='/public/images/logo.png' size='tiny' disabled={loading}/>
           <Segment disabled={loading}>
             <Header
