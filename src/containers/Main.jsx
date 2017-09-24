@@ -56,7 +56,7 @@ class MainContainer extends PureComponent {
   }
 
   handleNewProjectClick = () => {
-    this.props.onOpenTab(`projects/new`)
+    this.props.onOpenTab('projects/new')
   }
 
   handleTodosClick = () => {
@@ -132,7 +132,7 @@ const mapDispatchToProps = ({
   onOpenProfile: actions.openProfile,
   onOpenSettings: actions.openSettings,
   onSearch: actions.loadSearchProjects,
-  onOpenTab: actions.openTab,
+  onOpenTab: actions.openGitlabTab,
   onSetPage: actions.setPage
 })
 

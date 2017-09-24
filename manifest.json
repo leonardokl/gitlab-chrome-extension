@@ -15,7 +15,7 @@
   },
 
   "options_ui": {
-    "page": "src/options/index.html",
+    "page": "public/options/index.html",
     "chrome_style": true
   },
 

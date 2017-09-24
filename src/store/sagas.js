@@ -213,7 +213,7 @@ function* handleOpenTab ({ payload: { url } }) {
   chrome.openTab(url)
 }
 
-function* handleOpenGitlabTab (payload) {
+function* handleOpenGitlabTab ({ payload }) {
   const gitlabUrl = yield select(getGitlabUrl)
 
   chrome.openTab(`${gitlabUrl}/${payload}`)
