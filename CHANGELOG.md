@@ -1,3 +1,13 @@
+<a name="0.16.1"></a>
+## [0.16.1](https://github.com/leonardokl/gitlab-chrome-extension/compare/v0.16.0...v0.16.1) (2017-09-24)
+
+
+### Bug Fixes
+
+* New project url ([0c56a9d](https://github.com/leonardokl/gitlab-chrome-extension/commit/0c56a9d))
+
+
+
 <a name="0.16.0"></a>
 # [0.16.0](https://github.com/leonardokl/gitlab-chrome-extension/compare/v0.15.0...v0.16.0) (2017-08-19)
 
