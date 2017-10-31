@@ -5,7 +5,7 @@ Manage your GitLab projects and todos
 [![Build Status](https://travis-ci.org/leonardokl/gitlab-chrome-extension.svg?branch=master)](https://travis-ci.org/leonardokl/gitlab-chrome-extension)
 [![Coverage Status](https://coveralls.io/repos/github/leonardokl/gitlab-chrome-extension/badge.svg?branch=master)](https://coveralls.io/github/leonardokl/gitlab-chrome-extension?branch=master)
 
-<a target="_blank" href="https://chrome.google.com/webstore/detail/gitlab-manager-%CE%B2/adjbkadckkobnjhnljgpbaelndnagagm"><img alt="Try it now" src="https://github.com/thiagoribeir015/spotify-control-chrome-extension/blob/master/assets/app-store-img.png?raw=true" title="Click here to install from the Chrome Web Store"></img></a>
+<a target="_blank" href="https://chrome.google.com/webstore/detail/gitlab-manager-%CE%B2/adjbkadckkobnjhnljgpbaelndnagagm"><img alt="Try it now" src="src/assets/chrome-web-store.png" title="Click here to install from the Chrome Web Store"></img></a>
 
 ## Features
   - Projects search
