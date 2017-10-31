@@ -1,5 +1,5 @@
 import React, { PropTypes, PureComponent } from 'react'
-import throttle from 'lodash/throttle'
+import debounce from 'lodash/debounce'
 import { Icon, Input } from 'semantic-ui-react'
 
 class Search extends PureComponent {
@@ -7,12 +7,14 @@ class Search extends PureComponent {
     value: ''
   }
 
-  handleSearch = throttle(() => {
+  handleSearch = debounce(() => {
     this.props.onSearch(this.state.value)
-  }, 800)
+  }, 300)
 
   handleClose = () => {
-    this.setState({ value: '' }, this.handleSearch)
+    this.setState({ value: '' }, () => {
+      this.props.onSearch(this.state.value)
+    })
   }
 
   handleChange = ({ target: { value } }) => {
