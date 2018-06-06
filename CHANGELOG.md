@@ -1,3 +1,14 @@
+<a name="0.17.0"></a>
+# [0.17.0](https://github.com/leonardokl/gitlab-chrome-extension/compare/v0.16.1...v0.17.0) (2018-06-06)
+
+
+### Features
+
+* **search:** Switch throttle to debounce ([1c9f264](https://github.com/leonardokl/gitlab-chrome-extension/commit/1c9f264))
+* add action to copy the ssh url to repo (Clone) ([0f897c3](https://github.com/leonardokl/gitlab-chrome-extension/commit/0f897c3)), closes [#21](https://github.com/leonardokl/gitlab-chrome-extension/issues/21)
+
+
+
 <a name="0.16.1"></a>
 ## [0.16.1](https://github.com/leonardokl/gitlab-chrome-extension/compare/v0.16.0...v0.16.1) (2017-09-24)
 
