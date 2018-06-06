@@ -4,6 +4,8 @@ import curry from 'lodash/fp/curry'
 import { Projects } from 'components'
 import { actions } from 'store'
 import { getIsProjectPinned } from 'store/selectors'
+import notification from 'utils/notification';
+import copyToClipboard from 'utils/copyToClipboard'
 
 class ProjectContainer extends PureComponent {
   handleProjectClick = (project) => () => {
@@ -12,7 +14,7 @@ class ProjectContainer extends PureComponent {
 
   handleAction = curry((project, action) => {
     const { onOpenTab, onNewIssue } = this.props
-    const { web_url, default_branch } = project
+    const { web_url, ssh_url_to_repo, default_branch } = project
 
     switch (action) {
       case 'open':
@@ -25,6 +27,13 @@ class ProjectContainer extends PureComponent {
         return onOpenTab(`${web_url}/branches`)
       case 'issues':
         return onOpenTab(`${web_url}/issues`)
+      case 'clone':
+        copyToClipboard(ssh_url_to_repo)
+        notification.basic({
+          title: 'URL copied to clipboard!',
+          message: ssh_url_to_repo
+        })
+        return;
       default:
         console.error(`Unhandled action ${action}`)
     }
