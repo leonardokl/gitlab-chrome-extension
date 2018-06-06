@@ -15,7 +15,8 @@ export const GITLAB_API_ENDPOINT = 'api/v3'
 export const PROJECT_DROPDOWN_OPTIONS = [
   { value: 'code', text: 'Code', icon: 'code' },
   { value: 'branches', text: 'Branches', icon: 'fork' },
-  { value: 'issues', text: 'Issues', icon: 'warning circle' }
+  { value: 'issues', text: 'Issues', icon: 'warning circle' },
+  { value: 'clone', text: 'Clone', icon: 'clone' }
 ]
 
 export const GITLAB_TODO_ACTIONS = {
