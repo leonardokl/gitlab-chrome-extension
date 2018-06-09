@@ -10,7 +10,7 @@ export const Pages = {
 }
 
 export const GITLAB_URL = 'https://gitlab.com'
-export const GITLAB_API_ENDPOINT = 'api/v3'
+export const GITLAB_API_ENDPOINT = 'api/v4'
 
 export const PROJECT_DROPDOWN_OPTIONS = [
   { value: 'code', text: 'Code', icon: 'code' },
