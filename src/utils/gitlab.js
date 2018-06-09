@@ -32,13 +32,13 @@ const fetchUser = (apiUrl, private_token) => {
 
 const fetchProjects = ({ apiUrl, accessToken, page }) => {
   return gitlab.get(apiUrl, 'projects', {
-    pathname: { page, private_token: accessToken, per_page: 10 }
+    pathname: { page, private_token: accessToken, per_page: 10, membership: true }
   })
 }
 
 const searchProjects = ({ apiUrl, accessToken, page, query }) => {
   return gitlab.get(apiUrl, 'projects', {
-    pathname: { page, private_token: accessToken, per_page: 10, search: query }
+    pathname: { page, private_token: accessToken, per_page: 10, search: query, membership: true }
   })
 }
 
