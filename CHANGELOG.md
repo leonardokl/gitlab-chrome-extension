@@ -1,3 +1,13 @@
+<a name="0.17.2"></a>
+## [0.17.2](https://github.com/leonardokl/gitlab-chrome-extension/compare/v0.17.1...v0.17.2) (2018-11-16)
+
+
+### Bug Fixes
+
+* update the deprecated action "mark as done" to the new endpoint ([125d33c](https://github.com/leonardokl/gitlab-chrome-extension/commit/125d33c)), closes [#24](https://github.com/leonardokl/gitlab-chrome-extension/issues/24)
+
+
+
 <a name="0.17.1"></a>
 ## [0.17.1](https://github.com/leonardokl/gitlab-chrome-extension/compare/v0.17.0...v0.17.1) (2018-06-09)
 

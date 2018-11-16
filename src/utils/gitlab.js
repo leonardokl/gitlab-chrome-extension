@@ -49,7 +49,7 @@ const fetchTodos = ({ apiUrl, accessToken, page }) => {
 }
 
 const markAsDone = ({ apiUrl, accessToken, id }) => {
-  return gitlab.delete(apiUrl, `todos/${id}`, {
+  return gitlab.post(apiUrl, `todos/${id}/mark_as_done`, {
     pathname: { private_token: accessToken }
   })
 }
